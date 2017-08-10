@@ -1,22 +1,16 @@
 "use strict";
 
-$("document").ready(function(){
-    for (let item = 2; item < 9; item++) {
-    let itemContent = $("#Item"  + item).contents().clone();
-    let itemContentHidden = $("#ItemHidden"  + item).contents().clone();
-    
-    drawTo1st(itemContent, false);
-    drawTo1st(itemContentHidden, true);
-    }
+$("document").ready(function() {
+    // Draw values form values.js
+    for (let container in values) {
+        for (let item in values[container]) {
+            let i = values[container][item];
+            $("#" + container).append("<li>" + i + "</li>");
 
-    function drawTo1st(content, isHidden) {
-        for (let i in content) {
-            if ((i - 1) % 2 == 0) {
-                if (isHidden) {
-                    $("#ItemHidden1").append(content[i])
-                } else {
-                    $("#Item1").append(content[i]);
-                }
+            if (container.slice(4, 10) === "Hidden") {
+                $("#ItemHidden1").append("<li>" + i + "</li>")
+            } else {
+                $("#Item1").append("<li>" + i + "</li>");
             }
         }
     }
