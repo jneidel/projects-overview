@@ -47,6 +47,33 @@ li {
     margin-top: 30px;
 }
 
+
+/* Flexbox Order */
+#Container1 {
+    order: 1;
+}
+#Container2 {
+    order: 2;
+}
+#Container3 {
+    order: 3;
+}
+#Container4 {
+    order: 4;
+}
+#Container5 {
+    order: 8;
+}
+#Container6 {
+    order: 6;
+}
+#Container7 {
+    order: 7;
+}
+#Container8 {
+    order: 5;
+}
+
 @media all and (max-width:900px) {
     .item {
         margin: 0px 0px 10px;
