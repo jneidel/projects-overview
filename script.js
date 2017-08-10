@@ -14,14 +14,14 @@ $("document").ready(function() {
             }
         }
     }
-    document.getElementById("Container1").addEventListener("dblclick", function runSwitchToHidden() { switchToHidden.switch(1) });
-    document.getElementById("Container2").addEventListener("dblclick", function runSwitchToHidden() { switchToHidden.switch(2) });
-    document.getElementById("Container3").addEventListener("dblclick", function runSwitchToHidden() { switchToHidden.switch(3) });
-    document.getElementById("Container4").addEventListener("dblclick", function runSwitchToHidden() { switchToHidden.switch(4) });
-    document.getElementById("Container5").addEventListener("dblclick", function runSwitchToHidden() { switchToHidden.switch(5) });
-    document.getElementById("Container6").addEventListener("dblclick", function runSwitchToHidden() { switchToHidden.switch(6) });
-    document.getElementById("Container7").addEventListener("dblclick", function runSwitchToHidden() { switchToHidden.switch(7) });
-    document.getElementById("Container8").addEventListener("dblclick", function runSwitchToHidden() { switchToHidden.switch(8) });
+    document.getElementById("Container1").addEventListener("dblclick", function() { switchToHidden.switch(1) });
+    document.getElementById("Container2").addEventListener("dblclick", function() { switchToHidden.switch(2) });
+    document.getElementById("Container3").addEventListener("dblclick", function() { switchToHidden.switch(3) });
+    document.getElementById("Container4").addEventListener("dblclick", function() { switchToHidden.switch(4) });
+    document.getElementById("Container5").addEventListener("dblclick", function() { switchToHidden.switch(5) });
+    document.getElementById("Container6").addEventListener("dblclick", function() { switchToHidden.switch(6) });
+    document.getElementById("Container7").addEventListener("dblclick", function() { switchToHidden.switch(7) });
+    document.getElementById("Container8").addEventListener("dblclick", function() { switchToHidden.switch(8) });
 });
 
 var switchToHidden = { first: false, second: false, third: false, forth: false, fifth: false, sixth: false, seventh: false, eight: false,
