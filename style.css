@@ -1,0 +1,54 @@
+body {
+    background-color: #4FC1E9;
+    font-family: 'Raleway';
+    color: #F5F7FA;
+    text-align: center;
+}
+h1 {
+    margin-top: 7vh;
+}
+h2 {
+    font-size: 20px;
+    display: inline;
+}
+li {
+    text-align: left;
+    margin-left: 75px;
+}
+#container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: space-around;
+}
+.item {
+    width: 400px;
+    background-color: #5BE7C4;
+    border: 2px solid #7A57D1;
+    border-radius: 2%;
+    margin: 3vh 15px;
+    padding: 15px 0 0 0;
+    /* Makes item unselectable */
+    -webkit-touch-callout: none; 
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.hidden {
+    display: none;
+} 
+.status {
+    display: inline;
+    text-align: right;
+}
+#notice {
+    margin-top: 30px;
+}
+
+@media all and (max-width:900px) {
+    .item {
+        margin: 0px 0px 10px;
+    }
+}
