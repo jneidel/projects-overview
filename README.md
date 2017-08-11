@@ -1,3 +1,3 @@
 # project-manager
 
-[Live link (missing values)](https://github.com/jneidel/project-manager/index.html)
+[Live link (missing values)](https://jneidel.github.io/project-manager/)
