@@ -55,7 +55,7 @@ var switchToHidden = { first: false, second: false, third: false, forth: false, 
         if (switchToHidden[num]) {
             $("#ItemHidden" + i).css("display", "none");
             $("#Item" + i).css("display", "block");
-            $("#status" + i).html(" [c]");
+            $("#status" + i).html(" [a]");
             switchToHidden[num] = false;
             
         } else {
