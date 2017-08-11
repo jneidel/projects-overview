@@ -1,3 +1,3 @@
-# project-journey
+# project-manager
 
-[Live link](https://jneidel.github.io/project-journey/index.html)
+[Live link](https://github.com/jneidel/project-manager/index.html)
