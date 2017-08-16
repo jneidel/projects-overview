@@ -1,8 +1,11 @@
 body {
-    background-color: #4FC1E9;
+    background-image: url("background.png");
     font-family: 'Raleway';
     color: #F5F7FA;
     text-align: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 h1 {
     margin-top: 7vh;
@@ -23,9 +26,8 @@ li {
 }
 .item {
     width: 400px;
-    background-color: #5BE7C4;
+    background-color: #3BECAB;
     border: 2px solid #7A57D1;
-    border-radius: 2%;
     margin: 3vh 15px;
     padding: 15px 0 0 0;
     /* Makes item unselectable */
@@ -73,9 +75,6 @@ li {
 #Container8 {
     order: 5;
 }
-
-@media all and (max-width:900px) {
-    .item {
-        margin: 0px 0px 10px;
-    }
+#Container9 {
+    order: 3;
 }
