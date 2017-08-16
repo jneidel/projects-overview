@@ -78,9 +78,3 @@ li {
 #Container9 {
     order: 3;
 }
-
-@media all and (max-width:900px) {
-    .item {
-        margin: 0px 0px 10px;
-    }
-}
