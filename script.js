@@ -22,9 +22,10 @@ $("document").ready(function() {
     document.getElementById("Container6").addEventListener("dblclick", function() { switchToHidden.switch(6) });
     document.getElementById("Container7").addEventListener("dblclick", function() { switchToHidden.switch(7) });
     document.getElementById("Container8").addEventListener("dblclick", function() { switchToHidden.switch(8) });
+    document.getElementById("Container9").addEventListener("dblclick", function() { switchToHidden.switch(9) });
 });
 
-var switchToHidden = { first: false, second: false, third: false, forth: false, fifth: false, sixth: false, seventh: false, eight: false,
+var switchToHidden = { first: false, second: false, third: false, forth: false, fifth: false, sixth: false, seventh: false, eight: false, ninth: false,
     switch: function(i) {
         let num;
         switch(i) {
@@ -51,6 +52,9 @@ var switchToHidden = { first: false, second: false, third: false, forth: false, 
                 break;
             case(8):
                 num = "eight";
+                break;
+            case(9):
+                num = "ninth";
         }
         if (switchToHidden[num]) {
             $("#ItemHidden" + i).css("display", "none");
