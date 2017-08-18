@@ -14,15 +14,16 @@ $("document").ready(function() {
             }
         }
     }
-    document.getElementById("Container1").addEventListener("dblclick", function() { switchToHidden.switch(1) });
-    document.getElementById("Container2").addEventListener("dblclick", function() { switchToHidden.switch(2) });
-    document.getElementById("Container3").addEventListener("dblclick", function() { switchToHidden.switch(3) });
-    document.getElementById("Container4").addEventListener("dblclick", function() { switchToHidden.switch(4) });
-    document.getElementById("Container5").addEventListener("dblclick", function() { switchToHidden.switch(5) });
-    document.getElementById("Container6").addEventListener("dblclick", function() { switchToHidden.switch(6) });
-    document.getElementById("Container7").addEventListener("dblclick", function() { switchToHidden.switch(7) });
-    document.getElementById("Container8").addEventListener("dblclick", function() { switchToHidden.switch(8) });
-    document.getElementById("Container9").addEventListener("dblclick", function() { switchToHidden.switch(9) });
+    (function setEventListeners(range) {
+        for (let i of range) {
+            document.getElementById("Container" + i).addEventListener("dblclick", function() { switchToHidden.switch(i) });
+        }
+    })(range(1, 9));
+
+    function range(minNum, maxNum) {
+        minNum -= 2;
+        return Array.from(new Array(maxNum - minNum - 1), (x,i) => i - minNum)
+    }
 });
 
 var switchToHidden = { first: false, second: false, third: false, forth: false, fifth: false, sixth: false, seventh: false, eight: false, ninth: false,
