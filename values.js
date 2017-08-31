@@ -52,4 +52,7 @@ names = {
     6: "Learning",
     7: "Misc",
     8: "Audiobooks",
-};
+},
+order = [
+    "Programming", "Books", "eBooks", "Courses", "Learning", "Misc", "Audiobooks",
+];

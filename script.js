@@ -1,6 +1,6 @@
 "use strict";
 
-/* globals values names */
+/* globals values names order */
 
 const hidden = [ null ];
 let globalCounter = 0;
@@ -32,15 +32,23 @@ $( "document" ).ready( () => {
                 </p>
             </div>` );
             for ( const i in values[container] ) {
+                // When empty global flex will have whitespace in it
+                $( "#Item1" ).css( "display", "flex" );
+                $( "#ItemHidden1" ).css( "display", "flex" );
+
                 const item = values[container][i];
                 $( `#Item${container}` ).append( `<li>${item}</li>` );
-                $( "#Item1" ).append( `<li>${item}</li>` );
+                $( "#Item1" ).append( `
+                    <li style="order: ${order.indexOf( names[container] )};">${item}</li>`
+                );
                 globalCounter++;
             }
             for ( const i in values[`hidden${container}`] ) {
                 const item = values[`hidden${container}`][i];
                 $( `#ItemHidden${container}` ).append( `<li>${item}</li>` );
-                $( "#ItemHidden1" ).append( `<li>${item}</li>` );
+                $( "#ItemHidden1" ).append( `
+                    <li style="order: ${order.indexOf( names[container] )};">${item}</li>`
+                );
             }
             hidden.push( false );
             document.getElementById( `Container${container}` ).addEventListener( "dblclick", () => { switchToHidden( container ); } );
@@ -48,8 +56,8 @@ $( "document" ).ready( () => {
     }
     document.getElementById( `Container1` ).addEventListener( "dblclick", () => { switchToHidden( "1" ); } );
 
-    if (globalCounter >= 10) {
-        $("#globalWarning").html(`You got ${globalCounter} projects running,<br>please refrain from starting any new projects.`);
-        $("#globalWarning").css("margin-bottom", "-3px");
+    if ( globalCounter >= 10 ) {
+        $( "#globalWarning" ).html( `You got ${globalCounter} projects running,<br>please refrain from starting any new projects.` );
+        $( "#globalWarning" ).css( "margin-bottom", "-3px" );
     }
 } );
