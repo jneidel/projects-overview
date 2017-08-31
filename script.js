@@ -3,6 +3,7 @@
 /* globals values names */
 
 const hidden = [ null ];
+let globalCounter = 0;
 function switchToHidden( i ) {
     if ( hidden[i] ) {
         $( `#ItemHidden${i}` ).css( "display", "none" );
@@ -34,6 +35,7 @@ $( "document" ).ready( () => {
                 const item = values[container][i];
                 $( `#Item${container}` ).append( `<li>${item}</li>` );
                 $( "#Item1" ).append( `<li>${item}</li>` );
+                globalCounter++;
             }
             for ( const i in values[`hidden${container}`] ) {
                 const item = values[`hidden${container}`][i];
@@ -45,4 +47,9 @@ $( "document" ).ready( () => {
         }
     }
     document.getElementById( `Container1` ).addEventListener( "dblclick", () => { switchToHidden( "1" ); } );
+
+    if (globalCounter >= 10) {
+        $("#globalWarning").html(`You got ${globalCounter} projects running,<br>please refrain from starting any new projects.`);
+        $("#globalWarning").css("margin-bottom", "-3px");
+    }
 } );
