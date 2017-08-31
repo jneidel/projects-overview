@@ -1,5 +1,5 @@
 body {
-    background-image: url("background.png");
+    background-image: url("img/background.png");
     font-family: 'Raleway';
     color: #F5F7FA;
     text-align: center;
@@ -28,6 +28,7 @@ li {
     width: 400px;
     background-color: #3BECAB;
     border: 2px solid #7A57D1;
+    border-radius: 3px;
     margin: 3vh 15px;
     padding: 15px 0 0 0;
     /* Makes item unselectable */
@@ -77,4 +78,13 @@ li {
 }
 #Container9 {
     order: 3;
+}
+
+#Item1 {
+    flex-direction: column;
+    order: -1;
+}
+#ItemHidden1 {
+    flex-direction: column;
+    order: -1;
 }

@@ -1,31 +1,58 @@
-var values = {
-    Item2: [ //Programming a
-    
-    ], ItemHidden2: [ //Programming f
+/* eslint-disable no-unused-vars */
 
-    ], Item3: [ //Books a
+const values = {
+    2: [ // Programming a
 
-    ], ItemHidden3: [ //Books f
+    ],
+hidden2: [ // Programming f
 
-    ], Item4: [ //eBooks a
-    
-    ], ItemHidden4: [ //eBooks f
-    
-    ], Item5: [ //Courses a
+    ],
+3: [ // Books a
 
-    ], ItemHidden5: [ //Courses f
+    ],
+hidden3: [ // Books f
 
-    ], Item6: [ //Learning a
+    ],
+4: [ // eBooks a
 
-    ], ItemHidden6: [ //Learning f
+    ],
+hidden4: [ // eBooks f
 
-    ], Item7: [ //Misc a
+    ],
+5: [ // Courses a
 
-    ], ItemHidden7: [ //Misc f
+    ],
+hidden5: [ // Courses f
 
-    ], Item8: [ //Audiobooks a
+    ],
+6: [ // Learning a
 
-    ], ItemHidden8: [ //Audiobooks f
+    ],
+hidden6: [ // Learning f
 
-    ]
-}
+    ],
+7: [ // Misc a
+
+    ],
+hidden7: [ // Misc f
+
+    ],
+8: [ // Audiobooks a
+
+    ],
+hidden8: [ // Audiobooks f
+
+    ],
+},
+names = {
+    2: "Programming",
+    3: "Books",
+    4: "eBooks",
+    5: "Courses",
+    6: "Learning",
+    7: "Misc",
+    8: "Audiobooks",
+},
+order = [
+    "Programming", "Books", "eBooks", "Courses", "Learning", "Misc", "Audiobooks",
+];

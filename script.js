@@ -1,72 +1,63 @@
 "use strict";
 
-$("document").ready(function() {
-    // Draw values form values.js
-    for (let container in values) {
-        for (let item in values[container]) {
-            let i = values[container][item];
-            $("#" + container).append("<li>" + i + "</li>");
+/* globals values names order */
 
-            if (container.slice(4, 10) === "Hidden") {
-                $("#ItemHidden1").append("<li>" + i + "</li>")
-            } else {
-                $("#Item1").append("<li>" + i + "</li>");
-            }
-        }
-    }
-    document.getElementById("Container1").addEventListener("dblclick", function() { switchToHidden.switch(1) });
-    document.getElementById("Container2").addEventListener("dblclick", function() { switchToHidden.switch(2) });
-    document.getElementById("Container3").addEventListener("dblclick", function() { switchToHidden.switch(3) });
-    document.getElementById("Container4").addEventListener("dblclick", function() { switchToHidden.switch(4) });
-    document.getElementById("Container5").addEventListener("dblclick", function() { switchToHidden.switch(5) });
-    document.getElementById("Container6").addEventListener("dblclick", function() { switchToHidden.switch(6) });
-    document.getElementById("Container7").addEventListener("dblclick", function() { switchToHidden.switch(7) });
-    document.getElementById("Container8").addEventListener("dblclick", function() { switchToHidden.switch(8) });
-    document.getElementById("Container9").addEventListener("dblclick", function() { switchToHidden.switch(9) });
-});
-
-var switchToHidden = { first: false, second: false, third: false, forth: false, fifth: false, sixth: false, seventh: false, eight: false, ninth: false,
-    switch: function(i) {
-        let num;
-        switch(i) {
-            case(1):
-                num = "first";
-                break;
-            case(2):
-                num = "second";
-                break;
-            case(3):
-                num = "third";
-                break;
-            case(4):
-                num = "forth";
-                break;
-            case(5):
-                num = "fifth";
-                break;
-            case(6):
-                num = "sixth";
-                break;
-            case(7):
-                num = "seventh";
-                break;
-            case(8):
-                num = "eight";
-                break;
-            case(9):
-                num = "ninth";
-        }
-        if (switchToHidden[num]) {
-            $("#ItemHidden" + i).css("display", "none");
-            $("#Item" + i).css("display", "block");
-            $("#status" + i).html(" [a]");
-            switchToHidden[num] = false;
-            
-        } else {
-            $("#ItemHidden" + i).css("display", "block");
-            $("#Item" + i).css("display", "none");
-            $("#status" + i).html(" [f]");
-            switchToHidden[num] = true;
-        }
+const hidden = [ null ];
+let globalCounter = 0;
+function switchToHidden( i ) {
+    if ( hidden[i] ) {
+        $( `#ItemHidden${i}` ).css( "display", "none" );
+        $( `#Item${i}` ).css( "display", "block" );
+        $( `#status${i}` ).html( " [a]" );
+        hidden[i] = false;
+    } else {
+        $( `#ItemHidden${i}` ).css( "display", "block" );
+        $( `#Item${i}` ).css( "display", "none" );
+        $( `#status${i}` ).html( " [f]" );
+        hidden[i] = true;
     }
 }
+
+$( "document" ).ready( () => {
+    for ( const container in values ) { // Get values form values.js
+        if ( container.slice( 0, 6 ) !== "hidden" ) {
+            $( "#container" ).append( `
+            <div id="Container${container}" class="item">
+                <h2>${names[container]}</h2><span id="status${container}" class="status"></span>
+                <p>
+                    <ul>
+                        <span id="Item${container}"></span>
+                        <span id="ItemHidden${container}" class="hidden"></span>
+                    </ul>
+                </p>
+            </div>` );
+            for ( const i in values[container] ) {
+                // When empty global flex will have whitespace in it
+                $( "#Item1" ).css( "display", "flex" );
+                $( "#ItemHidden1" ).css( "display", "flex" );
+
+                const item = values[container][i];
+                $( `#Item${container}` ).append( `<li>${item}</li>` );
+                $( "#Item1" ).append( `
+                    <li style="order: ${order.indexOf( names[container] )};">${item}</li>`
+                );
+                globalCounter++;
+            }
+            for ( const i in values[`hidden${container}`] ) {
+                const item = values[`hidden${container}`][i];
+                $( `#ItemHidden${container}` ).append( `<li>${item}</li>` );
+                $( "#ItemHidden1" ).append( `
+                    <li style="order: ${order.indexOf( names[container] )};">${item}</li>`
+                );
+            }
+            hidden.push( false );
+            document.getElementById( `Container${container}` ).addEventListener( "dblclick", () => { switchToHidden( container ); } );
+        }
+    }
+    document.getElementById( `Container1` ).addEventListener( "dblclick", () => { switchToHidden( "1" ); } );
+
+    if ( globalCounter >= 10 ) {
+        $( "#globalWarning" ).html( `You got ${globalCounter} projects running,<br>please refrain from starting any new projects.` );
+        $( "#globalWarning" ).css( "margin-bottom", "-3px" );
+    }
+} );
