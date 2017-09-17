@@ -6,15 +6,23 @@ const hidden = [ null ];
 let globalCounter = 0;
 function switchToHidden( i ) {
     if ( hidden[i] ) {
-        $( `#ItemHidden${i}` ).css( "display", "none" );
-        $( `#Item${i}` ).css( "display", "block" );
-        $( `#status${i}` ).html( " [a]" );
-        hidden[i] = false;
+        updateDisplay(
+            "none",
+            "block",
+            " [a]"
+        );
     } else {
-        $( `#ItemHidden${i}` ).css( "display", "block" );
-        $( `#Item${i}` ).css( "display", "none" );
-        $( `#status${i}` ).html( " [f]" );
-        hidden[i] = true;
+        updateDisplay(
+            "block",
+            "none",
+            " [f]"
+        );
+    }
+    function updateDisplay( itemHidden, item, status ) {
+        document.getElementById( `ItemHidden${i}` ).style.display = itemHidden;
+        document.getElementById( `Item${i}` ).style.display = item;
+        document.getElementById( `status${i}` ).innerHTML = status;
+        hidden[i] = item === "none";
     }
 }
 
@@ -34,7 +42,7 @@ $( "document" ).ready( () => {
             for ( const i in values[container] ) {
                 // When empty global flex will have whitespace in it
                 $( "#Item1" ).css( "display", "flex" );
-                $( "#ItemHidden1" ).css( "display", "flex" );
+                // $( "#ItemHidden1" ).css( "display", "flex" ); messes with display: hidden
 
                 const item = values[container][i];
                 $( `#Item${container}` ).append( `<li>${item}</li>` );
@@ -56,8 +64,9 @@ $( "document" ).ready( () => {
     }
     document.getElementById( `Container1` ).addEventListener( "dblclick", () => { switchToHidden( "1" ); } );
 
-    if ( globalCounter >= 10 ) {
-        $( "#globalWarning" ).html( `You got ${globalCounter} projects running,<br>please refrain from starting any new projects.` );
-        $( "#globalWarning" ).css( "margin-bottom", "-3px" );
+    if ( globalCounter >= 2 ) {
+        const globalWarning = document.getElementById( "globalWarning" );
+        globalWarning.innerHTML = `You got ${globalCounter} projects running,<br>please refrain from starting any new projects.`;
+        globalWarning.style.marginBottom = "-3px";
     }
 } );
