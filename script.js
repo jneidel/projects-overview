@@ -64,7 +64,7 @@ $( "document" ).ready( () => {
     }
     document.getElementById( `Container1` ).addEventListener( "dblclick", () => { switchToHidden( "1" ); } );
 
-    if ( globalCounter >= 2 ) {
+    if ( globalCounter >= 10 ) {
         const globalWarning = document.getElementById( "globalWarning" );
         globalWarning.innerHTML = `You got ${globalCounter} projects running,<br>please refrain from starting any new projects.`;
         globalWarning.style.marginBottom = "-3px";

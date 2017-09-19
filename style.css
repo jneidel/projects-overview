@@ -1,5 +1,5 @@
 body {
-    background-image: url("img/background.png");
+    background-image: linear-gradient( #3BECAB, #15B7E4 );
     font-family: 'Raleway';
     color: #F5F7FA;
     text-align: center;
