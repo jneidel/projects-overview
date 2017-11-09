@@ -1,0 +1,24 @@
+{
+  "name": "project-manager",
+  "version": "1.0.0",
+  "description": "[Live link (missing values)](https://jneidel.github.io/project-manager/)",
+  "main": "values.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jneidel/project-manager.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jneidel/project-manager/issues"
+  },
+  "homepage": "https://github.com/jneidel/project-manager#readme",
+  "dependencies": {
+    "assert": "^1.4.1",
+    "dotenv": "^4.0.0",
+    "mongodb": "^2.2.33"
+  }
+}
