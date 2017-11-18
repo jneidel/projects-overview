@@ -1,0 +1,30 @@
+{
+  "name": "project-manager",
+  "version": "1.0.0",
+  "description": "None",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jneidel/project-manager.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "dotenv": "^4.0.0",
+    "express": "^4.16.2",
+    "express-validator": "^4.3.0",
+    "jimp": "^0.2.28",
+    "md5": "^2.2.1",
+    "mongodb": "^2.2.33",
+    "passport": "^0.4.0",
+    "validator": "^9.1.1"
+  },
+  "devDependencies": {
+    "concurrently": "^3.5.0",
+    "nodemon": "^1.12.1"
+  }
+}
