@@ -1,3 +1,10 @@
 exports.renderList = async( req, res ) => {
-    res.render( "main", { items: [ {name: "yesadfsadfsadfsadfsadfasdah"}, {name: "yesadfsadfsadfsadfsadfasdah"}, {name: "yesadfsadfsadfsadfsadfasdah"}, {name: "yesadfsadfsadfsadfsadfasdah"}, {name: "yesadfsadfsadfsadfsadfasdah"}, {name: "yesadfsadfsadfsadfsadfasdah"} ] } );
+    res.render( "main", { items: [ 
+        {title: "yesadfsadfsadfsadfsadfasdah", values: [ "awe", "abc", "efd" ] }, 
+        {title: "yesadfsadfsadfsadfsadfasdah", values: [ "awe", "abc", "efd" ] }, 
+        {title: "yesadfsadfsadfsadfsadfasdah", values: [ "awe", "abc", "efd" ] }, 
+        {title: "yesadfsadfsadfsadfsadfasdah", values: [ "awe", "abc", "efd" ] }, 
+        {title: "yesadfsadfsadfsadfsadfasdah", values: [ "awe", "abc", "efd" ] }, 
+        {title: "yesadfsadfsadfsadfsadfasdah", values: [ "awe", "abc", "efd" ] } 
+    ] } );
 };

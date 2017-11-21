@@ -1,2 +1,8 @@
 mixin itemCard( item = {} )
-    h2= item.name
+    h2= item.title
+    ul
+        each value in item.values
+            li
+                input.item( type="text" value=value )
+        li
+            input.item( type="text" )
