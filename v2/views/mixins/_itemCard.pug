@@ -1,5 +1,5 @@
 mixin itemCard( item = {} )
-    h2= item.title
+    input.title( type="text" value=item.title )
     ul
         each value in item.values
             li

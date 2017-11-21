@@ -47,3 +47,7 @@ input[type=text] {
     width: auto;
     caret-color: #333; /* Cursor color */
 }
+input.title {
+    font-size: 28px;
+    font-family: "Raleway";
+}
