@@ -1,0 +1,16 @@
+body {
+    background-image: linear-gradient( #3BECAB, #15B7E4 );
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    color: #F5F7FA;
+    min-height: 95vh;
+    margin: 0;
+    font-family: "Open Sans";
+}
+h1 {
+    text-align: center;
+    font-family: "Raleway";
+    margin-top: 8vh;
+    font-size: 40px;
+}
