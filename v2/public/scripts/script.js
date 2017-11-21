@@ -1,29 +1,32 @@
 const items = document.getElementsByClassName( "item" ),
     titles = document.getElementsByClassName( "title" );
 
-for ( let item of items ) {
+for ( const item of items ) {
     let originalItem = item.value;
-    item.addEventListener( "keydown", async () => {
+    item.addEventListener( "keydown", async() => {
         if ( event.which === 13 ) {
             const parentNode = item.parentNode.parentNode.parentNode,
                 title = parentNode.childNodes[0].value;
-            
-            console.log( `New item: ${item.value} --- Old item: ${originalItem} --- Title: ${title}` );
-            // Send request to backend to change item database
+
+            const request = new XMLHttpRequest();
+            request.open( "POST", `http://localhost:8080/api?newItem=${item.value}&oldItem=${originalItem}&title=${title}`, true );
+            request.setRequestHeader( "Content-Type", "application/x-www-form-urlencoded; charset=UTF-8" );
+            await request.send();
 
             originalItem = item.value;
         }
     } );
 }
 
-for ( let title of titles ) {
+for ( const title of titles ) {
     let originalTitle = title.value;
-    title.addEventListener( "keydown", async () => {
+    title.addEventListener( "keydown", async() => {
         if ( event.which === 13 ) {
+            const request = new XMLHttpRequest();
+            request.open( "POST", `http://localhost:8080/api?newTitle=${title.value}&title=${originalTitle}`, true );
+            request.setRequestHeader( "Content-Type", "application/x-www-form-urlencoded; charset=UTF-8" );
+            await request.send();
 
-            console.log( `New title: ${title.value} --- Old title: ${originalTitle} --- Title: ${originalTitle}`)
-            
-            // send ogTitle along on db request
             // if len > 17 alert that it will probably be cut off
 
             originalTitle = title.value;
