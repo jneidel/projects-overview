@@ -2,9 +2,9 @@
   "name": "project-manager",
   "version": "1.0.0",
   "description": "None",
-  "main": "app.js",
+  "main": "start.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon start.js"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
     "md5": "^2.2.1",
     "mongodb": "^2.2.33",
     "passport": "^0.4.0",
+    "pug": "^2.0.0-rc.4",
     "validator": "^9.1.1"
   },
   "devDependencies": {
