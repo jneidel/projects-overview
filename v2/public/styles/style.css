@@ -10,7 +10,21 @@ body {
 }
 h1 {
     text-align: center;
-    font-family: "Raleway";
     margin-top: 8vh;
     font-size: 40px;
+}
+h1, h2, h3 {
+    font-family: "Raleway";
+}
+
+/* Items Styling */
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+span {
+    display: inline-block;
+    padding: 0 20px;
 }

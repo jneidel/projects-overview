@@ -1,3 +1,8 @@
 extends layout
 
+include mixins/_itemCard
+
 block content
+    each item in items
+        span
+            +itemCard( item )
