@@ -14,17 +14,17 @@ body {
     margin: 0;
     font-family: "Open Sans";
 }
+
+/* Header */
 h1 {
     grid-area: header;
     text-align: center;
     font-size: 40px;
     padding-top: 20px;
-}
-h1, h2, h3 {
     font-family: "Raleway";
 }
 
-/* Items Styling */
+/* Cards */
 .content {
     grid-area: main;
     display: flex;
@@ -42,7 +42,7 @@ span.card {
     /* cursor: pointer; Implement card flip*/
 }
 
-/* Input Style */
+/* Item Style */
 input[type=text] {
     background-color: transparent;
     border: none;
@@ -55,4 +55,13 @@ input[type=text] {
 input.title {
     font-size: 28px;
     font-family: "Raleway";
+}
+
+/* Responsive Design */
+@media all and (max-width: 580px) {
+    body {
+        grid-template-areas: 
+            "header header header"
+            "main main main";
+    }
 }
