@@ -11,4 +11,5 @@ exports.renderItems = async( req, res ) => {
 
 exports.updateDatabase = async( req, res ) => {
     console.log( req.query );
+    res.sendStatus( 200 );
 };

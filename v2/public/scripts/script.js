@@ -9,8 +9,13 @@ for ( const item of items ) {
                 title = parentNode.childNodes[0].value;
 
             const request = new XMLHttpRequest();
-            request.open( "POST", `http://localhost:8080/api?newItem=${item.value}&oldItem=${originalItem}&title=${title}`, true );
+            request.open( "POST", `http://localhost:8080/api/update?newItem=${item.value}&oldItem=${originalItem}&title=${title}`, true );
             request.setRequestHeader( "Content-Type", "application/x-www-form-urlencoded; charset=UTF-8" );
+            request.addEventListener( "load", () => {
+                if ( request.status !== 200 ) {
+                    alert( "There was a error saving your data." );
+                }
+            } );
             await request.send();
 
             originalItem = item.value;
@@ -23,8 +28,13 @@ for ( const title of titles ) {
     title.addEventListener( "keydown", async() => {
         if ( event.which === 13 ) {
             const request = new XMLHttpRequest();
-            request.open( "POST", `http://localhost:8080/api?newTitle=${title.value}&title=${originalTitle}`, true );
+            request.open( "POST", `http://localhost:8080/api/update?newTitle=${title.value}&title=${originalTitle}`, true );
             request.setRequestHeader( "Content-Type", "application/x-www-form-urlencoded; charset=UTF-8" );
+            request.addEventListener( "load", () => {
+                if ( request.status !== 200 ) {
+                    alert( "There was a error saving your data." );
+                }
+            } );
             await request.send();
 
             // if len > 17 alert that it will probably be cut off
