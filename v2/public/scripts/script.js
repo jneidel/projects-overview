@@ -33,4 +33,3 @@ for ( const title of titles ) {
         }
     } );
 }
-

@@ -32,9 +32,14 @@ h1, h2, h3 {
     align-items: center;
     flex-wrap: wrap;
 }
-span {
+span.card {
     display: inline-block;
-    padding: 0 20px;
+    margin: 30px 20px;
+    padding: 20px;
+    box-shadow: 0 0 3px #F5F7FA;
+    border-radius: 5px;
+    background: rgba(245, 247, 250, 0.1);
+    /* cursor: pointer; Implement card flip*/
 }
 
 /* Input Style */
