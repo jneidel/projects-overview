@@ -8,6 +8,7 @@ mixin frontCard( card = {} )
             input.item( type="text" )
 
 mixin backCard( card = {} )
+    p.future Future
     input.title( type="text" value=card.title )
     ul
         each item in card.backItems
