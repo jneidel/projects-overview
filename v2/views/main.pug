@@ -1,8 +1,11 @@
 extends layout
 
-include mixins/_itemCard
+include mixins/_cards
 
 block content
-    each item in items
+    each card in cards
         span.card
-            +itemCard( item )
+            .front.inner
+                +frontCard( card )
+            .back.inner
+                +backCard( card )

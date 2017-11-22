@@ -1,8 +1,0 @@
-mixin itemCard( item = {} )
-    input.title( type="text" value=item.title )
-    ul
-        each value in item.values
-            li
-                input.item( type="text" value=value )
-        li
-            input.item( type="text" )

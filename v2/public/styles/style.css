@@ -25,12 +25,13 @@ h1 {
 }
 
 /* Cards */
-.content {
+#content {
     grid-area: main;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
+    perspective: 800px;
 }
 span.card {
     display: inline-block;
@@ -39,7 +40,18 @@ span.card {
     box-shadow: 0 0 3px #F5F7FA;
     border-radius: 5px;
     background: rgba(245, 247, 250, 0.1);
-    /* cursor: pointer; Implement card flip*/
+    cursor: pointer;
+    transition: all 0.6s ease;
+    transform-style: preserve-3d;
+}
+.front, .back {
+    backface-visibility: hidden;
+}
+.back {
+    position: absolute;
+    top: 20px;
+    left: -10;
+    transform: rotateY( 180deg );
 }
 
 /* Item Style */

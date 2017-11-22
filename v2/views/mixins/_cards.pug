@@ -1,0 +1,17 @@
+mixin frontCard( card = {} )
+    input.title( type="text" value=card.title )
+    ul
+        each item in card.frontItems
+            li
+                input.item( type="text" value=item )
+        li
+            input.item( type="text" )
+
+mixin backCard( card = {} )
+    input.title( type="text" value=card.title )
+    ul
+        each item in card.backItems
+            li
+                input.item( type="text" value=item )
+        li
+            input.item( type="text" )
