@@ -69,6 +69,26 @@ for ( const card of cards ) {
             }
         } );
     } else {
-        // Todo: add empty new card template
+        card.addEventListener( "dblclick", () => {
+            card.className = "card";
+            card.innerHTML = `
+                <div class="front inner">
+                    <input type="text" placeholder="Add title" class="title">
+                        <ul>
+                            <li>
+                                <input type="text" placeholder="Add items" class="item">
+                            </li>
+                        </ul>
+                </div>
+                <div class="back inner">
+                    <input type="text" placeholder="Add title" class="title"s>
+                        <ul>
+                            <li>
+                                <input type="text" placeholder="Add items" class="item">
+                            </li>
+                        </ul>
+                </div>
+            `;
+        } );
     }
 }
