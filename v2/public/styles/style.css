@@ -90,7 +90,7 @@ input.title {
 img.addCard {
     height: 48px;
     width: 48px;
-    padding: 20px 0 20px 0;
+    padding: 21px 0 21px 0;
     transition: all 0.3s ease-out;
     transform-origin: 50% 50% 0;
     user-select: none;

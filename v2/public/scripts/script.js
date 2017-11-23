@@ -21,7 +21,6 @@ function ajaxUpdate( url ) {
 function itemListener( item ) {
     let originalItem = item.value;
     item.addEventListener( "keydown", () => {
-        console.log( "ok")
         if ( event.which === 13 ) {
             const parentNode = item.parentNode.parentNode.parentNode,
                 titleNode = parentNode.children;
@@ -125,7 +124,11 @@ function setNewCardToInput( cardToBeSet, callingFunction ) {
     `;
     
     for ( const item of cardToBeSet.children ) {
-        itemListener( item.children[1].children[0].children[0] );
+        if ( item.children.length == 3 ) {
+            itemListener( item.children[2].children[0].children[0] );
+        } else {
+            itemListener( item.children[1].children[0].children[0] );
+        }
     }
     for ( const title of cardToBeSet.children ) {
         titleListener( title.children[0] );
