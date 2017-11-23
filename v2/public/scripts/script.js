@@ -1,6 +1,6 @@
 /* eslint-disable no-alert */
 
-/* Listening for item/title changes */
+/* Update database */
 function ajaxUpdate( url ) {
     const request = new XMLHttpRequest();
     request.open( "POST", url, true );
@@ -17,6 +17,7 @@ function ajaxUpdate( url ) {
     request.send();
 }
 
+/* Listening for item/title changes */
 function itemListener( item ) {
     let originalItem = item.value;
     item.addEventListener( "keydown", () => {
@@ -45,6 +46,13 @@ function titleListener( title ) {
             if ( title.value.length >= 20 ) {
                 alert( `The title "${title.value}" will probably be cut off as its too long.
                         ${title.value.length}` );
+            }
+
+            const parent = title.parentNode.parentNode.children;
+            if ( !title.parentNode.className.match( /back/ ) ) {
+                parent[1].children[1].value = title.value;
+            } else {
+                parent[0].children[0].value = title.value;
             }
     
             ajaxUpdate( `http://localhost:8080/api/update?newTitle=${title.value}&title=${originalTitle}` );
@@ -81,40 +89,36 @@ function flipCard( card ) {
     } );
 }
 
-function setNewCard( card ) {
-    console.log(card)
-    //setNewCardToInput( card );
-}
-
 for ( const card of cards ) {
     const classes = card.className;
     if ( !classes.match( /.addCardContainer/ ) ) {
         flipCard( card );
     } else {
-        /* Add new card */
         card.addEventListener( "dblclick", function () {
             setNewCardToInput( this, arguments.callee );
         } );
     }
 }
 
+/* Add new card */
 function setNewCardToInput( cardToBeSet, callingFunction ) {
     cardToBeSet.removeEventListener( "dblclick", callingFunction );
     cardToBeSet.className = "card";
     cardToBeSet.innerHTML = `
         <div class="front inner">
-            <input type="text" placeholder="Add title" class="title">
+            <input class="title" type="text" placeholder="Add title">
                 <ul>
                     <li>
-                        <input type="text" placeholder="Add items" class="item">
+                        <input class="item" type="text" placeholder="Add items">
                     </li>
                 </ul>
         </div>
         <div class="back inner">
-            <input type="text" placeholder="Add title" class="title"s>
+            <p class="future">Future</p> 
+            <input class="title" type="text" placeholder="Add title">
                 <ul>
                     <li>
-                        <input type="text" placeholder="Add items" class="item">
+                        <input class="item" type="text" placeholder="Add items">
                     </li>
                 </ul>
         </div>
@@ -133,7 +137,7 @@ function setNewCardToInput( cardToBeSet, callingFunction ) {
         newCard = content.appendChild( document.createElement( "span" ) );
     newCard.innerHTML += `<img class="addCard" src="img/add.png">`;
     newCard.className = "card addCardContainer";
-    newCard.addEventListener( "dblclick", function setNewCard() {
-        setNewCardToInput( this );
+    newCard.addEventListener( "dblclick", function () {
+        setNewCardToInput( this, arguments.callee );
     } );
 }
