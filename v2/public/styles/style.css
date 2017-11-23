@@ -29,11 +29,11 @@ h1 {
     grid-area: main;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     flex-wrap: wrap;
     perspective: 800px; /* Todo: scale up perspective for smaller screens */
 }
-span.card {
+.card {
     display: inline-block;
     margin: 30px 20px;
     padding: 20px;
@@ -45,7 +45,9 @@ span.card {
     transform-style: preserve-3d;
 }
 .front, .back {
-    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+       -moz-backface-visibility: hidden;
+            backface-visibility: hidden;
 }
 .back {
     position: absolute;
@@ -59,6 +61,23 @@ span.card {
     left: 2px;
     font-size: 10px;
     color: rgba(245, 247, 250, 0.88);
+}
+.addCardContainer {
+    width: 88px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+img.addCard {
+    height: 48px;
+    width: 48px;
+    padding: 20px 0 20px 0;
+    transition: all 0.3s ease-out;
+    transform-origin: 50% 50% 0;
+    user-select: none;
+}
+span.addCardContainer:hover img.addCard {
+    transform: rotateZ( 90deg );
 }
 
 /* Item Style */

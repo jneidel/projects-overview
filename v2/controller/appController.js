@@ -5,8 +5,7 @@ exports.renderItems = async( req, res ) => {
         { title: "Courses", frontItems: [ "foo", "baz", "bar" ], backItems: [ "awe", "abc", "efd" ] },
         { title: "eBooks", frontItems: [ "foo", "baz", "bar" ], backItems: [ "awe", "abc", "efd" ] },
         { title: "Audiobooks", frontItems: [ "foo", "baz", "bar" ], backItems: [ "awe", "abc", "efd" ] },
-        { title: "Misc", frontItems: [ "foo", "baz", "bar" ], backItems: [ "awe", "abc", "efd" ] },
-    ] } );
+    ], title: "Project Manager" } );
 };
 
 exports.updateDatabase = async( req, res ) => {
