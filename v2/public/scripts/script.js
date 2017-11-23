@@ -57,13 +57,18 @@ const cards = document.getElementsByClassName( "card" );
 let cardState = "front";
 
 for ( const card of cards ) {
-    card.addEventListener( "dblclick", () => {
-        if ( cardState === "front" ) {
-            card.style.transform = "rotateY( 180deg )";
-            cardState = "back";
-        } else {
-            card.style.transform = "rotateY( 0deg )";
-            cardState = "front";
-        }
-    } );
+    const classes = card.className;
+    if ( !classes.match( /.addCardContainer/ ) ) {
+        card.addEventListener( "dblclick", () => {
+            if ( cardState === "front" ) {
+                card.style.transform = "rotateY( 180deg )";
+                cardState = "back";
+            } else {
+                card.style.transform = "rotateY( 0deg )";
+                cardState = "front";
+            }
+        } );
+    } else {
+        // Todo: add empty new card template
+    }
 }
