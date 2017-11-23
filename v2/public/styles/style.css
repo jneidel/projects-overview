@@ -96,7 +96,12 @@ input.title {
 }
 
 /* Responsive Design */
-@media all and (max-width: 580px) {
+@media all and ( max-width: 842px ) {
+    .addCardContainer {
+        margin: 20px 170px 60px 170px;
+    }
+}
+@media all and ( max-width: 580px ) {
     body {
         grid-template-areas: 
             "header header header"
