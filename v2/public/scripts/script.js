@@ -1,7 +1,8 @@
 "use strict";
 
-/* Listening for item/title changes */
+/* eslint-disable no-alert */
 
+/* Listening for item/title changes */
 const items = document.getElementsByClassName( "item" ),
     titles = document.getElementsByClassName( "title" );
 
@@ -9,7 +10,7 @@ function ajaxUpdate( url ) {
     const request = new XMLHttpRequest();
     request.open( "POST", url, true );
     request.setRequestHeader( "Content-Type", "application/x-www-form-urlencoded; charset=UTF-8" );
-    request.addEventListener( "loadend", function requestLoad( event ) {
+    request.addEventListener( "loadend", function requestLoad() {
         if ( this.status !== 200 ) {
             alert( "There was a error saving your data." );
         }
@@ -69,26 +70,43 @@ for ( const card of cards ) {
             }
         } );
     } else {
-        card.addEventListener( "dblclick", () => {
-            card.className = "card";
-            card.innerHTML = `
-                <div class="front inner">
-                    <input type="text" placeholder="Add title" class="title">
-                        <ul>
-                            <li>
-                                <input type="text" placeholder="Add items" class="item">
-                            </li>
-                        </ul>
-                </div>
-                <div class="back inner">
-                    <input type="text" placeholder="Add title" class="title"s>
-                        <ul>
-                            <li>
-                                <input type="text" placeholder="Add items" class="item">
-                            </li>
-                        </ul>
-                </div>
-            `;
+        /* Add new card */
+        card.addEventListener( "dblclick", function setNewCard() {
+            setNewCardToInput( this );
         } );
     }
+}
+
+function setNewCardToInput( cardToBeSet ) {
+    cardToBeSet.className = "card";
+    cardToBeSet.innerHTML = `
+        <div class="front inner">
+            <input type="text" placeholder="Add title" class="title">
+                <ul>
+                    <li>
+                        <input type="text" placeholder="Add items" class="item">
+                    </li>
+                </ul>
+        </div>
+        <div class="back inner">
+            <input type="text" placeholder="Add title" class="title"s>
+                <ul>
+                    <li>
+                        <input type="text" placeholder="Add items" class="item">
+                    </li>
+                </ul>
+        </div>
+    `;
+
+    const content = document.getElementById( "content" );
+    content.innerHTML += `
+        <span class="card addCardContainer">
+            <img class="addCard" src="img/add.png">
+        </span>
+    `;
+
+    const newCard = document.getElementsByClassName( "addCardContainer" )[0];
+    newCard.addEventListener( "dblclick", function setNewCard() {
+        setNewCardToInput( this );
+    } );
 }
