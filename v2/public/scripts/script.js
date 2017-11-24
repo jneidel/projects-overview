@@ -8,7 +8,6 @@ const database = {
         request.setRequestHeader( "Content-Type", "application/x-www-form-urlencoded; charset=UTF-8" );
         request.addEventListener( "loadend", function requestLoad() {
             if ( newCardHandler && card ) { // New card handler
-                console.log("triggered")
                 newCardHandler( request.response, card );
             } else {
                 if ( this.status !== 200 ) {
@@ -41,6 +40,13 @@ const database = {
                 }
                 const cardId = trim( res.slice( 7 ) );
                 card.id = cardId;
+                console.log(cardId)
+
+                database.request(
+                    `http://localhost:8080/api/add-new-card?_id=${cardId}`,
+                    "POST",
+                    "add the new card."
+                )
             }
         );
     }

@@ -3,7 +3,7 @@ const mongo = require( "mongodb" ).MongoClient,
 
 require( "dotenv" ).config( { path: "../var.env" } );
 
-exports.renderItems = async( req, res ) => {
+exports.renderItems = ( req, res ) => {
     const userid = 1;
 
     mongo.connect( process.env.DATABASE, ( err, db ) => {
@@ -31,13 +31,13 @@ exports.renderItems = async( req, res ) => {
     } );
 };
 
-exports.updateDatabase = async( req, res ) => {
+exports.updateDatabase = ( req, res ) => {
     console.log( req.query );
 
     res.sendStatus( 200 );
 };
 
-exports.generateCardId = async( req, res ) => {
+exports.generateCardId = ( req, res ) => {
     mongo.connect( process.env.DATABASE, ( err, db ) => {
         assert.equal( err, null );
 
@@ -57,4 +57,20 @@ exports.generateCardId = async( req, res ) => {
             return db.close();
         } );
     } );
+};
+
+exports.addNewCard = ( req, res ) => {
+    mongo.connect( process.env.DATABASE, ( err, db ) => {
+        assert.equal( err, null );
+
+        const insertion = { 
+                _id: Number(req.query._id),
+                title: "",
+                front: [],
+                back: []
+            };
+        db.collection( "cards" ).insertOne( insertion );
+    } );
+
+    res.sendStatus( 200 );
 };
