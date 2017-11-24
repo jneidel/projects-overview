@@ -4,7 +4,7 @@ include mixins/_cards
 
 block content
     each card in cards
-        span.card
+        span.card( id=card._id )
             .front.inner
                 +frontCard( card )
             .back.inner

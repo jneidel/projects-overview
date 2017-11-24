@@ -11,7 +11,7 @@ exports.renderItems = async( req, res ) => {
 
         const cards = [],
             query = { userid },
-            projection = { _id: 0, title: 1, front: 1, back: 1, position: 1 },
+            projection = { _id: 1, title: 1, front: 1, back: 1, position: 1 },
             cursor = db.collection( "cards" ).find( query, projection );
 
         cursor.sort( { position: 1 } );
@@ -35,4 +35,26 @@ exports.updateDatabase = async( req, res ) => {
     console.log( req.query );
 
     res.sendStatus( 200 );
+};
+
+exports.generateCardId = async( req, res ) => {
+    mongo.connect( process.env.DATABASE, ( err, db ) => {
+        assert.equal( err, null );
+
+        const query = {},
+            projection = { _id: 1 },
+            cursor = db.collection( "cards" ).find( query, projection );
+
+        cursor.sort( { _id: -1 } );
+        cursor.limit( 1 );
+
+        cursor.forEach( ( doc ) => {
+            res.status( 200 );
+            res.json( { _id: doc._id + 1 } );
+        }, ( err ) => {
+            assert.equal( err, null );
+
+            return db.close();
+        } );
+    } );
 };

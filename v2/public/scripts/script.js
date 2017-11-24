@@ -1,14 +1,19 @@
 /* eslint-disable no-alert */
 
-/* Update database */
+/* Database Requests */
 const database = {
-    request( url, errorMsg ) {
+    request( url, method, errorMsg, card = null, newCardHandler = null ) {
         const request = new XMLHttpRequest();
-        request.open( "POST", url, true );
+        request.open( method, url, true );
         request.setRequestHeader( "Content-Type", "application/x-www-form-urlencoded; charset=UTF-8" );
         request.addEventListener( "loadend", function requestLoad() {
-            if ( this.status !== 200 ) {
-                alert( "There was a error " + errorMsg );
+            if ( newCardHandler && card ) { // New card handler
+                console.log("triggered")
+                newCardHandler( request.response, card );
+            } else {
+                if ( this.status !== 200 ) {
+                    alert( "There was a error " + errorMsg );
+                }
             }
         } );
         request.timeout = 10000;
@@ -20,14 +25,24 @@ const database = {
     update( url ) {
         this.request(
             url,
+            "POST",
             "saving your data."
-        )
+        );
     },
-    addCard( url ) {
+    addNewCard( url, card ) {
         this.request(
             url,
-            "adding the new card"
-        )
+            "GET",
+            "adding the new card.",
+            card,
+            function ( res, card ) {
+                function trim( str ) {
+                    return str.replace( /}/, "" );
+                }
+                const cardId = trim( res.slice( 7 ) );
+                card.id = cardId;
+            }
+        );
     }
 }
 
@@ -114,7 +129,7 @@ for ( const card of cards ) {
 }
 
 /* Add new card */
-function setNewCardToInput( cardToBeSet, callingFunction ) {
+async function setNewCardToInput( cardToBeSet, callingFunction ) {
     cardToBeSet.removeEventListener( "dblclick", callingFunction );
     cardToBeSet.className = "card";
     cardToBeSet.innerHTML = `
@@ -157,4 +172,7 @@ function setNewCardToInput( cardToBeSet, callingFunction ) {
     newCard.addEventListener( "dblclick", function () {
         setNewCardToInput( this, arguments.callee );
     } );
+
+    database.addNewCard( `http://localhost:8080/api/generate-userid`, cardToBeSet );
+    
 }
