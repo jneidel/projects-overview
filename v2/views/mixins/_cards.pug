@@ -1,7 +1,7 @@
 mixin frontCard( card = {} )
     input.title( type="text" value=card.title )
     ul
-        each item in card.frontItems
+        each item in card.front
             li
                 input.item( type="text" value=item )
         li
@@ -11,7 +11,7 @@ mixin backCard( card = {} )
     p.future Future
     input.title( type="text" value=card.title )
     ul
-        each item in card.backItems
+        each item in card.back
             li
                 input.item( type="text" value=item )
         li
