@@ -1,20 +1,34 @@
 /* eslint-disable no-alert */
 
 /* Update database */
-function ajaxUpdate( url ) {
-    const request = new XMLHttpRequest();
-    request.open( "POST", url, true );
-    request.setRequestHeader( "Content-Type", "application/x-www-form-urlencoded; charset=UTF-8" );
-    request.addEventListener( "loadend", function requestLoad() {
-        if ( this.status !== 200 ) {
-            alert( "There was a error saving your data." );
-        }
-    } );
-    request.timeout = 10000;
-    request.ontimeout = () => {
-        alert( "There was a timeout saving your data." );
-    };
-    request.send();
+const database = {
+    request( url, errorMsg ) {
+        const request = new XMLHttpRequest();
+        request.open( "POST", url, true );
+        request.setRequestHeader( "Content-Type", "application/x-www-form-urlencoded; charset=UTF-8" );
+        request.addEventListener( "loadend", function requestLoad() {
+            if ( this.status !== 200 ) {
+                alert( "There was a error " + errorMsg );
+            }
+        } );
+        request.timeout = 10000;
+        request.ontimeout = () => {
+            alert( "There was a timeout " + errorMsg );
+        };
+        request.send();
+    },
+    update( url ) {
+        this.request(
+            url,
+            "saving your data."
+        )
+    },
+    addCard( url ) {
+        this.request(
+            url,
+            "adding the new card"
+        )
+    }
 }
 
 /* Listening for item/title changes */
@@ -31,7 +45,7 @@ function itemListener( item ) {
                 var title = titleNode[0].value;
             }
 
-            ajaxUpdate( `http://localhost:8080/api/update?newItem=${item.value}&oldItem=${originalItem}&title=${title}` );
+            database.update( `http://localhost:8080/api/update?newItem=${item.value}&oldItem=${originalItem}&title=${title}` );
     
             originalItem = item.value;
         }
@@ -54,7 +68,7 @@ function titleListener( title ) {
                 parent[0].children[0].value = title.value;
             }
     
-            ajaxUpdate( `http://localhost:8080/api/update?newTitle=${title.value}&title=${originalTitle}` );
+            database.update( `http://localhost:8080/api/update?newTitle=${title.value}&title=${originalTitle}` );
     
             originalTitle = title.value;
         }
