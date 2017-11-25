@@ -1,35 +1,5 @@
-body {
-    display: grid;
-    grid-template-columns: 40px auto 40px;
-    grid-template-rows: 100px auto;
-    grid-template-areas: 
-        "header header header"
-        ". main .";
-    background-image: linear-gradient( #3BECAB, #15B7E4 );
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-    color: #F5F7FA;
-    min-height: 100vh;
-    margin: 0;
-    font-family: "Open Sans";
-}
-
-/* Header */
-h1 {
-    grid-area: header;
-    text-align: center;
-    font-size: 40px;
-    padding-top: 20px;
-    font-family: "Raleway";
-}
-
 /* Cards */
 #content {
-    grid-area: main;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
     flex-wrap: wrap;
     perspective: 800px; /* Todo: scale up perspective for smaller screens */
 }
@@ -115,12 +85,5 @@ form .form-control:placeholder {
 @media all and ( max-width: 842px ) {
     .addCardContainer {
         margin: 20px 100px 60px 100px;
-    }
-}
-@media all and ( max-width: 580px ) {
-    body {
-        grid-template-areas: 
-            "header header header"
-            "main main main";
     }
 }

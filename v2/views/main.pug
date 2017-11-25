@@ -2,6 +2,12 @@ extends layout
 
 include mixins/_cards
 
+block styles
+    link( rel="stylesheet", href="styles/main.css" )
+
+block header
+    h1 Project Manager
+
 block content
     each card in cards
         span.card( id=card._id )
@@ -11,3 +17,6 @@ block content
                 +backCard( card )
     span.card.addCardContainer
         img.addCard( src="img/add.png" )
+
+block scripts
+    script( src="scripts/main.js")

@@ -60,161 +60,17 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_then_request__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_then_request___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_then_request__);
-
-
-/* eslint-disable no-alert */
-
-// Listening for item/title changes
-function itemListener( item ) {
-    let originalItem = item.value;
-    item.addEventListener( "keydown", () => {
-        if ( event.which === 13 ) {
-            const parentNode = item.parentNode.parentNode.parentNode,
-                titleNode = parentNode.children;
-
-            if ( titleNode.length == 3 ) {
-                var title = titleNode[1].value;
-            } else {
-                var title = titleNode[0].value;
-            }
-
-            originalItem = item.value;
-            __WEBPACK_IMPORTED_MODULE_0_then_request___default()( "POST", `http://localhost:8080/api/update?newItem=${item.value}&oldItem=${originalItem}&title=${title}` );
-        }
-    } );
-}
-
-function titleListener( title ) {
-    let originalTitle = title.value;
-    title.addEventListener( "keydown", () => {
-        if ( event.which === 13 ) {
-            if ( title.value.length >= 20 ) {
-                alert( `The title "${title.value}" will probably be cut off as its too long.
-                        ${title.value.length}` );
-            }
-
-            const parent = title.parentNode.parentNode.children;
-            if ( !title.parentNode.className.match( /back/ ) ) {
-                parent[1].children[1].value = title.value;
-            } else {
-                parent[0].children[0].value = title.value;
-            }
-
-            originalTitle = title.value;
-            __WEBPACK_IMPORTED_MODULE_0_then_request___default()( "POST", `http://localhost:8080/api/update?newTitle=${title.value}&title=${originalTitle}` );
-        }
-    } );
-}
-
-const items = document.getElementsByClassName( "item" ),
-    titles = document.getElementsByClassName( "title" );
-
-for ( const item of items ) {
-    itemListener( item );
-}
-
-for ( const title of titles ) {
-    titleListener( title );
-}
-
-// Flip cards
-const cards = document.getElementsByClassName( "card" );
-
-function flipCard( card ) {
-    let cardState = "front";
-    card.addEventListener( "dblclick", () => {
-        if ( cardState === "front" ) {
-            card.style.transform = "rotateY( 180deg )";
-            cardState = "back";
-        } else {
-            card.style.transform = "rotateY( 0deg )";
-            cardState = "front";
-        }
-    } );
-}
-
-const cardListenerCallback = function() {
-    setNewCardToInput( this, cardListenerCallback );
-};
-
-for ( const card of cards ) {
-    const classes = card.className;
-    if ( !classes.match( /.addCardContainer/ ) ) {
-        flipCard( card );
-    } else {
-        card.addEventListener( "dblclick", cardListenerCallback );
-    }
-}
-
-// Add new card
-async function setNewCardToInput( cardToBeSet, callingFunction ) {
-    cardToBeSet.removeEventListener( "dblclick", callingFunction );
-    cardToBeSet.className = "card";
-    cardToBeSet.innerHTML = `
-        <div class="front inner">
-            <input class="title" type="text" placeholder="Add title">
-                <ul>
-                    <li>
-                        <input class="item" type="text" placeholder="Add items">
-                    </li>
-                </ul>
-        </div>
-        <div class="back inner">
-            <p class="future">Future</p> 
-            <input class="title" type="text" placeholder="Add title">
-                <ul>
-                    <li>
-                        <input class="item" type="text" placeholder="Add items">
-                    </li>
-                </ul>
-        </div>
-    `;
-
-    for ( const item of cardToBeSet.children ) {
-        if ( item.children.length == 3 ) {
-            itemListener( item.children[2].children[0].children[0] );
-        } else {
-            itemListener( item.children[1].children[0].children[0] );
-        }
-    }
-    for ( const title of cardToBeSet.children ) {
-        titleListener( title.children[0] );
-    }
-
-    flipCard( cardToBeSet );
-
-    const content = document.getElementById( "content" ),
-        newCard = content.appendChild( document.createElement( "span" ) );
-    newCard.innerHTML += `<img class="addCard" src="img/add.png">`;
-    newCard.className = "card addCardContainer";
-    newCard.addEventListener( "dblclick", cardListenerCallback );
-
-    const cardIdRequest = await __WEBPACK_IMPORTED_MODULE_0_then_request___default()( "GET", `http://localhost:8080/api/generate-cardId` ),
-        cardId = JSON.parse( cardIdRequest.body )._id;
-
-    await __WEBPACK_IMPORTED_MODULE_0_then_request___default()( "POST", `http://localhost:8080/api/add-new-card?_id=${cardId}` );
-}
-
-
-/***/ }),
-/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var asap = __webpack_require__(3);
+var asap = __webpack_require__(2);
 
 function noop() {}
 
@@ -428,7 +284,7 @@ function doResolve(fn, promise) {
 
 
 /***/ }),
-/* 2 */
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -438,7 +294,7 @@ module.exports = __webpack_require__(8)
 
 
 /***/ }),
-/* 3 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -669,7 +525,7 @@ rawAsap.makeRequestCallFromTimer = makeRequestCallFromTimer;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -878,7 +734,7 @@ exports.isBuffer = function isBuffer(obj) {
 
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -903,6 +759,150 @@ module.exports = {
 
 
 /***/ }),
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_then_request__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_then_request___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_then_request__);
+
+
+/* eslint-disable no-alert */
+
+// Listening for item/title changes
+function itemListener( item ) {
+    let originalItem = item.value;
+    item.addEventListener( "keydown", () => {
+        if ( event.which === 13 ) {
+            const parentNode = item.parentNode.parentNode.parentNode,
+                titleNode = parentNode.children;
+
+            if ( titleNode.length == 3 ) {
+                var title = titleNode[1].value;
+            } else {
+                var title = titleNode[0].value;
+            }
+
+            originalItem = item.value;
+            __WEBPACK_IMPORTED_MODULE_0_then_request___default()( "POST", `http://localhost:8080/api/update?newItem=${item.value}&oldItem=${originalItem}&title=${title}` );
+        }
+    } );
+}
+
+function titleListener( title ) {
+    let originalTitle = title.value;
+    title.addEventListener( "keydown", () => {
+        if ( event.which === 13 ) {
+            if ( title.value.length >= 20 ) {
+                alert( `The title "${title.value}" will probably be cut off as its too long.
+                        ${title.value.length}` );
+            }
+
+            const parent = title.parentNode.parentNode.children;
+            if ( !title.parentNode.className.match( /back/ ) ) {
+                parent[1].children[1].value = title.value;
+            } else {
+                parent[0].children[0].value = title.value;
+            }
+
+            originalTitle = title.value;
+            __WEBPACK_IMPORTED_MODULE_0_then_request___default()( "POST", `http://localhost:8080/api/update?newTitle=${title.value}&title=${originalTitle}` );
+        }
+    } );
+}
+
+const items = document.getElementsByClassName( "item" ),
+    titles = document.getElementsByClassName( "title" );
+
+for ( const item of items ) {
+    itemListener( item );
+}
+
+for ( const title of titles ) {
+    titleListener( title );
+}
+
+// Flip cards
+const cards = document.getElementsByClassName( "card" );
+
+function flipCard( card ) {
+    let cardState = "front";
+    card.addEventListener( "dblclick", () => {
+        if ( cardState === "front" ) {
+            card.style.transform = "rotateY( 180deg )";
+            cardState = "back";
+        } else {
+            card.style.transform = "rotateY( 0deg )";
+            cardState = "front";
+        }
+    } );
+}
+
+const cardListenerCallback = function() {
+    setNewCardToInput( this, cardListenerCallback );
+};
+
+for ( const card of cards ) {
+    const classes = card.className;
+    if ( !classes.match( /.addCardContainer/ ) ) {
+        flipCard( card );
+    } else {
+        card.addEventListener( "dblclick", cardListenerCallback );
+    }
+}
+
+// Add new card
+async function setNewCardToInput( cardToBeSet, callingFunction ) {
+    cardToBeSet.removeEventListener( "dblclick", callingFunction );
+    cardToBeSet.className = "card";
+    cardToBeSet.innerHTML = `
+        <div class="front inner">
+            <input class="title" type="text" placeholder="Add title">
+                <ul>
+                    <li>
+                        <input class="item" type="text" placeholder="Add items">
+                    </li>
+                </ul>
+        </div>
+        <div class="back inner">
+            <p class="future">Future</p> 
+            <input class="title" type="text" placeholder="Add title">
+                <ul>
+                    <li>
+                        <input class="item" type="text" placeholder="Add items">
+                    </li>
+                </ul>
+        </div>
+    `;
+
+    for ( const item of cardToBeSet.children ) {
+        if ( item.children.length == 3 ) {
+            itemListener( item.children[2].children[0].children[0] );
+        } else {
+            itemListener( item.children[1].children[0].children[0] );
+        }
+    }
+    for ( const title of cardToBeSet.children ) {
+        titleListener( title.children[0] );
+    }
+
+    flipCard( cardToBeSet );
+
+    const content = document.getElementById( "content" ),
+        newCard = content.appendChild( document.createElement( "span" ) );
+    newCard.innerHTML += `<img class="addCard" src="img/add.png">`;
+    newCard.className = "card addCardContainer";
+    newCard.addEventListener( "dblclick", cardListenerCallback );
+
+    const cardIdRequest = await __WEBPACK_IMPORTED_MODULE_0_then_request___default()( "GET", `http://localhost:8080/api/generate-cardId` ),
+        cardId = JSON.parse( cardIdRequest.body )._id;
+
+    await __WEBPACK_IMPORTED_MODULE_0_then_request___default()( "POST", `http://localhost:8080/api/add-new-card?_id=${cardId}` );
+}
+
+
+/***/ }),
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -918,7 +918,7 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
 };
 exports.__esModule = true;
 var GenericResponse = __webpack_require__(7);
-var Promise = __webpack_require__(2);
+var Promise = __webpack_require__(1);
 var ResponsePromise_1 = __webpack_require__(16);
 exports.ResponsePromise = ResponsePromise_1.ResponsePromise;
 var handle_qs_1 = __webpack_require__(17);
@@ -1089,7 +1089,7 @@ module.exports = Response;
 "use strict";
 
 
-module.exports = __webpack_require__(1);
+module.exports = __webpack_require__(0);
 __webpack_require__(10);
 __webpack_require__(11);
 __webpack_require__(12);
@@ -1131,7 +1131,7 @@ module.exports = g;
 "use strict";
 
 
-var Promise = __webpack_require__(1);
+var Promise = __webpack_require__(0);
 
 module.exports = Promise;
 Promise.prototype.done = function (onFulfilled, onRejected) {
@@ -1151,7 +1151,7 @@ Promise.prototype.done = function (onFulfilled, onRejected) {
 "use strict";
 
 
-var Promise = __webpack_require__(1);
+var Promise = __webpack_require__(0);
 
 module.exports = Promise;
 Promise.prototype['finally'] = function (f) {
@@ -1176,7 +1176,7 @@ Promise.prototype['finally'] = function (f) {
 
 //This file contains the ES6 extensions to the core Promises/A+ API
 
-var Promise = __webpack_require__(1);
+var Promise = __webpack_require__(0);
 
 module.exports = Promise;
 
@@ -1291,7 +1291,7 @@ Promise.prototype['catch'] = function (onRejected) {
 // This file contains then/promise specific extensions that are only useful
 // for node.js interop
 
-var Promise = __webpack_require__(1);
+var Promise = __webpack_require__(0);
 var asap = __webpack_require__(14);
 
 module.exports = Promise;
@@ -1426,7 +1426,7 @@ Promise.prototype.nodeify = function (callback, ctx) {
 
 
 // rawAsap provides everything we need except exception management.
-var rawAsap = __webpack_require__(3);
+var rawAsap = __webpack_require__(2);
 // RawTasks are recycled to reduce GC churn.
 var freeTasks = [];
 // We queue errors to ensure they are thrown in right order (FIFO).
@@ -1498,7 +1498,7 @@ RawTask.prototype.call = function () {
 "use strict";
 
 
-var Promise = __webpack_require__(1);
+var Promise = __webpack_require__(0);
 
 module.exports = Promise;
 Promise.enableSynchronous = function () {
@@ -1567,7 +1567,7 @@ Promise.disableSynchronous = function() {
 "use strict";
 
 exports.__esModule = true;
-var Promise = __webpack_require__(2);
+var Promise = __webpack_require__(1);
 function getBody(encoding) {
     if (!encoding) {
         return this.then(getBodyBinary);
@@ -1628,7 +1628,7 @@ exports["default"] = handleQs;
 
 var stringify = __webpack_require__(19);
 var parse = __webpack_require__(20);
-var formats = __webpack_require__(5);
+var formats = __webpack_require__(4);
 
 module.exports = {
     formats: formats,
@@ -1644,8 +1644,8 @@ module.exports = {
 "use strict";
 
 
-var utils = __webpack_require__(4);
-var formats = __webpack_require__(5);
+var utils = __webpack_require__(3);
+var formats = __webpack_require__(4);
 
 var arrayPrefixGenerators = {
     brackets: function brackets(prefix) { // eslint-disable-line func-name-matching
@@ -1861,7 +1861,7 @@ module.exports = function (object, opts) {
 "use strict";
 
 
-var utils = __webpack_require__(4);
+var utils = __webpack_require__(3);
 
 var has = Object.prototype.hasOwnProperty;
 
