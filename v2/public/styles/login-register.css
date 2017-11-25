@@ -13,7 +13,7 @@ h1 {
     background: rgba(245, 247, 250, 0.1);
     padding: 50px;
 }
-input {
+input, a {
     display: block;
     margin-bottom: 20px;
     background-color: transparent;
@@ -23,24 +23,38 @@ input {
     outline: none;
     color: #F5F7FA;
     font-size: 18px;
-    width: auto;
     caret-color: #F5F7FA; /* Cursor color */
     transition: box-shadow 0.3s ease-in;
 }
 input.fields {
     width: 250px;
 }
-input.submit {
+input.button {
     width: 270px;
+}
+.button {
     color: #F5F7FA;
     cursor: pointer;
     transition: all 0.4s ease-out;
-    margin-bottom: 0;
 }
-input.submit:hover {
+.button:hover {
     background: #F5F7FA;
-    color: rgba(25, 206, 222, 0.8);
+    color: rgba(25, 206, 222, 0.9);
 }
 input:focus:not([readonly]) {
     box-shadow: 0 0 10px#fff;
+}
+a {
+    width: 250px;
+    text-decoration: none;
+    font-size: 18px;
+    text-align: center;
+    margin: 10px 0 0 0;
+}
+.dots {
+    text-align: center;
+}
+img {
+    width: 32px;
+    height: 32px;
 }

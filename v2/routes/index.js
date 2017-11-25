@@ -4,7 +4,8 @@ const express = require( "express" ),
     databaseController = require( "../controller/databaseController" );
 
 router.get( "/", appController.renderItems );
-router.get( "/login", appController.login )
+router.get( "/login", appController.login );
+router.get( "/register", appController.register );
 
 // API
 router.post( "/api/update", databaseController.updateDatabase );

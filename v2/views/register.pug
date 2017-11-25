@@ -1,0 +1,17 @@
+extends layout
+
+block styles
+    link( rel="stylesheet", href="styles/login-register.css" )
+
+block content
+    .container
+        h1 Register
+        form.login( action="/register" method="POST" )
+            input.fields( name="username" type="text" placeholder="Username" )
+            input.fields( name="email" type="email" placeholder="Email Address" )
+            input.fields( name="password" type="password" placeholder="Password" )
+            input.fields( name="password-confim" type="password" placeholder="Password Confirmation" )
+            input.button( type="submit" value="Register" )
+            .dots
+                img( src="img/dots.png" )
+            a.button( href="/login" ) Login
