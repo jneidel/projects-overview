@@ -7,8 +7,8 @@ block content
     .container
         h1 Login
         form.login( action="/login" method="POST" )
-            input.fields( name="email" type="email" placeholder="Email Address" )
-            input.fields( name="password" type="password" placeholder="Password" )
+            input.fields( name="email" type="email" placeholder="Email Address" required )
+            input.fields( name="password" type="password" placeholder="Password" required )
             input.button( type="submit" value="Log In" )
             .dots
                 img( src="img/dots.png" )

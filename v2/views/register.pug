@@ -7,10 +7,10 @@ block content
     .container
         h1 Register
         form.login( action="/register" method="POST" )
-            input.fields( name="username" type="text" placeholder="Username" )
-            input.fields( name="email" type="email" placeholder="Email Address" )
-            input.fields( name="password" type="password" placeholder="Password" )
-            input.fields( name="password-confim" type="password" placeholder="Password Confirmation" )
+            input.fields( name="username" type="text" placeholder="Username" required )
+            input.fields( name="email" type="email" placeholder="Email Address" required )
+            input.fields( name="password" type="password" placeholder="Password" required )
+            input.fields( name="password-confim" type="password" placeholder="Confirm Password" required )
             input.button( type="submit" value="Register" )
             .dots
                 img( src="img/dots.png" )
