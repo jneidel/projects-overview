@@ -31,6 +31,23 @@ exports.generateCardId = ( req, res ) => {
     } );
 };
 
+exports.getUserId = ( req, res ) => {
+    mongo.connect( process.env.DATABASE, ( err, db ) => {
+        assert.equal( err, null );
+
+        const query = { _id: req.query._id },
+            projection = { userid: 1 },
+            cursor = db.collection( "cards" ).find( query, projection );
+
+        cursor.forEach( ( doc ) => {
+            res.json( { userid: doc.userid } );
+        }, ( err ) => {
+            assert.equal( err, null );
+            return db.close();
+        } );
+    } );
+};
+
 exports.addNewCard = ( req, res ) => {
     mongo.connect( process.env.DATABASE, ( err, db ) => {
         assert.equal( err, null );
@@ -45,22 +62,4 @@ exports.addNewCard = ( req, res ) => {
     } );
 
     res.sendStatus( 200 );
-};
-
-exports.getUserId = ( req, res ) => {
-    mongo.connect( process.env.DATABASE, ( err, db ) => {
-        assert.equal( err, null );
-
-        const query = { _id: req.query._id },
-            projection = { userid: 1 },
-            cursor = db.collection( "cards" ).find( query, projection );
-
-        cursor.forEach( ( doc ) => {
-            res.status( 200 );
-            res.json( { userid: doc.userid } );
-        }, ( err ) => {
-            assert.equal( err, null );
-            return db.close();
-        } );
-    } );
 };

@@ -1,59 +1,8 @@
+import request from "then-request";
+
 /* eslint-disable no-alert */
 
-/* Database Requests */
-const database = {
-    request( url, method, errorMsg, card = null, newCardHandler = null ) {
-        const request = new XMLHttpRequest();
-        request.open( method, url, true );
-        request.setRequestHeader( "Content-Type", "application/x-www-form-urlencoded; charset=UTF-8" );
-        request.addEventListener( "loadend", function requestLoad() {
-            console.log(1)
-            if ( newCardHandler && card ) { // New card handler
-                newCardHandler( request.response, card );
-            } else {
-                if ( this.status !== 200 ) {
-                    alert( "There was a error " + errorMsg );
-                }
-            };
-        } );
-        request.timeout = 10000;
-        request.ontimeout = () => {
-            alert( "There was a timeout " + errorMsg );
-        };
-        request.send();
-    },
-    update( url ) {
-        this.request(
-            url,
-            "POST",
-            "saving your data."
-        );
-    },
-    addNewCard( url, card ) {
-        this.request(
-            url,
-            "GET",
-            "adding the new card.",
-            card,
-            function ( res, card ) {
-                function trim( str ) {
-                    return str.replace( /}/, "" );
-                }
-                const cardId = trim( res.slice( 7 ) );
-                card.id = cardId;
-                console.log(cardId)
-                
-                database.request(
-                    `http://localhost:8080/api/add-new-card?_id=${cardId}`,
-                    "POST",
-                    "add the new card."
-                );
-            }
-        );
-    }
-}
-
-/* Listening for item/title changes */
+// Listening for item/title changes
 function itemListener( item ) {
     let originalItem = item.value;
     item.addEventListener( "keydown", () => {
@@ -67,9 +16,8 @@ function itemListener( item ) {
                 var title = titleNode[0].value;
             }
 
-            database.update( `http://localhost:8080/api/update?newItem=${item.value}&oldItem=${originalItem}&title=${title}` );
-    
             originalItem = item.value;
+            request( "POST", `http://localhost:8080/api/update?newItem=${item.value}&oldItem=${originalItem}&title=${title}` );
         }
     } );
 }
@@ -89,10 +37,9 @@ function titleListener( title ) {
             } else {
                 parent[0].children[0].value = title.value;
             }
-    
-            database.update( `http://localhost:8080/api/update?newTitle=${title.value}&title=${originalTitle}` );
-    
+
             originalTitle = title.value;
+            request( "POST", `http://localhost:8080/api/update?newTitle=${title.value}&title=${originalTitle}` );
         }
     } );
 }
@@ -108,7 +55,7 @@ for ( const title of titles ) {
     titleListener( title );
 }
 
-/* Flip cards */
+// Flip cards
 const cards = document.getElementsByClassName( "card" );
 
 function flipCard( card ) {
@@ -124,18 +71,20 @@ function flipCard( card ) {
     } );
 }
 
+const cardListenerCallback = function() {
+    setNewCardToInput( this, cardListenerCallback );
+};
+
 for ( const card of cards ) {
     const classes = card.className;
     if ( !classes.match( /.addCardContainer/ ) ) {
         flipCard( card );
     } else {
-        card.addEventListener( "dblclick", function () {
-            setNewCardToInput( this, arguments.callee );
-        } );
+        card.addEventListener( "dblclick", cardListenerCallback );
     }
 }
 
-/* Add new card */
+// Add new card
 async function setNewCardToInput( cardToBeSet, callingFunction ) {
     cardToBeSet.removeEventListener( "dblclick", callingFunction );
     cardToBeSet.className = "card";
@@ -158,7 +107,7 @@ async function setNewCardToInput( cardToBeSet, callingFunction ) {
                 </ul>
         </div>
     `;
-    
+
     for ( const item of cardToBeSet.children ) {
         if ( item.children.length == 3 ) {
             itemListener( item.children[2].children[0].children[0] );
@@ -176,10 +125,10 @@ async function setNewCardToInput( cardToBeSet, callingFunction ) {
         newCard = content.appendChild( document.createElement( "span" ) );
     newCard.innerHTML += `<img class="addCard" src="img/add.png">`;
     newCard.className = "card addCardContainer";
-    newCard.addEventListener( "dblclick", function () {
-        setNewCardToInput( this, arguments.callee );
-    } );
+    newCard.addEventListener( "dblclick", cardListenerCallback );
 
-    database.addNewCard( `http://localhost:8080/api/generate-userid`, cardToBeSet );
-    
+    const cardIdRequest = await request( "GET", `http://localhost:8080/api/generate-cardId` ),
+        cardId = JSON.parse( cardIdRequest.body )._id;
+
+    await request( "POST", `http://localhost:8080/api/add-new-card?_id=${cardId}` );
 }

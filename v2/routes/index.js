@@ -5,7 +5,7 @@ const express = require( "express" ),
 
 router.get( "/", appController.renderItems );
 router.post( "/api/update", databaseController.updateDatabase );
-router.get( "/api/generate-userid", databaseController.generateCardId );
+router.get( "/api/generate-cardId", databaseController.generateCardId );
 router.post( "/api/add-new-card", databaseController.addNewCard );
 router.get( "/api/get-userid", databaseController.getUserId );
 
