@@ -4,7 +4,9 @@
   "description": "None",
   "main": "start.js",
   "scripts": {
-    "start": "nodemon start.js"
+    "start": "concurrently \"npm run watch\" \"npm run build\" --names \"💻,📦\" --prefix name",
+    "watch": "nodemon start.js --ignore public/scripts/",
+    "build": "webpack -w"
   },
   "repository": {
     "type": "git",
@@ -23,10 +25,12 @@
     "mongodb": "^2.2.33",
     "passport": "^0.4.0",
     "pug": "^2.0.0-rc.4",
-    "validator": "^9.1.1"
+    "then-request": "^4.1.0",
+    "validator": "^9.1.2"
   },
   "devDependencies": {
-    "concurrently": "^3.5.0",
-    "nodemon": "^1.12.1"
+    "concurrently": "^3.5.1",
+    "nodemon": "^1.12.1",
+    "webpack": "^3.8.1"
   }
 }
