@@ -16,8 +16,11 @@ body {
 }
 
 /* Header */
-h1 {
+#header {
     grid-area: header;
+    
+}
+h1 {
     text-align: center;
     font-size: 40px;
     padding-top: 20px;
@@ -30,6 +33,20 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: flex-start;
+}
+
+/* Input */
+input::-webkit-input-placeholder {
+    color: rgba(245, 247, 250, 0.7);
+}
+input::-moz-placeholder {
+    color: rgba(245, 247, 250, 0.7);
+}
+input::-ms-input-placeholder {
+    color: rgba(245, 247, 250, 0.7);
+}
+input::placeholder {
+    color: rgba(245, 247, 250, 0.7);
 }
 
 /* Responsive Design */

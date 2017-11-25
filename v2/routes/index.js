@@ -4,6 +4,9 @@ const express = require( "express" ),
     databaseController = require( "../controller/databaseController" );
 
 router.get( "/", appController.renderItems );
+router.get( "/login", appController.login )
+
+// API
 router.post( "/api/update", databaseController.updateDatabase );
 router.get( "/api/generate-cardId", databaseController.generateCardId );
 router.post( "/api/add-new-card", databaseController.addNewCard );

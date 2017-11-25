@@ -1,0 +1,12 @@
+extends layout
+
+block styles
+    link( rel="stylesheet", href="styles/login.css" )
+
+block content
+    .container
+        h1 Login
+        form.login( action="/login" method="POST" )
+            input.fields( name="email" type="email" placeholder="Email Address" size="25" )
+            input.fields( name="password" type="password" placeholder="Password" )
+            input.submit( type="submit" value="Log In")

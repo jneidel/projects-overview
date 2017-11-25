@@ -11,7 +11,7 @@
     border-radius: 5px;
     background: rgba(245, 247, 250, 0.1);
     cursor: pointer;
-    transition: all 0.6s ease;
+    transition: transform 0.6s ease;
     transform-style: preserve-3d;
 }
 
@@ -61,24 +61,12 @@ img.addCard {
     height: 48px;
     width: 48px;
     padding: 21px 0 21px 0;
-    transition: all 0.3s ease-out;
+    transition: transform 0.3s ease-out;
     transform-origin: 50% 50% 0;
     user-select: none;
 }
 span.addCardContainer:hover img.addCard {
     transform: rotateZ( 90deg );
-}
-input::-webkit-input-placeholder {
-    color: rgba(245, 247, 250, 0.7);
-}
-form .form-control::-moz-placeholder {
-    color: rgba(245, 247, 250, 0.7);
-}
-form .form-control:-ms-input-placeholder {
-    color: rgba(245, 247, 250, 0.7);
-}
-form .form-control:placeholder {
-    color: rgba(245, 247, 250, 0.7);
 }
 
 /* Responsive Design */
