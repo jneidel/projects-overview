@@ -1,11 +1,12 @@
 const express = require( "express" ),
     router = express.Router(),
-    appController = require( "../controller/appController" );
+    appController = require( "../controller/appController" ),
+    databaseController = require( "../controller/databaseController" );
 
 router.get( "/", appController.renderItems );
-router.post( "/api/update", appController.updateDatabase );
-router.get( "/api/generate-userid", appController.generateCardId );
-router.post( "/api/add-new-card", appController.addNewCard );
-// router.post( "/api/data" );
+router.post( "/api/update", databaseController.updateDatabase );
+router.get( "/api/generate-userid", databaseController.generateCardId );
+router.post( "/api/add-new-card", databaseController.addNewCard );
+router.get( "/api/get-userid", databaseController.getUserId );
 
 module.exports = router;

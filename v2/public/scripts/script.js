@@ -7,13 +7,14 @@ const database = {
         request.open( method, url, true );
         request.setRequestHeader( "Content-Type", "application/x-www-form-urlencoded; charset=UTF-8" );
         request.addEventListener( "loadend", function requestLoad() {
+            console.log(1)
             if ( newCardHandler && card ) { // New card handler
                 newCardHandler( request.response, card );
             } else {
                 if ( this.status !== 200 ) {
                     alert( "There was a error " + errorMsg );
                 }
-            }
+            };
         } );
         request.timeout = 10000;
         request.ontimeout = () => {
@@ -41,12 +42,12 @@ const database = {
                 const cardId = trim( res.slice( 7 ) );
                 card.id = cardId;
                 console.log(cardId)
-
+                
                 database.request(
                     `http://localhost:8080/api/add-new-card?_id=${cardId}`,
                     "POST",
                     "add the new card."
-                )
+                );
             }
         );
     }
