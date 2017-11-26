@@ -1,5 +1,6 @@
 const express = require( "express" ),
     router = express.Router(),
+    passport = require( "passport" ),
     appController = require( "../controller/appController" ),
     accountController = require( "../controller/accountController" ),
     databaseController = require( "../controller/databaseController" ),
@@ -12,7 +13,8 @@ router.get( "/login", appController.login );
 router.get( "/register", appController.register );
 router.post( "/login", accountController.login );
 router.post( "/register", 
-    accountController.validateRegister
+    accountController.validateRegister,
+    accountController.register
 );
 
 // API

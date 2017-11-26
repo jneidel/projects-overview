@@ -7,7 +7,7 @@ exports.login = ( req, res ) => {
     res.json(req.body)
 };
 
-exports.validateRegister = ( req, res ) => {
+exports.validateRegister = ( req, res, next ) => {
     req.checkBody( "username", "Please supply a username." ).notEmpty();
     req.sanitizeBody( "username" );
     req.checkBody( "email", "Please supply a valid email address." ).isEmail();
@@ -32,3 +32,14 @@ exports.validateRegister = ( req, res ) => {
     }
     return next();
 };
+
+exports.register = ( req, res ) => {
+    res.send("Works");
+};
+
+/* exports.isLoggedIn = (req, res, next) => {
+    if ( req.isAuthenticated() ) return next();
+    
+    req.flash( "error", "You must be logged in to visit this page." );
+    res.redirect( "back" );
+}; */
