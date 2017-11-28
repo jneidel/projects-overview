@@ -22,6 +22,11 @@ router.post( "/register",
     accountController.validateRegister,
     accountController.register
 );
+router.get( "/logout", ( req, res ) => {
+    req.logout();
+    req.flash( "success", "Successfully logged out." );
+    res.redirect( "/login" );
+} );
 
 // API
 router.post( "/api/update", databaseController.updateDatabase );

@@ -1,5 +1,6 @@
 const mongo = require( "mongodb" ).MongoClient,
-    assert = require( "assert" );
+    assert = require( "assert" ),
+    md5 = require( "md5" );
 
 require( "dotenv" ).config( { path: "../var.env" } );
 
@@ -19,9 +20,9 @@ exports.validateRegister = ( req, res, next ) => {
     const errors = req.validationErrors();
     if ( errors ) {
         req.flash( "error", errors.map( err => err.msg ) );
-        res.render( "register", { 
+        res.render( "register", {
             title: "Register", 
-            body: req.body, 
+            body: req.body,
             flashes: req.flash() 
         } );
         return;
@@ -30,11 +31,30 @@ exports.validateRegister = ( req, res, next ) => {
 };
 
 exports.register = ( req, res ) => {
-    res.send("Works");
+    mongo.connect( process.env.DATABASE, ( err, db ) => {
+        assert.equal( err, null );
+        console.log( "Connected to mongodb for register" );
+
+        const doc = {
+            username: req.body.username.trim().toLowerCase(),
+            email: req.body.email.trim().toLowerCase(),
+            password: md5( req.body.password )
+        }
+
+        db.collection( "users" ).insertOne( doc, function(err, result) {
+            if ( err || result.result.ok != 1 ) {
+                req.flash( "error", "Account could not be registered." );
+                return;
+            }
+            req.flash( "success", "Successfully registerd." );
+            res.render( "register", { title: "Login" } );
+        } );
+    } );
 };
 
 exports.login = ( req, res ) => {
-    res.send("Works");
+    req.flash( "success", "Successfully logged in." );
+    res.render( "login", { title: "Login" } );
 };
 
 /* exports.isLoggedIn = (req, res, next) => {
