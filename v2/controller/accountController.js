@@ -1,11 +1,7 @@
 const mongo = require( "mongodb" ).MongoClient,
-assert = require( "assert" );
+    assert = require( "assert" );
 
 require( "dotenv" ).config( { path: "../var.env" } );
-
-exports.login = ( req, res ) => {
-    res.json(req.body)
-};
 
 exports.validateRegister = ( req, res, next ) => {
     req.checkBody( "username", "Please supply a username." ).notEmpty();
@@ -34,6 +30,10 @@ exports.validateRegister = ( req, res, next ) => {
 };
 
 exports.register = ( req, res ) => {
+    res.send("Works");
+};
+
+exports.login = ( req, res ) => {
     res.send("Works");
 };
 
