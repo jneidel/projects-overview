@@ -52,11 +52,11 @@ exports.addNewCard = ( req, res ) => {
     mongo.connect( process.env.DATABASE, ( err, db ) => {
         assert.equal( err, null );
 
-        const insertion = { 
-                _id: Number(req.query._id),
+        const insertion = {
+                _id  : Number( req.query._id ),
                 title: "",
                 front: [],
-                back: []
+                back : [],
             };
         db.collection( "cards" ).insertOne( insertion );
     } );

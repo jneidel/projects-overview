@@ -4,28 +4,31 @@ const express = require( "express" ),
     appController = require( "../controller/appController" ),
     accountController = require( "../controller/accountController" ),
     databaseController = require( "../controller/databaseController" ),
-    { catchErrors } = require( "../handlers/errorHandlers" );
+    { catchErrors } = require( "../handlers/errorHandlers" ),
+    ensureLogin = require( "connect-ensure-login" );
 
 router.get( "/", appController.renderItems );
 
 // Account
 router.get( "/login", appController.login );
 router.get( "/register", appController.register );
-router.post( "/login", 
+router.post( "/login",
     passport.authenticate( "local", {
-        failureRedirect: "/login",
-        failureFlash: true
-    } ),
-    accountController.login 
+        failureRedirect          : "/login",
+        failureFlash             : true,
+        successFlash             : "You successfully logged in.",
+        successReturnToOrRedirect: "/login",
+    } )
 );
-router.post( "/register", 
+router.post( "/register",
     accountController.validateRegister,
     accountController.register,
     passport.authenticate( "local", {
-        failureRedirect: "/login",
-        failureFlash: true
-    } ),
-    accountController.login 
+        failureRedirect          : "/login",
+        failureFlash             : true,
+        successFlash             : "You successfully logged in.",
+        successReturnToOrRedirect: "/login",
+    } )
 );
 router.get( "/logout", ( req, res ) => {
     req.logout();

@@ -21,9 +21,9 @@ exports.validateRegister = ( req, res, next ) => {
     if ( errors ) {
         req.flash( "error", errors.map( err => err.msg ) );
         res.render( "register", {
-            title: "Register",
+            title   : "Register",
             username: req.body.username,
-            flashes: req.flash()
+            flashes : req.flash(),
         } );
         return;
     }
@@ -35,23 +35,23 @@ exports.register = ( req, res, next ) => {
         assert.equal( err, null );
         console.log( "Connected to mongodb for register" );
 
-        const usernamePromise = new Promise( function( resolve, reject ) {
-            db.collection( "users" ).findOne( { username: req.body.username }, function( err, result ) {
+        const usernamePromise = new Promise( ( resolve, reject ) => {
+            db.collection( "users" ).findOne( { username: req.body.username }, ( err, result ) => {
                 if ( err ) return reject( err );
                 return resolve( result );
-            } )
+            } );
         } );
         const username = await usernamePromise
-            .then( ( result ) => { return result } )
-            .catch( ( err ) => { return err } ) ;
+            .then( result => result )
+            .catch( err => err );
         if ( username !== null ) {
-            req.flash( "error", "This username has already been registered." )
+            req.flash( "error", "This username has already been registered." );
             res.render( "register", {
-                title: "Register",
-                username: req.body.username,
-                password: req.body.password,
+                title           : "Register",
+                username        : req.body.username,
+                password        : req.body.password,
                 password_confirm: req.body.password_confirm,
-                flashes: req.flash()
+                flashes         : req.flash(),
             } );
             return db.close();
         }
@@ -60,19 +60,19 @@ exports.register = ( req, res, next ) => {
             username: req.body.username.trim().toLowerCase(),
             // email: req.body.email.trim().toLowerCase(),
             password: md5( req.body.password ),
-            cards: [],
-            settings: {}
-        }
+            cards   : [],
+            settings: {},
+        };
 
-        db.collection( "users" ).insertOne( userDocument, function( err, result ) {
+        db.collection( "users" ).insertOne( userDocument, ( err, result ) => {
             if ( err || result.result.ok != 1 ) {
                 req.flash( "error", "Account could not be registered." );
                 res.render( "register", {
-                    title: "Register",
-                    username: req.body.username,
-                    password: req.body.password,
+                    title           : "Register",
+                    username        : req.body.username,
+                    password        : req.body.password,
                     password_confirm: req.body.password_confirm,
-                    flashes: req.flash()
+                    flashes         : req.flash(),
                 } );
                 return;
             }
