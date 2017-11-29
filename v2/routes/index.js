@@ -20,7 +20,12 @@ router.post( "/login",
 );
 router.post( "/register", 
     accountController.validateRegister,
-    accountController.register
+    accountController.register,
+    passport.authenticate( "local", {
+        failureRedirect: "/login",
+        failureFlash: true
+    } ),
+    accountController.login 
 );
 router.get( "/logout", ( req, res ) => {
     req.logout();

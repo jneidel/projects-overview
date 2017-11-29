@@ -2,8 +2,8 @@ require( "dotenv" ).config( { path: "var.env" } );
 
 const express = require( "express" ),
     bodyParser = require( "body-parser" ),
-    mongoose = require( "mongoose" ),
     passport = require( "passport" ),
+    // MongoStore = require( "connect-mongo" )( session ),
     errorHandlers = require( "./handlers/errorHandlers" ),
     app = express(),
     port = process.env.PORT;
@@ -24,7 +24,8 @@ app.use( require( "express-validator" )() );
 app.use( require( "express-session" )( { 
     secret           : "test",
     resave           : false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    // store: new MongoStore( { mongooseConnection: mongoose.connection } ) -- Implement without mongoose
 } ) );
 
 require( "./models/passport" );
