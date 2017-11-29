@@ -14,16 +14,16 @@ exports.validateRegister = ( req, res, next ) => {
         gmail_remove_subaddress: false,
     } ); */
     req.checkBody( "password", "Please supply a password." ).notEmpty();
-    req.checkBody( "password-confirm", "Please supply a confirm password." ).notEmpty();
-    req.checkBody( "password-confirm", "Your passwords do not match." ).equals( req.body.password );
+    req.checkBody( "password_confirm", "Please supply a confirm password." ).notEmpty();
+    req.checkBody( "password_confirm", "Your passwords do not match." ).equals( req.body.password );
 
     const errors = req.validationErrors();
     if ( errors ) {
         req.flash( "error", errors.map( err => err.msg ) );
         res.render( "register", {
-            title: "Register", 
-            body: req.body,
-            flashes: req.flash() 
+            title: "Register",
+            username: req.body.username,
+            flashes: req.flash()
         } );
         return;
     }
@@ -45,10 +45,12 @@ exports.register = ( req, res, next ) => {
             .then( ( result ) => { return result } )
             .catch( ( err ) => { return err } ) ;
         if ( username !== null ) {
-            req.flash( "error", "This username has already been registered." );
+            req.flash( "error", "This username has already been registered." )
             res.render( "register", {
                 title: "Register",
-                body: req.body,
+                username: req.body.username,
+                password: req.body.password,
+                password_confirm: req.body.password_confirm,
                 flashes: req.flash()
             } );
             return db.close();
@@ -64,11 +66,12 @@ exports.register = ( req, res, next ) => {
 
         db.collection( "users" ).insertOne( userDocument, function( err, result ) {
             if ( err || result.result.ok != 1 ) {
-                console.log( err )
                 req.flash( "error", "Account could not be registered." );
                 res.render( "register", {
                     title: "Register",
-                    body: req.body,
+                    username: req.body.username,
+                    password: req.body.password,
+                    password_confirm: req.body.password_confirm,
                     flashes: req.flash()
                 } );
                 return;
