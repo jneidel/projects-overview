@@ -6,10 +6,12 @@ html
         link( rel="shortcut icon" type="image/png" href="/img/icon.png" )
         link( href="https://fonts.googleapis.com/css?family=Open+Sans|Raleway"  rel="stylesheet")
         block styles
+
     body
         #header
             block header
         
+        #content
             block flashes
                 if locals.flashes
                     - const categories = Object.keys(locals.flashes)
@@ -17,8 +19,7 @@ html
                             each message in flashes[category]
                                 .flash( class=`flash--${category}` onClick="this.remove()" )
                                     p.flash__text!= message
-        
-        #content
-            block content
+            #inner
+                block content
 
         block scripts

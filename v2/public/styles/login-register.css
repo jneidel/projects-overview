@@ -5,9 +5,9 @@
 }
 h1 {
     margin: 0;
-    padding: 0 0 30px 0;
+    padding: 0 0 30px 0; /* Unset default values */
 }
-.container {
+#inner {
     box-shadow: 0 0 5px #F5F7FA;
     border-radius: 5px;
     background: rgba(245, 247, 250, 0.1);

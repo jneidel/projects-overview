@@ -4,14 +4,13 @@ block styles
     link( rel="stylesheet", href="styles/login-register.css" )
 
 block content
-    .container
-        h1 Register
-        form.login( action="/register" method="POST" )
-            input.fields( name="username" type="text" placeholder="Username" required value=`${ username || "" }` )
-            // input.fields( name="email" type="email" placeholder="Email Address" required )
-            input.fields( name="password" type="password" placeholder="Password" required value=`${ password || "" }` )
-            input.fields( name="password_confirm" type="password" placeholder="Confirm Password" required value=`${ password_confirm || ""}` )
-            input.button( type="submit" value="Register" )
-            .dots
-                img( src="img/dots.png" )
-            a.button( href="/login" ) Login
+    h1 Register
+    form.login( action="/register" method="POST" )
+        input.fields( name="username" type="text" placeholder="Username" required value=`${ username || "" }` )
+        // input.fields( name="email" type="email" placeholder="Email Address" required )
+        input.fields( name="password" type="password" placeholder="Password" required value=`${ password || "" }` )
+        input.fields( name="password_confirm" type="password" placeholder="Confirm Password" required value=`${ password_confirm || ""}` )
+        input.button( type="submit" value="Register" )
+        .dots
+            img( src="img/dots.png" )
+        a.button( href="/login" ) Login

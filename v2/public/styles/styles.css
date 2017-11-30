@@ -1,7 +1,7 @@
 body {
     display: grid;
     grid-template-columns: 40px auto 40px;
-    grid-template-rows: auto auto;
+    grid-template-rows: 0 auto;
     grid-template-areas: 
         "header header header"
         ". main .";
@@ -14,28 +14,18 @@ body {
     margin: 0;
     font-family: "Open Sans";
 }
-
-/* Header */
+#content {
+    grid-area: main;
+}
 #header {
     grid-area: header;
-    margin-bottom: -10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    display: inline;
 }
+
 h1 {
     text-align: center;
     font-size: 40px;
-    padding-top: 20px;
     font-family: "Raleway";
-}
-
-/* Content */
-#content {
-    grid-area: main;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
 }
 
 /* Responsive Design */
@@ -48,14 +38,6 @@ h1 {
 }
 
 /* Flashes */
-.flash-messages {
-    margin-top: -10px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
 .flash {
     min-width: 310px;
     margin: 0 50px 20px 50px;

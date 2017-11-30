@@ -1,5 +1,8 @@
 /* Cards */
-#content {
+.cards {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
     flex-wrap: wrap;
     perspective: 800px; /* Todo: scale up perspective for smaller screens */
 }
