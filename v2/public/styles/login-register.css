@@ -14,7 +14,7 @@ h1 {
     padding: 50px;
     margin: 50px;
 }
-input, a {
+#inner input, #inner a {
     display: block;
     margin-bottom: 20px;
     background-color: transparent;
@@ -45,7 +45,7 @@ input.button {
 input:focus:not([readonly]) {
     box-shadow: 0 0 10px#fff;
 }
-a {
+#inner a {
     width: 250px;
     text-decoration: none;
     font-size: 18px;

@@ -10,6 +10,11 @@ html
     body
         #header
             block header
+                #nav-left
+                    a#test( href="/" ) Home
+                #nav-right
+                    a( href="/register" style="margin-right: 15px;" ) Register
+                    a( href="/login" ) Login
         
         #content
             block flashes

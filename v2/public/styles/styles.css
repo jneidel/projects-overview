@@ -1,7 +1,7 @@
 body {
     display: grid;
     grid-template-columns: 40px auto 40px;
-    grid-template-rows: 0 auto;
+    grid-template-rows: 50px auto;
     grid-template-areas: 
         "header header header"
         ". main .";
@@ -16,12 +16,33 @@ body {
 }
 #content {
     grid-area: main;
-}
-#header {
-    grid-area: header;
-    display: inline;
+    overflow: hidden;
 }
 
+/* Header */
+#header {
+    grid-area: header;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    box-shadow: 0 0 15px #F5F7FA;
+}
+#nav-right {
+    display: flex;
+}
+#nav-right, #nav-left {
+    padding: 12px 25px;
+}
+#header a {
+    text-decoration: none;
+    color: #F5F7FA;
+    padding-bottom: 2px;
+    border-bottom: 2px solid transparent;
+    transition: border 0.3s ease;
+}
+#header a:hover {
+    border-bottom: 2px solid #F5F7FA;
+}
 h1 {
     text-align: center;
     font-size: 40px;
