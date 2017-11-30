@@ -889,7 +889,7 @@ async function setNewCardToInput( cardToBeSet, callingFunction ) {
 
     flipCard( cardToBeSet );
 
-    const content = document.getElementById( "content" ),
+    const content = document.getElementById( "cards" ),
         newCard = content.appendChild( document.createElement( "span" ) );
     newCard.innerHTML += `<img class="addCard" src="img/add.png">`;
     newCard.className = "card addCardContainer";
