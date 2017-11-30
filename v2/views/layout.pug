@@ -11,10 +11,15 @@ html
         #header
             block header
                 #nav-left
-                    a#test( href="/" ) Home
+                    a.header-link-home( href="/" ) Home
+                    .header-underline
                 #nav-right
-                    a( href="/register" style="margin-right: 15px;" ) Register
-                    a( href="/login" ) Login
+                    .nav-container
+                        a.header-link-register( href="/register" style="margin-right: 15px;" ) Register
+                        .header-underline
+                    .nav-container
+                        a.header-link-login( href="/login" ) Login
+                        .header-underline
         
         #content
             block flashes

@@ -25,7 +25,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    box-shadow: 0 0 15px #F5F7FA;
+    box-shadow: 0 0 10px #F5F7FA;
 }
 #nav-right {
     display: flex;
@@ -40,14 +40,28 @@ body {
     border-bottom: 2px solid transparent;
     transition: border 0.3s ease;
 }
-#header a:hover {
-    border-bottom: 2px solid #F5F7FA;
+.header-underline {
+    max-width: 0;
+    height: 3px;
+    background: #F5F7FA;
+    transition: max-width 0.2s ease-in-out;
 }
+.header-link-home:hover + .header-underline {
+    max-width: 35px;
+}
+.header-link-register:hover + .header-underline {
+    max-width: 50px;
+}
+.header-link-login:hover + .header-underline {
+    max-width: 35px;
+}
+
 h1 {
     text-align: center;
     font-size: 40px;
     font-family: "Raleway";
 }
+
 
 /* Responsive Design */
 @media all and ( max-width: 580px ) {
