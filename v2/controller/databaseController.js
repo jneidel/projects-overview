@@ -4,9 +4,35 @@ const mongo = require( "mongodb" ).MongoClient,
 require( "dotenv" ).config( { path: "../var.env" } );
 
 exports.updateDatabase = ( req, res ) => {
-    console.log( req.query );
+    const query = {},
+        update = {};
 
-    res.sendStatus( 200 );
+    if ( req.query.updatedItem === undefined ) {
+        query.userid = req.query.userId;
+        query.title = req.query.title;
+        update.$set = { title: req.query.updatedTitle };
+    } else {
+        query.userid = req.query.userId;
+        query.title = req.query.title;
+        query[ req.query.cardSide ] = req.query.oldItem;
+        const setObj = {};
+        setObj[ req.query.cardSide + ".$" ] = req.query.updatedItem;
+        update.$set = setObj;
+    }
+
+    mongo.connect( process.env.DATABASE, ( err, db ) => {
+        assert.equal( err, null );
+
+        console.log( query, update )
+
+        db.collection( "cards" ).updateOne( query, update, ( err, res ) => {
+            if ( err ) {
+                console.log(err)
+                return err;
+            }
+            console.log( res.result )
+        } );
+    } );
 };
 
 exports.generateCardId = ( req, res ) => {

@@ -4,7 +4,7 @@ const mongo = require( "mongodb" ).MongoClient,
 require( "dotenv" ).config( { path: "../var.env" } );
 
 exports.renderItems = ( req, res ) => {
-    const userid = 1;
+    const userid = "1";
 
     mongo.connect( process.env.DATABASE, ( err, db ) => {
         assert.equal( err, null );

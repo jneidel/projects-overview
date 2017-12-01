@@ -777,15 +777,21 @@ function itemListener( item ) {
         if ( event.which === 13 ) {
             const parentNode = item.parentNode.parentNode.parentNode,
                 titleNode = parentNode.children;
-
+            let cardSide;
+            
+            if ( parentNode.className.match( /back/ ) === null ) {
+                cardSide = "front";
+            } else {
+                cardSide = "back";
+            }
             if ( titleNode.length == 3 ) {
                 var title = titleNode[1].value;
             } else {
                 var title = titleNode[0].value;
             }
 
+            __WEBPACK_IMPORTED_MODULE_0_then_request___default()( "POST", `http://localhost:8080/api/update?userId=${1}&updatedItem=${item.value}&oldItem=${originalItem}&cardSide=${cardSide}&title=${title}` );
             originalItem = item.value;
-            __WEBPACK_IMPORTED_MODULE_0_then_request___default()( "POST", `http://localhost:8080/api/update?newItem=${item.value}&oldItem=${originalItem}&title=${title}` );
         }
     } );
 }
@@ -806,8 +812,8 @@ function titleListener( title ) {
                 parent[0].children[0].value = title.value;
             }
 
+            __WEBPACK_IMPORTED_MODULE_0_then_request___default()( "POST", `http://localhost:8080/api/update?userId=${1}&updatedTitle=${title.value}&title=${originalTitle}` );
             originalTitle = title.value;
-            __WEBPACK_IMPORTED_MODULE_0_then_request___default()( "POST", `http://localhost:8080/api/update?newTitle=${title.value}&title=${originalTitle}` );
         }
     } );
 }
