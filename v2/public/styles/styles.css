@@ -1,7 +1,7 @@
 body {
     display: grid;
     grid-template-columns: 6vw auto 6vw;
-    grid-template-rows: 50px auto;
+    grid-template-rows: 57px auto;
     grid-template-areas: 
         "header header header"
         ". main .";
@@ -18,11 +18,7 @@ body {
     grid-area: main;
     overflow: hidden;
 }
-h1 {
-    text-align: center;
-    font-size: 40px;
-    font-family: "Raleway";
-}
+
 
 /* Header */
 #header {
@@ -32,11 +28,16 @@ h1 {
     align-items: flex-start;
     box-shadow: 0 0 10px #F5F7FA;
 }
+.header-link-home {
+    font-size: 25px;
+    font-family: "Raleway";
+}
+#nav-left {
+    padding: 12px 25px;
+}
 #nav-right {
     display: flex;
-}
-#nav-right, #nav-left {
-    padding: 12px 25px;
+    padding: 18px 25px;
 }
 #header a {
     text-decoration: none;
@@ -52,7 +53,7 @@ h1 {
     transition: max-width 0.2s ease-in-out;
 }
 .header-link-home:hover + .header-underline {
-    max-width: 35px;
+    max-width: 175px;
 }
 .header-link-register:hover + .header-underline {
     max-width: 50px;

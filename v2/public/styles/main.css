@@ -9,6 +9,7 @@ h1 {
     align-items: flex-start;
     flex-wrap: wrap;
     perspective: 800px; /* Todo: scale up perspective for smaller screens */
+    margin-top: 30px;
 }
 .card {
     display: inline-block;
