@@ -18,6 +18,11 @@ body {
     grid-area: main;
     overflow: hidden;
 }
+h1 {
+    text-align: center;
+    font-size: 40px;
+    font-family: "Raleway";
+}
 
 /* Header */
 #header {
@@ -55,13 +60,6 @@ body {
 .header-link-login:hover + .header-underline {
     max-width: 35px;
 }
-
-h1 {
-    text-align: center;
-    font-size: 40px;
-    font-family: "Raleway";
-}
-
 
 /* Responsive Design */
 @media all and ( max-width: 580px ) {

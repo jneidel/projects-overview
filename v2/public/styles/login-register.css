@@ -14,33 +14,30 @@ h1 {
     padding: 50px;
     margin: 50px;
 }
-#inner input, #inner a {
+.fields, .button {
     display: block;
     margin-bottom: 20px;
-    background-color: transparent;
     border: 1px solid #F5F7FA;
     border-radius: 3px;
     padding: 10px;
     outline: none;
+    font-size: 18px; 
+    background: transparent;
     color: #F5F7FA;
-    font-size: 18px;
-    caret-color: #F5F7FA; /* Cursor color */
-    transition: box-shadow 0.3s ease-in;
 }
-input.fields {
+.fields {
     width: 250px;
-}
-input.button {
-    width: 270px;
+    caret-color: #F5F7FA; /* Cursor color */
+    transition: box-shadow 0.3s ease-in; 
 }
 .button {
-    color: #F5F7FA;
-    cursor: pointer;
+    width: 270px;
     transition: all 0.4s ease-out;
 }
 .button:hover {
     background: #F5F7FA;
-    color: rgba(25, 206, 222, 0.9);
+    color: rgba(25, 206, 222, 0.9); /* Broken */
+    cursor: pointer;
 }
 input:focus:not([readonly]) {
     box-shadow: 0 0 10px#fff;
