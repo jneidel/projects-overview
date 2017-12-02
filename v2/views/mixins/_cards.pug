@@ -4,8 +4,6 @@ mixin frontCard( card = {} )
         each item in card.front
             li
                 input.item( type="text" value=item )
-        li
-            input.item( type="text" )
 
 mixin backCard( card = {} )
     p.future Future
@@ -14,5 +12,3 @@ mixin backCard( card = {} )
         each item in card.back
             li
                 input.item( type="text" value=item )
-        li
-            input.item( type="text" )
