@@ -81,10 +81,17 @@ exports.addNewCard = ( req, res ) => {
         const insertion = {
                 _id  : Number( req.query._id ),
                 title: "",
-                front: [],
-                back : [],
+                front: [ "" ],
+                back : [ "" ],
+                userid: "1"
             };
-        db.collection( "cards" ).insertOne( insertion );
+        db.collection( "cards" ).insertOne( insertion, ( err, res ) => {
+            if ( err ) {
+                console.log( err );
+                return err;
+            } 
+            console.log( "Added " + insertion._id );
+        } );
     } );
 
     res.sendStatus( 200 );
