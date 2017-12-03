@@ -1,9 +1,9 @@
 const express = require( "express" ),
     router = express.Router(),
     passport = require( "passport" ),
-    appController = require( "../controller/appController" ),
-    accountController = require( "../controller/accountController" ),
-    databaseController = require( "../controller/databaseController" ),
+    appController = require( "../controllers/appController" ),
+    accountController = require( "../controllers/accountController" ),
+    databaseController = require( "../controllers/databaseController" ),
     { catchErrors } = require( "../handlers/errorHandlers" ),
     ensureLogin = require( "connect-ensure-login" );
 
