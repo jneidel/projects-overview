@@ -1,3 +1,5 @@
 # project-manager
 
-[v1](https://jneidel.github.io/project-manager/v1/)
+Currently under development.
+
+View previous version [v1](https://github.com/jneidel/project-manager/releases/tag/v1.0).
