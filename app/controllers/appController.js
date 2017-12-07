@@ -1,5 +1,6 @@
 const mongo = require( "mongodb" ).MongoClient,
-    assert = require( "assert" );
+    assert = require( "assert" ),
+    jws = require( "jsonwebtoken" );
 
 require( "dotenv" ).config( { path: "../var.env" } );
 

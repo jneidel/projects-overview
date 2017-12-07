@@ -14,23 +14,23 @@ exports.updateDatabase = ( req, res ) => {
     } else {
         query.userid = req.query.userId;
         query.title = req.query.title;
-        query[ req.query.cardSide ] = req.query.oldItem;
+        query[req.query.cardSide] = req.query.oldItem;
         const setObj = {};
-        setObj[ req.query.cardSide + ".$" ] = req.query.updatedItem;
+        setObj[`${req.query.cardSide}.$`] = req.query.updatedItem;
         update.$set = setObj;
     }
 
     mongo.connect( process.env.DATABASE, ( err, db ) => {
         assert.equal( err, null );
 
-        console.log( query, update )
+        console.log( query, update );
 
         db.collection( "cards" ).updateOne( query, update, ( err, res ) => {
             if ( err ) {
-                console.log(err)
+                console.log( err );
                 return err;
             }
-            console.log( res.result )
+            console.log( res.result );
         } );
     } );
 };
@@ -79,18 +79,18 @@ exports.addNewCard = ( req, res ) => {
         assert.equal( err, null );
 
         const insertion = {
-                _id  : Number( req.query._id ),
-                title: "",
-                front: [ "" ],
-                back : [ "" ],
-                userid: "1"
+                _id   : Number( req.query._id ),
+                title : "",
+                front : [ "" ],
+                back  : [ "" ],
+                userid: "1",
             };
         db.collection( "cards" ).insertOne( insertion, ( err, res ) => {
             if ( err ) {
                 console.log( err );
                 return err;
-            } 
-            console.log( "Added " + insertion._id );
+            }
+            console.log( `Added ${insertion._id}` );
         } );
     } );
 

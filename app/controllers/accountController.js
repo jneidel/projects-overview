@@ -1,6 +1,7 @@
 const mongo = require( "mongodb" ).MongoClient,
     assert = require( "assert" ),
-    md5 = require( "md5" );
+    md5 = require( "md5" ),
+    jws = require( "jsonwebtoken" );
 
 require( "dotenv" ).config( { path: "../var.env" } );
 
@@ -83,8 +84,21 @@ exports.register = ( req, res, next ) => {
     } );
 };
 
-exports.login = ( req, res ) => {
-    if ( !req.registered ) req.flash( "success", "You successfully logged in." );
+exports.login = async( req, res ) => {
+    mongo.connect( process.env.DATABASE, ( err, db ) => {
+        assert.equal( err, null );
+        console.log( "Connected to mongodb for login" );
+
+        db.collection( "users" ).find( { username: req.body.username } ).toArray( ( err, docs ) => {
+            if ( err ) return next( err );
+            if ( !docs || docs.length === 0 ) return next( null, false, { message: "Incorrect username." } );
+            if ( docs[0].password !== md5( req.body.password ) ) return next( null, false, { message: "Incorrect password." } );
+            console.log( `Found user: ${req.body.username}` );
+            return db.close();
+        } );
+    } );
+    req.body.token = await jws.sign( { username: req.body.username }, process.env.SECRET );
+    req.flash( "success", "You successfully logged in." );
     res.redirect( "/login" );
 };
 

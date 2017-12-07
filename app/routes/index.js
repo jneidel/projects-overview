@@ -12,14 +12,7 @@ router.get( "/", appController.renderItems );
 // Account
 router.get( "/login", appController.login );
 router.get( "/register", appController.register );
-router.post( "/login",
-    passport.authenticate( "local", {
-        failureRedirect          : "/login",
-        failureFlash             : true,
-        successFlash             : "You successfully logged in.",
-        successReturnToOrRedirect: "/login",
-    } )
-);
+router.post( "/login", accountController.login );
 router.post( "/register",
     accountController.validateRegister,
     accountController.register,
