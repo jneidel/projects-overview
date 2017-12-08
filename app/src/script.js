@@ -10,7 +10,7 @@ function itemListener( item ) {
             const parentNode = item.parentNode.parentNode.parentNode,
                 titleNode = parentNode.children;
             let cardSide;
-            
+
             if ( parentNode.className.match( /back/ ) === null ) {
                 cardSide = "front";
             } else {

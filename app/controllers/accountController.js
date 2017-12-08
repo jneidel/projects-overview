@@ -85,21 +85,23 @@ exports.register = ( req, res, next ) => {
 };
 
 exports.login = async( req, res ) => {
+    console.log( req.query );
+
     mongo.connect( process.env.DATABASE, ( err, db ) => {
         assert.equal( err, null );
         console.log( "Connected to mongodb for login" );
 
-        db.collection( "users" ).find( { username: req.body.username } ).toArray( ( err, docs ) => {
+        db.collection( "users" ).find( { username: req.query.username } ).toArray( ( err, docs ) => {
             if ( err ) return next( err );
             if ( !docs || docs.length === 0 ) return next( null, false, { message: "Incorrect username." } );
-            if ( docs[0].password !== md5( req.body.password ) ) return next( null, false, { message: "Incorrect password." } );
-            console.log( `Found user: ${req.body.username}` );
+            if ( docs[0].password !== md5( req.query.password ) ) return next( null, false, { message: "Incorrect password." } );
+            console.log( `Found user: ${req.query.username}` );
             return db.close();
         } );
     } );
-    req.body.token = await jws.sign( { username: req.body.username }, process.env.SECRET );
+    const token = await jws.sign( { username: req.query.username }, process.env.SECRET );
     req.flash( "success", "You successfully logged in." );
-    res.redirect( "/login" );
+    res.json( token );
 };
 
 /* exports.isLoggedIn = (req, res, next) => {

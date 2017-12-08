@@ -8,10 +8,10 @@ block content
     form.login( action="/login" method="POST" )
         input.fields( name="username" type="text" placeholder="Username" required )
         input.fields( name="password" type="password" placeholder="Password" required )
-        input.button( type="submit" value="Log In" )
-        .dots
-            img( src="img/dots.png" )
-        a.button( href="/register" ) Register
+    button.button#login Log In
+    .dots
+        img( src="img/dots.png" )
+    a.button( href="/register" ) Register
 
 block scripts
     script( src="scripts/account.js")
