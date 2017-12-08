@@ -60,241 +60,174 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ 	return __webpack_require__(__webpack_require__.s = 100);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
-/***/ (function(module, exports, __webpack_require__) {
+/******/ ({
+
+/***/ 100:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_then_request__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_then_request___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_then_request__);
 
 
-var asap = __webpack_require__(2);
+/* eslint-disable no-alert */
 
-function noop() {}
+// Listening for item/title changes
+function itemListener( item ) {
+    let originalItem = item.value;
+    item.addEventListener( "keydown", () => {
+        if ( event.which === 13 ) {
+            const parentNode = item.parentNode.parentNode.parentNode,
+                titleNode = parentNode.children;
+            let cardSide;
 
-// States:
-//
-// 0 - pending
-// 1 - fulfilled with _value
-// 2 - rejected with _value
-// 3 - adopted the state of another promise, _value
-//
-// once the state is no longer pending (0) it is immutable
+            if ( parentNode.className.match( /back/ ) === null ) {
+                cardSide = "front";
+            } else {
+                cardSide = "back";
+            }
+            if ( titleNode.length == 3 ) {
+                var title = titleNode[1].value;
+            } else {
+                var title = titleNode[0].value;
+            }
 
-// All `_` prefixed properties will be reduced to `_{random number}`
-// at build time to obfuscate them and discourage their use.
-// We don't use symbols or Object.defineProperty to fully hide them
-// because the performance isn't good enough.
-
-
-// to avoid using try/catch inside critical functions, we
-// extract them to here.
-var LAST_ERROR = null;
-var IS_ERROR = {};
-function getThen(obj) {
-  try {
-    return obj.then;
-  } catch (ex) {
-    LAST_ERROR = ex;
-    return IS_ERROR;
-  }
+            __WEBPACK_IMPORTED_MODULE_0_then_request___default()( "POST", `http://localhost:8080/api/update?userId=${1}&updatedItem=${item.value}&oldItem=${originalItem}&cardSide=${cardSide}&title=${title}` );
+            originalItem = item.value;
+        }
+    } );
 }
 
-function tryCallOne(fn, a) {
-  try {
-    return fn(a);
-  } catch (ex) {
-    LAST_ERROR = ex;
-    return IS_ERROR;
-  }
-}
-function tryCallTwo(fn, a, b) {
-  try {
-    fn(a, b);
-  } catch (ex) {
-    LAST_ERROR = ex;
-    return IS_ERROR;
-  }
+function titleListener( title ) {
+    let originalTitle = title.value;
+    title.addEventListener( "keydown", () => {
+        if ( event.which === 13 ) {
+            if ( title.value.length >= 20 ) {
+                alert( `The title "${title.value}" will probably be cut off as its too long.
+                        ${title.value.length}` );
+            }
+
+            const parent = title.parentNode.parentNode.children;
+            if ( !title.parentNode.className.match( /back/ ) ) {
+                parent[1].children[1].value = title.value;
+            } else {
+                parent[0].children[0].value = title.value;
+            }
+
+            __WEBPACK_IMPORTED_MODULE_0_then_request___default()( "POST", `http://localhost:8080/api/update?userId=${1}&updatedTitle=${title.value}&title=${originalTitle}` );
+            originalTitle = title.value;
+        }
+    } );
 }
 
-module.exports = Promise;
+const items = document.getElementsByClassName( "item" ),
+    titles = document.getElementsByClassName( "title" );
 
-function Promise(fn) {
-  if (typeof this !== 'object') {
-    throw new TypeError('Promises must be constructed via new');
-  }
-  if (typeof fn !== 'function') {
-    throw new TypeError('Promise constructor\'s argument is not a function');
-  }
-  this._75 = 0;
-  this._83 = 0;
-  this._18 = null;
-  this._38 = null;
-  if (fn === noop) return;
-  doResolve(fn, this);
+for ( const item of items ) {
+    itemListener( item );
 }
-Promise._47 = null;
-Promise._71 = null;
-Promise._44 = noop;
 
-Promise.prototype.then = function(onFulfilled, onRejected) {
-  if (this.constructor !== Promise) {
-    return safeThen(this, onFulfilled, onRejected);
-  }
-  var res = new Promise(noop);
-  handle(this, new Handler(onFulfilled, onRejected, res));
-  return res;
+for ( const title of titles ) {
+    titleListener( title );
+}
+
+// Flip cards
+const cards = document.getElementsByClassName( "card" );
+
+function flipCard( card ) {
+    let cardState = "front";
+    card.addEventListener( "dblclick", () => {
+        if ( cardState === "front" ) {
+            card.style.transform = "rotateY( 180deg )";
+            cardState = "back";
+        } else {
+            card.style.transform = "rotateY( 0deg )";
+            cardState = "front";
+        }
+    } );
+}
+
+const cardListenerCallback = function() {
+    setNewCardToInput( this, cardListenerCallback );
 };
 
-function safeThen(self, onFulfilled, onRejected) {
-  return new self.constructor(function (resolve, reject) {
-    var res = new Promise(noop);
-    res.then(resolve, reject);
-    handle(self, new Handler(onFulfilled, onRejected, res));
-  });
-}
-function handle(self, deferred) {
-  while (self._83 === 3) {
-    self = self._18;
-  }
-  if (Promise._47) {
-    Promise._47(self);
-  }
-  if (self._83 === 0) {
-    if (self._75 === 0) {
-      self._75 = 1;
-      self._38 = deferred;
-      return;
-    }
-    if (self._75 === 1) {
-      self._75 = 2;
-      self._38 = [self._38, deferred];
-      return;
-    }
-    self._38.push(deferred);
-    return;
-  }
-  handleResolved(self, deferred);
-}
-
-function handleResolved(self, deferred) {
-  asap(function() {
-    var cb = self._83 === 1 ? deferred.onFulfilled : deferred.onRejected;
-    if (cb === null) {
-      if (self._83 === 1) {
-        resolve(deferred.promise, self._18);
-      } else {
-        reject(deferred.promise, self._18);
-      }
-      return;
-    }
-    var ret = tryCallOne(cb, self._18);
-    if (ret === IS_ERROR) {
-      reject(deferred.promise, LAST_ERROR);
+for ( const card of cards ) {
+    const classes = card.className;
+    if ( !classes.match( /.addCardContainer/ ) ) {
+        flipCard( card );
     } else {
-      resolve(deferred.promise, ret);
+        card.addEventListener( "dblclick", cardListenerCallback );
     }
-  });
-}
-function resolve(self, newValue) {
-  // Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
-  if (newValue === self) {
-    return reject(
-      self,
-      new TypeError('A promise cannot be resolved with itself.')
-    );
-  }
-  if (
-    newValue &&
-    (typeof newValue === 'object' || typeof newValue === 'function')
-  ) {
-    var then = getThen(newValue);
-    if (then === IS_ERROR) {
-      return reject(self, LAST_ERROR);
-    }
-    if (
-      then === self.then &&
-      newValue instanceof Promise
-    ) {
-      self._83 = 3;
-      self._18 = newValue;
-      finale(self);
-      return;
-    } else if (typeof then === 'function') {
-      doResolve(then.bind(newValue), self);
-      return;
-    }
-  }
-  self._83 = 1;
-  self._18 = newValue;
-  finale(self);
 }
 
-function reject(self, newValue) {
-  self._83 = 2;
-  self._18 = newValue;
-  if (Promise._71) {
-    Promise._71(self, newValue);
-  }
-  finale(self);
-}
-function finale(self) {
-  if (self._75 === 1) {
-    handle(self, self._38);
-    self._38 = null;
-  }
-  if (self._75 === 2) {
-    for (var i = 0; i < self._38.length; i++) {
-      handle(self, self._38[i]);
+// Add new card
+async function setNewCardToInput( cardToBeSet, callingFunction ) {
+    cardToBeSet.removeEventListener( "dblclick", callingFunction );
+    cardToBeSet.className = "card";
+    cardToBeSet.innerHTML = `
+        <div class="front inner">
+            <input class="title" type="text" placeholder="Add title">
+                <ul>
+                    <li>
+                        <input class="item" type="text" placeholder="Add items">
+                    </li>
+                </ul>
+        </div>
+        <div class="back inner">
+            <p class="future">Future</p> 
+            <input class="title" type="text" placeholder="Add title">
+                <ul>
+                    <li>
+                        <input class="item" type="text" placeholder="Add items">
+                    </li>
+                </ul>
+        </div>
+    `;
+
+    for ( const item of cardToBeSet.children ) {
+        if ( item.children.length == 3 ) {
+            itemListener( item.children[2].children[0].children[0] );
+        } else {
+            itemListener( item.children[1].children[0].children[0] );
+        }
     }
-    self._38 = null;
-  }
-}
+    for ( const title of cardToBeSet.children ) {
+        titleListener( title.children[0] );
+    }
 
-function Handler(onFulfilled, onRejected, promise){
-  this.onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : null;
-  this.onRejected = typeof onRejected === 'function' ? onRejected : null;
-  this.promise = promise;
-}
+    flipCard( cardToBeSet );
 
-/**
- * Take a potentially misbehaving resolver function and make sure
- * onFulfilled and onRejected are only called once.
- *
- * Makes no guarantees about asynchrony.
- */
-function doResolve(fn, promise) {
-  var done = false;
-  var res = tryCallTwo(fn, function (value) {
-    if (done) return;
-    done = true;
-    resolve(promise, value);
-  }, function (reason) {
-    if (done) return;
-    done = true;
-    reject(promise, reason);
-  });
-  if (!done && res === IS_ERROR) {
-    done = true;
-    reject(promise, LAST_ERROR);
-  }
+    const content = document.getElementById( "cards" ),
+        newCard = content.appendChild( document.createElement( "span" ) );
+    newCard.innerHTML += `<img class="addCard" src="img/add.png">`;
+    newCard.className = "card addCardContainer";
+    newCard.addEventListener( "dblclick", cardListenerCallback );
+
+    const cardIdRequest = await __WEBPACK_IMPORTED_MODULE_0_then_request___default()( "GET", `http://localhost:8080/api/generate-cardId` ),
+        cardId = JSON.parse( cardIdRequest.body )._id;
+
+    await __WEBPACK_IMPORTED_MODULE_0_then_request___default()( "POST", `http://localhost:8080/api/add-new-card?_id=${cardId}` );
 }
 
 
 /***/ }),
-/* 1 */
+
+/***/ 11:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(8)
+module.exports = __webpack_require__(21)
 
 
 /***/ }),
-/* 2 */
+
+/***/ 12:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -522,10 +455,11 @@ rawAsap.makeRequestCallFromTimer = makeRequestCallFromTimer;
 // back into ASAP proper.
 // https://github.com/tildeio/rsvp.js/blob/cddf7232546a9cf858524b75cde6f9edf72620a7/lib/rsvp/asap.js
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ }),
-/* 3 */
+
+/***/ 13:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -734,7 +668,8 @@ exports.isBuffer = function isBuffer(obj) {
 
 
 /***/ }),
-/* 4 */
+
+/***/ 14:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -759,157 +694,8 @@ module.exports = {
 
 
 /***/ }),
-/* 5 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_then_request__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_then_request___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_then_request__);
-
-
-/* eslint-disable no-alert */
-
-// Listening for item/title changes
-function itemListener( item ) {
-    let originalItem = item.value;
-    item.addEventListener( "keydown", () => {
-        if ( event.which === 13 ) {
-            const parentNode = item.parentNode.parentNode.parentNode,
-                titleNode = parentNode.children;
-            let cardSide;
-
-            if ( parentNode.className.match( /back/ ) === null ) {
-                cardSide = "front";
-            } else {
-                cardSide = "back";
-            }
-            if ( titleNode.length == 3 ) {
-                var title = titleNode[1].value;
-            } else {
-                var title = titleNode[0].value;
-            }
-
-            __WEBPACK_IMPORTED_MODULE_0_then_request___default()( "POST", `http://localhost:8080/api/update?userId=${1}&updatedItem=${item.value}&oldItem=${originalItem}&cardSide=${cardSide}&title=${title}` );
-            originalItem = item.value;
-        }
-    } );
-}
-
-function titleListener( title ) {
-    let originalTitle = title.value;
-    title.addEventListener( "keydown", () => {
-        if ( event.which === 13 ) {
-            if ( title.value.length >= 20 ) {
-                alert( `The title "${title.value}" will probably be cut off as its too long.
-                        ${title.value.length}` );
-            }
-
-            const parent = title.parentNode.parentNode.children;
-            if ( !title.parentNode.className.match( /back/ ) ) {
-                parent[1].children[1].value = title.value;
-            } else {
-                parent[0].children[0].value = title.value;
-            }
-
-            __WEBPACK_IMPORTED_MODULE_0_then_request___default()( "POST", `http://localhost:8080/api/update?userId=${1}&updatedTitle=${title.value}&title=${originalTitle}` );
-            originalTitle = title.value;
-        }
-    } );
-}
-
-const items = document.getElementsByClassName( "item" ),
-    titles = document.getElementsByClassName( "title" );
-
-for ( const item of items ) {
-    itemListener( item );
-}
-
-for ( const title of titles ) {
-    titleListener( title );
-}
-
-// Flip cards
-const cards = document.getElementsByClassName( "card" );
-
-function flipCard( card ) {
-    let cardState = "front";
-    card.addEventListener( "dblclick", () => {
-        if ( cardState === "front" ) {
-            card.style.transform = "rotateY( 180deg )";
-            cardState = "back";
-        } else {
-            card.style.transform = "rotateY( 0deg )";
-            cardState = "front";
-        }
-    } );
-}
-
-const cardListenerCallback = function() {
-    setNewCardToInput( this, cardListenerCallback );
-};
-
-for ( const card of cards ) {
-    const classes = card.className;
-    if ( !classes.match( /.addCardContainer/ ) ) {
-        flipCard( card );
-    } else {
-        card.addEventListener( "dblclick", cardListenerCallback );
-    }
-}
-
-// Add new card
-async function setNewCardToInput( cardToBeSet, callingFunction ) {
-    cardToBeSet.removeEventListener( "dblclick", callingFunction );
-    cardToBeSet.className = "card";
-    cardToBeSet.innerHTML = `
-        <div class="front inner">
-            <input class="title" type="text" placeholder="Add title">
-                <ul>
-                    <li>
-                        <input class="item" type="text" placeholder="Add items">
-                    </li>
-                </ul>
-        </div>
-        <div class="back inner">
-            <p class="future">Future</p> 
-            <input class="title" type="text" placeholder="Add title">
-                <ul>
-                    <li>
-                        <input class="item" type="text" placeholder="Add items">
-                    </li>
-                </ul>
-        </div>
-    `;
-
-    for ( const item of cardToBeSet.children ) {
-        if ( item.children.length == 3 ) {
-            itemListener( item.children[2].children[0].children[0] );
-        } else {
-            itemListener( item.children[1].children[0].children[0] );
-        }
-    }
-    for ( const title of cardToBeSet.children ) {
-        titleListener( title.children[0] );
-    }
-
-    flipCard( cardToBeSet );
-
-    const content = document.getElementById( "cards" ),
-        newCard = content.appendChild( document.createElement( "span" ) );
-    newCard.innerHTML += `<img class="addCard" src="img/add.png">`;
-    newCard.className = "card addCardContainer";
-    newCard.addEventListener( "dblclick", cardListenerCallback );
-
-    const cardIdRequest = await __WEBPACK_IMPORTED_MODULE_0_then_request___default()( "GET", `http://localhost:8080/api/generate-cardId` ),
-        cardId = JSON.parse( cardIdRequest.body )._id;
-
-    await __WEBPACK_IMPORTED_MODULE_0_then_request___default()( "POST", `http://localhost:8080/api/add-new-card?_id=${cardId}` );
-}
-
-
-/***/ }),
-/* 6 */
+/***/ 19:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -923,11 +709,11 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
     return t;
 };
 exports.__esModule = true;
-var GenericResponse = __webpack_require__(7);
-var Promise = __webpack_require__(1);
-var ResponsePromise_1 = __webpack_require__(16);
+var GenericResponse = __webpack_require__(20);
+var Promise = __webpack_require__(11);
+var ResponsePromise_1 = __webpack_require__(28);
 exports.ResponsePromise = ResponsePromise_1.ResponsePromise;
-var handle_qs_1 = __webpack_require__(17);
+var handle_qs_1 = __webpack_require__(29);
 function request(method, url, options) {
     return ResponsePromise_1["default"](new Promise(function (resolve, reject) {
         var xhr = new XMLHttpRequest();
@@ -1040,7 +826,8 @@ module.exports.FormData = fd;
 
 
 /***/ }),
-/* 7 */
+
+/***/ 20:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1089,55 +876,30 @@ module.exports = Response;
 
 
 /***/ }),
-/* 8 */
+
+/***/ 21:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(0);
-__webpack_require__(10);
-__webpack_require__(11);
-__webpack_require__(12);
-__webpack_require__(13);
-__webpack_require__(15);
+module.exports = __webpack_require__(3);
+__webpack_require__(22);
+__webpack_require__(23);
+__webpack_require__(24);
+__webpack_require__(25);
+__webpack_require__(27);
 
 
 /***/ }),
-/* 9 */
-/***/ (function(module, exports) {
 
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 10 */
+/***/ 22:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Promise = __webpack_require__(0);
+var Promise = __webpack_require__(3);
 
 module.exports = Promise;
 Promise.prototype.done = function (onFulfilled, onRejected) {
@@ -1151,13 +913,14 @@ Promise.prototype.done = function (onFulfilled, onRejected) {
 
 
 /***/ }),
-/* 11 */
+
+/***/ 23:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Promise = __webpack_require__(0);
+var Promise = __webpack_require__(3);
 
 module.exports = Promise;
 Promise.prototype['finally'] = function (f) {
@@ -1174,7 +937,8 @@ Promise.prototype['finally'] = function (f) {
 
 
 /***/ }),
-/* 12 */
+
+/***/ 24:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1182,7 +946,7 @@ Promise.prototype['finally'] = function (f) {
 
 //This file contains the ES6 extensions to the core Promises/A+ API
 
-var Promise = __webpack_require__(0);
+var Promise = __webpack_require__(3);
 
 module.exports = Promise;
 
@@ -1288,7 +1052,8 @@ Promise.prototype['catch'] = function (onRejected) {
 
 
 /***/ }),
-/* 13 */
+
+/***/ 25:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1297,8 +1062,8 @@ Promise.prototype['catch'] = function (onRejected) {
 // This file contains then/promise specific extensions that are only useful
 // for node.js interop
 
-var Promise = __webpack_require__(0);
-var asap = __webpack_require__(14);
+var Promise = __webpack_require__(3);
+var asap = __webpack_require__(26);
 
 module.exports = Promise;
 
@@ -1425,14 +1190,15 @@ Promise.prototype.nodeify = function (callback, ctx) {
 
 
 /***/ }),
-/* 14 */
+
+/***/ 26:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 // rawAsap provides everything we need except exception management.
-var rawAsap = __webpack_require__(2);
+var rawAsap = __webpack_require__(12);
 // RawTasks are recycled to reduce GC churn.
 var freeTasks = [];
 // We queue errors to ensure they are thrown in right order (FIFO).
@@ -1498,13 +1264,14 @@ RawTask.prototype.call = function () {
 
 
 /***/ }),
-/* 15 */
+
+/***/ 27:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Promise = __webpack_require__(0);
+var Promise = __webpack_require__(3);
 
 module.exports = Promise;
 Promise.enableSynchronous = function () {
@@ -1567,13 +1334,14 @@ Promise.disableSynchronous = function() {
 
 
 /***/ }),
-/* 16 */
+
+/***/ 28:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 exports.__esModule = true;
-var Promise = __webpack_require__(1);
+var Promise = __webpack_require__(11);
 function getBody(encoding) {
     if (!encoding) {
         return this.then(getBodyBinary);
@@ -1601,13 +1369,14 @@ exports.ResponsePromise = undefined;
 
 
 /***/ }),
-/* 17 */
+
+/***/ 29:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 exports.__esModule = true;
-var qs_1 = __webpack_require__(18);
+var qs_1 = __webpack_require__(30);
 function handleQs(url, query) {
     var _a = url.split('?'), start = _a[0], part2 = _a[1];
     var qs = (part2 || '').split('#')[0];
@@ -1626,15 +1395,237 @@ exports["default"] = handleQs;
 
 
 /***/ }),
-/* 18 */
+
+/***/ 3:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var stringify = __webpack_require__(19);
-var parse = __webpack_require__(20);
-var formats = __webpack_require__(4);
+var asap = __webpack_require__(12);
+
+function noop() {}
+
+// States:
+//
+// 0 - pending
+// 1 - fulfilled with _value
+// 2 - rejected with _value
+// 3 - adopted the state of another promise, _value
+//
+// once the state is no longer pending (0) it is immutable
+
+// All `_` prefixed properties will be reduced to `_{random number}`
+// at build time to obfuscate them and discourage their use.
+// We don't use symbols or Object.defineProperty to fully hide them
+// because the performance isn't good enough.
+
+
+// to avoid using try/catch inside critical functions, we
+// extract them to here.
+var LAST_ERROR = null;
+var IS_ERROR = {};
+function getThen(obj) {
+  try {
+    return obj.then;
+  } catch (ex) {
+    LAST_ERROR = ex;
+    return IS_ERROR;
+  }
+}
+
+function tryCallOne(fn, a) {
+  try {
+    return fn(a);
+  } catch (ex) {
+    LAST_ERROR = ex;
+    return IS_ERROR;
+  }
+}
+function tryCallTwo(fn, a, b) {
+  try {
+    fn(a, b);
+  } catch (ex) {
+    LAST_ERROR = ex;
+    return IS_ERROR;
+  }
+}
+
+module.exports = Promise;
+
+function Promise(fn) {
+  if (typeof this !== 'object') {
+    throw new TypeError('Promises must be constructed via new');
+  }
+  if (typeof fn !== 'function') {
+    throw new TypeError('Promise constructor\'s argument is not a function');
+  }
+  this._75 = 0;
+  this._83 = 0;
+  this._18 = null;
+  this._38 = null;
+  if (fn === noop) return;
+  doResolve(fn, this);
+}
+Promise._47 = null;
+Promise._71 = null;
+Promise._44 = noop;
+
+Promise.prototype.then = function(onFulfilled, onRejected) {
+  if (this.constructor !== Promise) {
+    return safeThen(this, onFulfilled, onRejected);
+  }
+  var res = new Promise(noop);
+  handle(this, new Handler(onFulfilled, onRejected, res));
+  return res;
+};
+
+function safeThen(self, onFulfilled, onRejected) {
+  return new self.constructor(function (resolve, reject) {
+    var res = new Promise(noop);
+    res.then(resolve, reject);
+    handle(self, new Handler(onFulfilled, onRejected, res));
+  });
+}
+function handle(self, deferred) {
+  while (self._83 === 3) {
+    self = self._18;
+  }
+  if (Promise._47) {
+    Promise._47(self);
+  }
+  if (self._83 === 0) {
+    if (self._75 === 0) {
+      self._75 = 1;
+      self._38 = deferred;
+      return;
+    }
+    if (self._75 === 1) {
+      self._75 = 2;
+      self._38 = [self._38, deferred];
+      return;
+    }
+    self._38.push(deferred);
+    return;
+  }
+  handleResolved(self, deferred);
+}
+
+function handleResolved(self, deferred) {
+  asap(function() {
+    var cb = self._83 === 1 ? deferred.onFulfilled : deferred.onRejected;
+    if (cb === null) {
+      if (self._83 === 1) {
+        resolve(deferred.promise, self._18);
+      } else {
+        reject(deferred.promise, self._18);
+      }
+      return;
+    }
+    var ret = tryCallOne(cb, self._18);
+    if (ret === IS_ERROR) {
+      reject(deferred.promise, LAST_ERROR);
+    } else {
+      resolve(deferred.promise, ret);
+    }
+  });
+}
+function resolve(self, newValue) {
+  // Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
+  if (newValue === self) {
+    return reject(
+      self,
+      new TypeError('A promise cannot be resolved with itself.')
+    );
+  }
+  if (
+    newValue &&
+    (typeof newValue === 'object' || typeof newValue === 'function')
+  ) {
+    var then = getThen(newValue);
+    if (then === IS_ERROR) {
+      return reject(self, LAST_ERROR);
+    }
+    if (
+      then === self.then &&
+      newValue instanceof Promise
+    ) {
+      self._83 = 3;
+      self._18 = newValue;
+      finale(self);
+      return;
+    } else if (typeof then === 'function') {
+      doResolve(then.bind(newValue), self);
+      return;
+    }
+  }
+  self._83 = 1;
+  self._18 = newValue;
+  finale(self);
+}
+
+function reject(self, newValue) {
+  self._83 = 2;
+  self._18 = newValue;
+  if (Promise._71) {
+    Promise._71(self, newValue);
+  }
+  finale(self);
+}
+function finale(self) {
+  if (self._75 === 1) {
+    handle(self, self._38);
+    self._38 = null;
+  }
+  if (self._75 === 2) {
+    for (var i = 0; i < self._38.length; i++) {
+      handle(self, self._38[i]);
+    }
+    self._38 = null;
+  }
+}
+
+function Handler(onFulfilled, onRejected, promise){
+  this.onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : null;
+  this.onRejected = typeof onRejected === 'function' ? onRejected : null;
+  this.promise = promise;
+}
+
+/**
+ * Take a potentially misbehaving resolver function and make sure
+ * onFulfilled and onRejected are only called once.
+ *
+ * Makes no guarantees about asynchrony.
+ */
+function doResolve(fn, promise) {
+  var done = false;
+  var res = tryCallTwo(fn, function (value) {
+    if (done) return;
+    done = true;
+    resolve(promise, value);
+  }, function (reason) {
+    if (done) return;
+    done = true;
+    reject(promise, reason);
+  });
+  if (!done && res === IS_ERROR) {
+    done = true;
+    reject(promise, LAST_ERROR);
+  }
+}
+
+
+/***/ }),
+
+/***/ 30:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var stringify = __webpack_require__(31);
+var parse = __webpack_require__(32);
+var formats = __webpack_require__(14);
 
 module.exports = {
     formats: formats,
@@ -1644,14 +1635,15 @@ module.exports = {
 
 
 /***/ }),
-/* 19 */
+
+/***/ 31:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(3);
-var formats = __webpack_require__(4);
+var utils = __webpack_require__(13);
+var formats = __webpack_require__(14);
 
 var arrayPrefixGenerators = {
     brackets: function brackets(prefix) { // eslint-disable-line func-name-matching
@@ -1861,13 +1853,14 @@ module.exports = function (object, opts) {
 
 
 /***/ }),
-/* 20 */
+
+/***/ 32:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(3);
+var utils = __webpack_require__(13);
 
 var has = Object.prototype.hasOwnProperty;
 
@@ -2041,5 +2034,34 @@ module.exports = function (str, opts) {
 };
 
 
+/***/ }),
+
+/***/ 6:
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
 /***/ })
-/******/ ]);
+
+/******/ });

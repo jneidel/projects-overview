@@ -19,7 +19,6 @@ body {
     overflow: hidden;
 }
 
-
 /* Header */
 #header {
     grid-area: header;
@@ -37,7 +36,11 @@ body {
 }
 #nav-right {
     display: flex;
-    padding: 18px 25px;
+    padding: 0 25px;
+}
+.nav-container {
+    padding-top: 18px;
+    padding-bottom: 18px;
 }
 #header a {
     text-decoration: none;
@@ -45,6 +48,7 @@ body {
     padding-bottom: 2px;
     border-bottom: 2px solid transparent;
     transition: border 0.3s ease;
+    cursor: pointer;
 }
 .header-underline {
     max-width: 0;

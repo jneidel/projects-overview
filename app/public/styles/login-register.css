@@ -6,6 +6,7 @@
 h1 {
     margin: 0;
     padding: 0 0 30px 0; /* Unset default values */
+    text-align: center;
 }
 #inner {
     box-shadow: 0 0 5px #F5F7FA;
