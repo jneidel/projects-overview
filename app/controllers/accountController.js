@@ -1,7 +1,10 @@
-const mongo = require( "mongodb" ).MongoClient,
-    assert = require( "assert" ),
-    md5 = require( "md5" ),
-    jws = require( "jsonwebtoken" );
+const mongo = require( "mongodb" ).MongoClient;
+const assert = require( "assert" );
+const md5 = require( "md5" );
+const jws = require( "jsonwebtoken" );
+const fs = require("mz/fs");
+const rsa = require("node-rsa");
+const atob = require("atob");
 
 require( "dotenv" ).config( { path: "../var.env" } );
 
@@ -85,20 +88,30 @@ exports.register = ( req, res, next ) => {
 };
 
 exports.login = async( req, res ) => {
-    console.log( req.query );
 
-    mongo.connect( process.env.DATABASE, ( err, db ) => {
-        assert.equal( err, null );
-        console.log( "Connected to mongodb for login" );
+    const db = await mongo.connect( process.env.DATABASE );
+    console.log( "Connected to mongodb for login" );
 
-        db.collection( "users" ).find( { username: req.query.username } ).toArray( ( err, docs ) => {
-            if ( err ) return next( err );
-            if ( !docs || docs.length === 0 ) return next( null, false, { message: "Incorrect username." } );
-            if ( docs[0].password !== md5( req.query.password ) ) return next( null, false, { message: "Incorrect password." } );
-            console.log( `Found user: ${req.query.username}` );
-            return db.close();
-        } );
-    } );
+    const privateKeyFile = await fs.readFile( "./private-key.pem" );
+    const privateKey = new rsa();
+    privateKey.importKey( privateKeyFile, "pkcs1-private-pem" );
+
+    let username = req.query.username;
+    let password = req.query.password;
+    password = atob( password );
+    password = privateKey.decrypt( password, "utf8" );
+    password = md5( password );
+
+    const docs = await db.collection( "users" ).find( { username } ).toArray();
+    if ( !docs || docs.length === 0 ) {
+        return next( null, false, { message: "Incorrect username." } );
+    }
+    if ( docs[0].password !== password ) {
+        return next( null, false, { message: "Incorrect password." } );
+    }
+    console.log( `Found user: ${username}` );
+    db.close();
+   
     const token = await jws.sign( { username: req.query.username }, process.env.SECRET );
     req.flash( "success", "You successfully logged in." );
     res.json( token );

@@ -9,27 +9,6 @@ const express = require( "express" ),
 
 router.get( "/", appController.renderItems );
 
-router.get( "/key", ( req, res ) => {
-    try {
-        const fs = require("fs");
-        const rsa = require("node-rsa");
-        const atob = require("atob")
-
-        fs.readFile( "./private-key.pem", ( err, privateKey ) => {
-            if ( err ) return console.log( err );
-                
-            const key = new rsa();
-            key.importKey( privateKey, "pkcs1-private-pem" );
-
-            console.log( key.decrypt( atob(req.query.key), "utf8" ))
-        } )
-    } catch (error) {
-        console.log(error)
-    }
-    
-    res.sendStatus(200)
-} )
-
 // Account
 router.get( "/login", appController.login );
 router.get( "/register", appController.register );
@@ -50,7 +29,7 @@ router.get( "/logout", ( req, res ) => {
 } );
 
 // API
-router.post( "/api/login", accountController.login );
+router.post( "/api/login", catchErrors( accountController.login ) );
 router.post( "/api/update", databaseController.updateDatabase );
 router.get( "/api/generate-cardId", databaseController.generateCardId );
 router.post( "/api/add-new-card", databaseController.addNewCard );

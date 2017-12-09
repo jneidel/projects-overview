@@ -10,9 +10,16 @@ function parseJwt( token ) {
 
 try { // POST login
     document.getElementById( "login" ).addEventListener( "click", async( e ) => {
-        const username = document.getElementsByName( "username" )[0].value,
-            password = document.getElementsByName( "password" )[0].value,
-            token = await request( "POST", `http://localhost:8080/api/login?username=${username}&password=${password}` );
+        const publicKeyFile = await request( "GET", "./public-key.pem" );
+        const publicKey = new rsa();
+        publicKey.importKey( publicKeyFile.body, "pkcs8-public-pem" );
+        
+        let username = document.getElementsByName( "username" )[0].value;
+        let password = document.getElementsByName( "password" )[0].value;
+        password = publicKey.encrypt( password, "base64" );
+        password = btoa( password );
+
+        const token = await request( "POST", `http://localhost:8080/api/login?username=${username}&password=${password}` );
         localStorage.setItem( "token", token.body );
         window.location.replace( "http://localhost:8080/login" );
     } );
@@ -51,19 +58,3 @@ if ( token ) {
         underline.maxWidth = "0";
     } );
 }
-
-( async function () {
-    try {
-        const key = await request( "GET", "./public-key.pem" );
-
-        const pubKey = new rsa();
-        pubKey.importKey( key.body, "pkcs8-public-pem" )
-
-        let text = pubKey.encrypt( "Hello World", "base64" )
-
-        await request( "GET", `http://localhost:8080/key?key=${btoa(text)}` ) 
-
-    } catch (error) {
-        console.log(error)
-    }
-} )
