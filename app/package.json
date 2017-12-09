@@ -16,6 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "assert": "^1.4.1",
+    "atob": "^2.0.3",
     "body-parser": "^1.18.2",
     "connect-ensure-login": "^0.1.1",
     "connect-flash": "^0.1.1",
@@ -28,6 +29,7 @@
     "md5": "^2.2.1",
     "mongodb": "^2.2.33",
     "morgan": "^1.9.0",
+    "node-rsa": "^0.4.2",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "pug": "^2.0.0-rc.4",
@@ -36,7 +38,7 @@
   },
   "devDependencies": {
     "concurrently": "^3.5.1",
-    "nodemon": "^1.12.1",
+    "nodemon": "^1.12.5",
     "webpack": "^3.8.1"
   }
 }

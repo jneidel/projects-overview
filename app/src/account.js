@@ -1,5 +1,6 @@
 import request from "then-request";
 import jwt from "jsonwebtoken";
+import rsa from "node-rsa";
 
 function parseJwt( token ) {
     const base64Url = token.split( "." )[1],
@@ -36,7 +37,7 @@ if ( token ) {
 
     // Underline hover
     const username = document.getElementsByClassName( "nav-username" )[0],
-        underline = username.parentElement.childNodes[3].style; 
+        underline = username.parentElement.childNodes[3].style;
 
     underline.maxWidth = "0";
     underline.height = "3px";
@@ -50,3 +51,19 @@ if ( token ) {
         underline.maxWidth = "0";
     } );
 }
+
+( async function () {
+    try {
+        const key = await request( "GET", "./public-key.pem" );
+
+        const pubKey = new rsa();
+        pubKey.importKey( key.body, "pkcs8-public-pem" )
+
+        let text = pubKey.encrypt( "Hello World", "base64" )
+
+        await request( "GET", `http://localhost:8080/key?key=${btoa(text)}` ) 
+
+    } catch (error) {
+        console.log(error)
+    }
+} )

@@ -1,3 +1,5 @@
 var.env
 node_modules/
 todo.md
+private-key.pem
+public/scripts
