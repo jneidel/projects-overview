@@ -52,7 +52,7 @@ if ( token ) {
     username.style.margin = "0";
 
     username.addEventListener( "mouseover", ( e ) => {
-        underline.maxWidth = "80%";
+        underline.maxWidth = "100%";
     } );
     username.addEventListener( "mouseleave", ( e ) => {
         underline.maxWidth = "0";
