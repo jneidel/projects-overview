@@ -5,10 +5,11 @@ import request from "then-request";
 // Listening for item/title changes
 function itemListener( item ) {
     let originalItem = item.value;
+
     item.addEventListener( "keydown", () => {
         if ( event.which === 13 ) {
-            const parentNode = item.parentNode.parentNode.parentNode,
-                titleNode = parentNode.children;
+            const parentNode = item.parentNode.parentNode.parentNode;
+            const titleNode = parentNode.children;
             let cardSide;
 
             if ( parentNode.className.match( /back/ ) === null ) {
@@ -16,6 +17,7 @@ function itemListener( item ) {
             } else {
                 cardSide = "back";
             }
+
             if ( titleNode.length == 3 ) {
                 var title = titleNode[1].value;
             } else {
@@ -30,6 +32,7 @@ function itemListener( item ) {
 
 function titleListener( title ) {
     let originalTitle = title.value;
+
     title.addEventListener( "keydown", () => {
         if ( event.which === 13 ) {
             if ( title.value.length >= 20 ) {
@@ -50,8 +53,8 @@ function titleListener( title ) {
     } );
 }
 
-const items = document.getElementsByClassName( "item" ),
-    titles = document.getElementsByClassName( "title" );
+const items = document.getElementsByClassName( "item" );
+const titles = document.getElementsByClassName( "title" );
 
 for ( const item of items ) {
     itemListener( item );
@@ -66,6 +69,7 @@ const cards = document.getElementsByClassName( "card" );
 
 function flipCard( card ) {
     let cardState = "front";
+
     card.addEventListener( "dblclick", () => {
         if ( cardState === "front" ) {
             card.style.transform = "rotateY( 180deg )";
@@ -77,7 +81,7 @@ function flipCard( card ) {
     } );
 }
 
-const cardListenerCallback = function() {
+const cardListenerCallback = function cardListenerCallbackWrapper() {
     setNewCardToInput( this, cardListenerCallback );
 };
 
@@ -121,20 +125,22 @@ async function setNewCardToInput( cardToBeSet, callingFunction ) {
             itemListener( item.children[1].children[0].children[0] );
         }
     }
+
     for ( const title of cardToBeSet.children ) {
         titleListener( title.children[0] );
     }
 
     flipCard( cardToBeSet );
 
-    const content = document.getElementById( "cards" ),
-        newCard = content.appendChild( document.createElement( "span" ) );
+    const content = document.getElementById( "cards" );
+    const newCard = content.appendChild( document.createElement( "span" ) );
+
     newCard.innerHTML += `<img class="addCard" src="img/add.png">`;
     newCard.className = "card addCardContainer";
     newCard.addEventListener( "dblclick", cardListenerCallback );
 
-    const cardIdRequest = await request( "GET", `http://localhost:8080/api/generate-cardId` ),
-        cardId = JSON.parse( cardIdRequest.body )._id;
+    const cardIdRequest = await request( "GET", `http://localhost:8080/api/generate-cardId` );
+    const cardId = JSON.parse( cardIdRequest.body )._id;
 
-    await request( "POST", `http://localhost:8080/api/add-new-card?_id=${cardId}` );
+    request( "POST", `http://localhost:8080/api/add-new-card?_id=${cardId}` );
 }

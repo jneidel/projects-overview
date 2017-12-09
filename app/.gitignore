@@ -1,5 +1,5 @@
-var.env
 node_modules/
-todo.md
+variables.env
 private-key.pem
 public/scripts
+todo.md

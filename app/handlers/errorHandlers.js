@@ -1,6 +1,11 @@
 exports.catchErrors = fn => function( req, res, next ) {
-        return fn( req, res, next ).catch( next );
-    };
+    try {
+        fn( req, res, next ).catch( next );
+    } catch ( err ) {
+       console.log( err );
+       return next( err );
+    }
+};
 
 exports.notFound = ( req, res, next ) => {
     const err = new Error( "Not Found" );

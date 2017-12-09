@@ -1,11 +1,10 @@
-const express = require( "express" ),
-    router = express.Router(),
-    passport = require( "passport" ),
-    appController = require( "../controllers/appController" ),
-    accountController = require( "../controllers/accountController" ),
-    databaseController = require( "../controllers/databaseController" ),
-    { catchErrors } = require( "../handlers/errorHandlers" ),
-    ensureLogin = require( "connect-ensure-login" );
+const express = require( "express" );
+const router = express.Router();
+const appController = require( "../controllers/appController" );
+const accountController = require( "../controllers/accountController" );
+const databaseController = require( "../controllers/databaseController" );
+const { catchErrors } = require( "../handlers/errorHandlers" );
+const ensureLogin = require( "connect-ensure-login" );
 
 router.get( "/", appController.renderItems );
 
@@ -14,19 +13,8 @@ router.get( "/login", appController.login );
 router.get( "/register", appController.register );
 router.post( "/register",
     accountController.validateRegister,
-    accountController.register,
-    passport.authenticate( "local", {
-        failureRedirect          : "/login",
-        failureFlash             : true,
-        successFlash             : "You successfully logged in.",
-        successReturnToOrRedirect: "/login",
-    } )
+    accountController.register
 );
-router.get( "/logout", ( req, res ) => {
-    req.logout();
-    req.flash( "success", "Successfully logged out." );
-    res.redirect( "/login" );
-} );
 
 // API
 router.post( "/api/login", catchErrors( accountController.login ) );

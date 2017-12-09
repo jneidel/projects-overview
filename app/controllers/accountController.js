@@ -2,11 +2,11 @@ const mongo = require( "mongodb" ).MongoClient;
 const assert = require( "assert" );
 const md5 = require( "md5" );
 const jws = require( "jsonwebtoken" );
-const fs = require("mz/fs");
-const rsa = require("node-rsa");
-const atob = require("atob");
+const fs = require( "mz/fs" );
+const rsa = require( "node-rsa" );
+const atob = require( "atob" );
 
-require( "dotenv" ).config( { path: "../var.env" } );
+require( "dotenv" ).config( { path: "../variables.env" } );
 
 exports.validateRegister = ( req, res, next ) => {
     req.checkBody( "username", "Please supply a username." ).notEmpty();
@@ -29,74 +29,62 @@ exports.validateRegister = ( req, res, next ) => {
             username: req.body.username,
             flashes : req.flash(),
         } );
-        return;
+        return next( new Error( "Validation Error" ) );
     }
     return next();
 };
 
-exports.register = ( req, res, next ) => {
-    mongo.connect( process.env.DATABASE, async( err, db ) => {
-        assert.equal( err, null );
-        console.log( "Connected to mongodb for register" );
+exports.register = async ( req, res, next ) => {
+    const db = await mongo.connect( process.env.DATABASE );
 
-        const usernamePromise = new Promise( ( resolve, reject ) => {
-            db.collection( "users" ).findOne( { username: req.body.username }, ( err, result ) => {
-                if ( err ) return reject( err );
-                return resolve( result );
-            } );
+    const username = await db.collection( "users" ).findOne( { username: req.body.username } );
+    if ( username !== null ) {
+        req.flash( "error", "This username has already been registered." );
+        res.render( "register", {
+            title           : "Register",
+            username        : req.body.username,
+            password        : req.body.password,
+            password_confirm: req.body.password_confirm,
+            flashes         : req.flash(),
         } );
-        const username = await usernamePromise
-            .then( result => result )
-            .catch( err => err );
-        if ( username !== null ) {
-            req.flash( "error", "This username has already been registered." );
-            res.render( "register", {
-                title           : "Register",
-                username        : req.body.username,
-                password        : req.body.password,
-                password_confirm: req.body.password_confirm,
-                flashes         : req.flash(),
-            } );
-            return db.close();
-        }
+        db.close();
+        return next();
+    }
 
-        const userDocument = {
-            username: req.body.username.trim().toLowerCase(),
-            // email: req.body.email.trim().toLowerCase(),
-            password: md5( req.body.password ),
-            cards   : [],
-            settings: {},
-        };
+    const userDocument = {
+        username: req.body.username.trim(), // unique
+        // email: req.body.email.trim().toLowerCase(), validator.isEmail(), unique
+        password: md5( req.body.password ),
+        cards   : [],
+        settings: {},
+    };
 
-        db.collection( "users" ).insertOne( userDocument, ( err, result ) => {
-            if ( err || result.result.ok != 1 ) {
-                req.flash( "error", "Account could not be registered." );
-                res.render( "register", {
-                    title           : "Register",
-                    username        : req.body.username,
-                    password        : req.body.password,
-                    password_confirm: req.body.password_confirm,
-                    flashes         : req.flash(),
-                } );
-                return;
-            }
-            req.flash( "success", "Your account has been successfully registered." );
-            req.registered = true;
-            next();
+    const response = db.collection( "users" ).insertOne( userDocument );
+    if ( response.result.ok != 1 ) {
+        req.flash( "error", "Account could not be registered." );
+        res.render( "register", {
+            title           : "Register",
+            username        : req.body.username,
+            password        : req.body.password,
+            password_confirm: req.body.password_confirm,
+            flashes         : req.flash(),
         } );
-    } );
+        return next();
+    }
+
+    req.flash( "success", "Your account has been successfully registered." );
+    req.registered = true;
+    return next();
 };
 
-exports.login = async( req, res ) => {
-
+exports.login = async ( req, res, next ) => {
     const db = await mongo.connect( process.env.DATABASE );
-    console.log( "Connected to mongodb for login" );
 
     const privateKeyFile = await fs.readFile( "./private-key.pem" );
     const privateKey = new rsa();
     privateKey.importKey( privateKeyFile, "pkcs1-private-pem" );
 
-    let username = req.query.username;
+    const username = req.query.username;
     let password = req.query.password;
     password = atob( password );
     password = privateKey.decrypt( password, "utf8" );
@@ -111,7 +99,7 @@ exports.login = async( req, res ) => {
     }
     console.log( `Found user: ${username}` );
     db.close();
-   
+
     const token = await jws.sign( { username: req.query.username }, process.env.SECRET );
     req.flash( "success", "You successfully logged in." );
     res.json( token );

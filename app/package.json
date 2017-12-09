@@ -31,7 +31,6 @@
     "morgan": "^1.9.0",
     "mz": "^2.7.0",
     "node-rsa": "^0.4.2",
-    "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "pug": "^2.0.0-rc.4",
     "then-request": "^4.1.0",
