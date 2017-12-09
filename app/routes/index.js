@@ -4,7 +4,6 @@ const appController = require( "../controllers/appController" );
 const accountController = require( "../controllers/accountController" );
 const databaseController = require( "../controllers/databaseController" );
 const { catchErrors } = require( "../handlers/errorHandlers" );
-const ensureLogin = require( "connect-ensure-login" );
 
 router.get( "/", appController.renderItems );
 
