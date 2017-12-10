@@ -164,3 +164,7 @@ select:-webkit-autofill:focus {
   -webkit-text-fill-color: #F5F7FA;
   transition: background-color 5000s ease-in-out 0s;
 }
+
+::-webkit-scrollbar { 
+    display: none; 
+}
