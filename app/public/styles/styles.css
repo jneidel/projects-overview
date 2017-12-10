@@ -89,6 +89,12 @@ body {
 .header-link-home:hover #header-logo {
     transform: translateX( 0% );
 }
+/* Logout icon */
+.logout-icon {
+	width: 16px;
+	height: 16px;
+	padding: 3px 0 0 8px;
+}
 
 /* Responsive Design */
 @media all and ( max-width: 580px ) {

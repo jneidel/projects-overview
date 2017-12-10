@@ -38,7 +38,12 @@ if ( token ) {
         <div class="nav-container">
             <a href="#" class="nav-username">${token.username}</a>
             <div class="header-underline"></div>
-        </div>
+		</div>
+		<div class="nav-container">
+			<a href="/logout">
+				<img class="logout-icon" src="/img/logout.png">	
+			</a>
+		</div>
     `;
 
     // Underline hover
