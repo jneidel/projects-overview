@@ -37,3 +37,13 @@ exports.login = ( req, res ) => {
 exports.register = ( req, res ) => {
     res.render( "register", { title: "Register" } );
 };
+
+exports.logout = ( req, res ) => {
+	if ( req.query === {} ) {
+		req.flash( "success", "You have been sucessfully logged out." );
+	} else if ( req.query.unverified ) {
+		req.flash( "error", "Unverified token" );
+	}
+
+	res.render( "logout", { title: "Logout" } );
+};

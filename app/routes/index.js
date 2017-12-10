@@ -14,10 +14,7 @@ router.post( "/register",
     accountController.validateRegister,
     accountController.register
 );
-router.get( "/logout", ( req, res ) => {
-	req.flash( "success", "You have been sucessfully logged out." );
-	res.render( "logout", { title: "Logout" } );
-} );
+router.get( "/logout", appController.logout );
 
 // API
 router.post( "/api/login", catchErrors( accountController.login ) );
@@ -25,5 +22,6 @@ router.post( "/api/update", databaseController.updateDatabase );
 router.get( "/api/generate-cardId", databaseController.generateCardId );
 router.post( "/api/add-new-card", databaseController.addNewCard );
 router.get( "/api/get-userid", databaseController.getUserId );
+router.get( "/api/userdata", databaseController.getUserdata );
 
 module.exports = router;

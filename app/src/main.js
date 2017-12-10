@@ -1,6 +1,32 @@
 import request from "then-request";
+import jwt from "jsonwebtoken";
 
 /* eslint-disable no-alert */
+
+function parseJwt( token ) {
+    const base64Url = token.split( "." )[1];
+    const base64 = base64Url.replace( "-", "+" ).replace( "_", "/" );
+    return JSON.parse( window.atob( base64 ) );
+}
+
+let token = localStorage.getItem( "token" );
+if ( !token ) {
+	window.location.replace( "http://localhost:8080/login" );
+}
+async function getUserdata() {
+	let data = await request( "GET", `http://localhost:8080/api/userdata?token=${token}` );
+	data = JSON.parse( data.body );
+
+	if ( data.error ) {
+		window.location.replace( "http://localhost:8080/logout?unverified=true" );	
+	}
+
+	return data;
+};
+
+const userdata = getUserdata();
+
+token = parseJwt( token );
 
 // Listening for item/title changes
 function itemListener( item ) {

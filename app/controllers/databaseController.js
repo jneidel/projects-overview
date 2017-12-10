@@ -1,5 +1,6 @@
 const mongo = require( "mongodb" ).MongoClient;
 const assert = require( "assert" );
+const jwt = require( "jsonwebtoken" );
 
 require( "dotenv" ).config( { path: "../variables.env" } );
 
@@ -82,4 +83,20 @@ exports.addNewCard = async ( req, res, next ) => {
     }
 
     res.sendStatus( 200 );
+};
+
+exports.getUserdata = async ( req, res, next ) => {
+	function trim( str, regex ) {
+		return str.replace( new RegExp( regex, "g" ), "" );
+	}
+
+	const token = trim( req.query.token, "\"" );
+	try {
+		const tokenData = await jwt.verify( token, process.env.SECRET );
+	} catch ( error ) {
+		res.json( { error: true } );
+	}
+
+	const db = await mongo.connect( process.env.DATABASE );
+	res.json( {} );
 };
