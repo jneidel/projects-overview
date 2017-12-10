@@ -14,6 +14,10 @@ router.post( "/register",
     accountController.validateRegister,
     accountController.register
 );
+router.get( "/logout", ( req, res ) => {
+	req.flash( "success", "You have been sucessfully logged out." );
+	res.render( "logout", { title: "Logout" } );
+} );
 
 // API
 router.post( "/api/login", catchErrors( accountController.login ) );

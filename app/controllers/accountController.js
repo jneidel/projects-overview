@@ -101,7 +101,7 @@ exports.login = async ( req, res, next ) => {
     db.close();
 
     const token = await jws.sign( { username: req.query.username }, process.env.SECRET );
-    req.flash( "success", "You successfully logged in." );
+    req.flash( "success", "You have been successfully logged in." );
     res.json( token );
 };
 
