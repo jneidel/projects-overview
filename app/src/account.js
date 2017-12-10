@@ -33,10 +33,16 @@ try { // POST register
 // Display username in place of login/register
 let token = localStorage.getItem( "token" );
 if ( token ) {
-    token = parseJwt( token );
+	token = parseJwt( token );
+	
+	let username = token.username;
+	if ( username.length > 20 ) {
+		username = username.slice( 0, 20 );
+	}
+
     document.getElementById( "nav-right" ).innerHTML = `
         <div class="nav-container">
-            <a href="#" class="nav-username">${token.username}</a>
+            <a href="#" class="nav-username">${username}</a>
             <div class="header-underline"></div>
 		</div>
 		<div class="nav-container">
@@ -47,19 +53,19 @@ if ( token ) {
     `;
 
     // Underline hover
-    const username = document.getElementsByClassName( "nav-username" )[0];
-    const underline = username.parentElement.childNodes[3].style;
+    const usernameElem = document.getElementsByClassName( "nav-username" )[0];
+    const underlineElem = usernameElem.parentElement.childNodes[3].style;
 
-    underline.maxWidth = "0";
-    underline.height = "3px";
-    underline.background = "#F5F7FA";
-    underline.transition = "max-width 0.2s ease-in-out";
-    username.style.margin = "0";
+    underlineElem.maxWidth = "0";
+    underlineElem.height = "3px";
+    underlineElem.background = "#F5F7FA";
+    underlineElem.transition = "max-width 0.2s ease-in-out";
+    usernameElem.style.margin = "0";
 
-    username.addEventListener( "mouseover", ( e ) => {
-        underline.maxWidth = "100%";
+    usernameElem.addEventListener( "mouseover", ( e ) => {
+        underlineElem.maxWidth = "100%";
     } );
-    username.addEventListener( "mouseleave", ( e ) => {
-        underline.maxWidth = "0";
+    usernameElem.addEventListener( "mouseleave", ( e ) => {
+        underlineElem.maxWidth = "0";
     } );
 }
