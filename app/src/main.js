@@ -3,6 +3,8 @@ import jwt from "jsonwebtoken";
 
 /* eslint-disable no-alert */
 
+const url = "http://localhost:8080";
+
 function parseJwt( token ) {
     const base64Url = token.split( "." )[1];
     const base64 = base64Url.replace( "-", "+" ).replace( "_", "/" );
@@ -11,14 +13,14 @@ function parseJwt( token ) {
 
 let token = localStorage.getItem( "token" );
 if ( !token ) {
-	window.location.replace( "http://localhost:8080/login" );
+	window.location.replace( `${url}/login` );
 }
 async function getUserdata() {
-	let data = await request( "GET", `http://localhost:8080/api/userdata?token=${token}` );
+	let data = await request( "GET", `${url}/api/userdata?token=${token}` );
 	data = JSON.parse( data.body );
 
 	if ( data.error ) {
-		window.location.replace( "http://localhost:8080/logout?unverified=true" );
+		window.location.replace( `${url}/logout?unverified=true` );
 	}
 
 	return data;
@@ -50,7 +52,7 @@ function itemListener( item ) {
                 var title = titleNode[0].value;
             }
 
-            request( "POST", `http://localhost:8080/api/update?userId=${1}&updatedItem=${item.value}&oldItem=${originalItem}&cardSide=${cardSide}&title=${title}` );
+            request( "POST", `${url}/api/update?userId=${1}&updatedItem=${item.value}&oldItem=${originalItem}&cardSide=${cardSide}&title=${title}` );
             originalItem = item.value;
         }
     } );
@@ -73,7 +75,7 @@ function titleListener( title ) {
                 parent[0].children[0].value = title.value;
             }
 
-            request( "POST", `http://localhost:8080/api/update?userId=${1}&updatedTitle=${title.value}&title=${originalTitle}` );
+            request( "POST", `${url}/api/update?userId=${1}&updatedTitle=${title.value}&title=${originalTitle}` );
             originalTitle = title.value;
         }
     } );
@@ -165,8 +167,8 @@ async function setNewCardToInput( cardToBeSet, callingFunction ) {
     newCard.className = "card addCardContainer";
     newCard.addEventListener( "dblclick", cardListenerCallback );
 
-    const cardIdRequest = await request( "GET", `http://localhost:8080/api/generate-cardId` );
+    const cardIdRequest = await request( "GET", `${url}/api/generate-cardId` );
     const cardId = JSON.parse( cardIdRequest.body )._id;
 
-    request( "POST", `http://localhost:8080/api/add-new-card?_id=${cardId}` );
+    request( "POST", `${url}/api/add-new-card?_id=${cardId}` );
 }

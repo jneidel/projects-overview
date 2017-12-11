@@ -4,6 +4,8 @@ import rsa from "node-rsa";
 
 /* eslint-disable no-empty */
 
+const url = "http://localhost:8080";
+
 function parseJwt( token ) {
     const base64Url = token.split( "." )[1];
     const base64 = base64Url.replace( "-", "+" ).replace( "_", "/" );
@@ -21,9 +23,9 @@ try { // POST login
         password = publicKey.encrypt( password, "base64" );
         password = btoa( password );
 
-        const token = await request( "POST", `http://localhost:8080/api/login?username=${username}&password=${password}` );
+        const token = await request( "POST", `${url}/api/login?username=${username}&password=${password}` );
         localStorage.setItem( "token", token.body );
-        window.location.replace( "http://localhost:8080/" );
+        window.location.replace( `${url}/` );
     } );
 } catch ( error ) {} // Not on login page 
 
