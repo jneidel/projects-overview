@@ -10,12 +10,13 @@ module.exports = {
 	entry: {
 		main   : "./src/main.js",
 		account: "./src/account.js",
+		state  : "./src/state.js",
 	},
 	output: {
 		filename: "[name].js",
 		path    : path.resolve( __dirname, "public/scripts" ),
 	},
 	plugins: prod ? [
-		new minify( {}, { comments: false } )
-	] : []
+		new minify( {}, { comments: false } ),
+	] : [],
 };

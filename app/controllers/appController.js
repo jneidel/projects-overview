@@ -39,11 +39,15 @@ exports.register = ( req, res ) => {
 };
 
 exports.logout = ( req, res ) => {
-	if ( req.query === {} ) {
-		req.flash( "success", "You have been sucessfully logged out." );
-	} else if ( req.query.unverified ) {
+	if ( req.query.unverified ) {
 		req.flash( "error", "Unverified token" );
+	} else {
+		req.flash( "success", "You have been sucessfully logged out." );
 	}
 
 	res.render( "logout", { title: "Logout" } );
+};
+
+exports.account = ( req, res, next ) => {
+	res.render( "account", { title: "Account" } );
 };

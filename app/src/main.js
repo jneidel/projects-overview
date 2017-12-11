@@ -18,11 +18,11 @@ async function getUserdata() {
 	data = JSON.parse( data.body );
 
 	if ( data.error ) {
-		window.location.replace( "http://localhost:8080/logout?unverified=true" );	
+		window.location.replace( "http://localhost:8080/logout?unverified=true" );
 	}
 
 	return data;
-};
+}
 
 const userdata = getUserdata();
 

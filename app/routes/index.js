@@ -15,6 +15,7 @@ router.post( "/register",
     accountController.register
 );
 router.get( "/logout", appController.logout );
+router.get( "/account", appController.account );
 
 // API
 router.post( "/api/login", catchErrors( accountController.login ) );
