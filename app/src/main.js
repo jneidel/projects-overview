@@ -1,9 +1,8 @@
 import request from "then-request";
 import jwt from "jsonwebtoken";
 
+/* globals Vue */
 /* eslint-disable no-alert */
-
-const url = "http://localhost:8080";
 
 function parseJwt( token ) {
     const base64Url = token.split( "." )[1];
@@ -11,19 +10,15 @@ function parseJwt( token ) {
     return JSON.parse( window.atob( base64 ) );
 }
 
-( async function main() {
-	await setItems();
-	setEventListeners();
-	flipCardOrAddNewCard();
-} )();
+const token = localStorage.getItem( "token" );
+if ( !token ) {
+	window.location.replace( `${url}/login` );
+}
 
+const url = "http://localhost:8080";
+const username = parseJwt( token ).username;
 
 async function setItems() {
-	let token = localStorage.getItem( "token" );
-	if ( !token ) {
-		window.location.replace( `${url}/login` );
-	}
-
 	const data = await request( "GET", `${url}/api/getitems?token=${token}` );
 	const cards = JSON.parse( data.body );
 
@@ -31,13 +26,13 @@ async function setItems() {
 		window.location.replace( `${url}/logout?unverified=true` );
 	}
 
-	console.log(cards)
+	console.log( cards );
 
 	var vue = new Vue( {
-		el: "#vue-container",
+		el  : "#vue-container",
 		data: {
-			cards
-		}
+			cards,
+		},
 	} );
 }
 
@@ -56,49 +51,49 @@ async function setItems() {
 function setEventListeners() {
 	function itemListener( item ) {
 		let originalItem = item.value;
-	
+
 		item.addEventListener( "keydown", () => {
 			if ( event.which === 13 ) {
 				const parentNode = item.parentNode.parentNode.parentNode;
 				const titleNode = parentNode.children;
 				let cardSide;
-	
+
 				if ( parentNode.className.match( /back/ ) === null ) {
 					cardSide = "front";
 				} else {
 					cardSide = "back";
 				}
-	
+
 				if ( titleNode.length == 3 ) {
 					var title = titleNode[1].value;
 				} else {
 					var title = titleNode[0].value;
 				}
-	
-				request( "POST", `${url}/api/update?userId=${1}&updatedItem=${item.value}&oldItem=${originalItem}&cardSide=${cardSide}&title=${title}` );
+
+				request( "POST", `${url}/api/update?userId=${username}&updatedItem=${item.value}&oldItem=${originalItem}&cardSide=${cardSide}&title=${title}` );
 				originalItem = item.value;
 			}
 		} );
 	}
-	
+
 	function titleListener( title ) {
 		let originalTitle = title.value;
-	
+
 		title.addEventListener( "keydown", () => {
 			if ( event.which === 13 ) {
 				if ( title.value.length >= 20 ) {
 					alert( `The title "${title.value}" will probably be cut off as its too long.
 							${title.value.length}` );
 				}
-	
+
 				const parent = title.parentNode.parentNode.children;
 				if ( !title.parentNode.className.match( /back/ ) ) {
 					parent[1].children[1].value = title.value;
 				} else {
 					parent[0].children[0].value = title.value;
 				}
-	
-				request( "POST", `${url}/api/update?userId=${1}&updatedTitle=${title.value}&title=${originalTitle}` );
+
+				request( "POST", `${url}/api/update?userId=${username}&updatedTitle=${title.value}&title=${originalTitle}` );
 				originalTitle = title.value;
 			}
 		} );
@@ -114,15 +109,13 @@ function setEventListeners() {
 	for ( const title of titles ) {
 	    titleListener( title );
 	}
-}
 
-function flipCardOrAddNewCard() {
 	const cards = document.getElementsByClassName( "card" );
-	
+
 	// flip cards
 	function flipCard( card ) {
 		let cardState = "front";
-	
+
 		card.addEventListener( "dblclick", () => {
 			if ( cardState === "front" ) {
 				card.style.transform = "rotateY( 180deg )";
@@ -133,7 +126,7 @@ function flipCardOrAddNewCard() {
 			}
 		} );
 	}
-	
+
 	// Add new card
 	const cardListenerCallback = function cardListenerCallbackWrapper() {
 		setNewCardToInput( this, cardListenerCallback );
@@ -161,7 +154,7 @@ function flipCardOrAddNewCard() {
 					</ul>
 			</div>
 		`;
-	
+
 		for ( const item of cardToBeSet.children ) {
 			if ( item.children.length == 3 ) {
 				itemListener( item.children[2].children[0].children[0] );
@@ -169,24 +162,24 @@ function flipCardOrAddNewCard() {
 				itemListener( item.children[1].children[0].children[0] );
 			}
 		}
-	
+
 		for ( const title of cardToBeSet.children ) {
 			titleListener( title.children[0] );
 		}
-	
+
 		flipCard( cardToBeSet );
-	
+
 		const content = document.getElementById( "cards" );
 		const newCard = content.appendChild( document.createElement( "span" ) );
-	
+
 		newCard.innerHTML += `<img class="addCard" src="img/add.png">`;
 		newCard.className = "card addCardContainer";
 		newCard.addEventListener( "dblclick", cardListenerCallback );
-	
+
 		const cardIdRequest = await request( "GET", `${url}/api/generate-cardId` );
 		const cardId = JSON.parse( cardIdRequest.body )._id;
-	
-		request( "POST", `${url}/api/add-new-card?_id=${cardId}` );
+
+		request( "POST", `${url}/api/add-new-card?userid=${username}&_id=${cardId}` );
 	}
 
 	for ( const card of cards ) {
@@ -198,3 +191,8 @@ function flipCardOrAddNewCard() {
 		}
 	}
 }
+
+( async function main() { // to ensure drawing items before setting listeners
+	await setItems();
+	setEventListeners();
+} )();

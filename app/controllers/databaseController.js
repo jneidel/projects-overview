@@ -74,7 +74,7 @@ exports.addNewCard = async ( req, res, next ) => {
         title : "",
         front : [ "" ],
         back  : [ "" ],
-        userid: "1",
+        userid: req.query.userid,
     };
 
     const response = await db.collection( "cards" ).insertOne( insertion );
@@ -122,7 +122,7 @@ exports.getItems = async ( req, res, next ) => {
 		.find( query, projection )
 		.sort( { position: 1 } )
 		.toArray();
-	
+
 	db.close();
 	return res.json( cards );
-}
+};
