@@ -97,7 +97,6 @@ exports.login = async ( req, res, next ) => {
     if ( docs[0].password !== password ) {
         return next( null, false, { message: "Incorrect password." } );
     }
-    console.log( `Found user: ${username}` );
     db.close();
 
     const token = await jws.sign( { username: req.query.username }, process.env.SECRET );

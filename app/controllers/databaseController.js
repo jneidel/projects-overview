@@ -69,12 +69,19 @@ exports.getUserId = async ( req, res, next ) => {
 exports.addNewCard = async ( req, res, next ) => {
     const db = await mongo.connect( process.env.DATABASE );
 
+	const lastPosition = await db.collection( "cards" ).aggregate( [
+		{ $match: { userid: req.query.userid } },
+		{ $group: { position: { $max: "$position" }, _id: null } },
+	] ).toArray();
+	const newPosition = lastPosition[0].position + 1;
+
     const insertion = {
-        _id   : Number( req.query._id ),
-        title : "",
-        front : [ "" ],
-        back  : [ "" ],
-        userid: req.query.userid,
+        _id     : Number( req.query._id ),
+		userid  : req.query.userid,
+        title   : "",
+        front   : [ "" ],
+        back    : [ "" ],
+		position: newPosition,
     };
 
     const response = await db.collection( "cards" ).insertOne( insertion );
