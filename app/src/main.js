@@ -29,7 +29,7 @@ async function setItems() {
 	console.log( cards );
 
 	var vue = new Vue( {
-		el  : "#vue-container",
+		el  : "#cards",
 		data: {
 			cards,
 		},
