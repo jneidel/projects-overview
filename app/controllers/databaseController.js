@@ -1,6 +1,5 @@
 const mongo = require( "mongodb" ).MongoClient;
 const assert = require( "assert" );
-const jwt = require( "jsonwebtoken" );
 
 require( "dotenv" ).config( { path: "../variables.env" } );
 
@@ -93,36 +92,19 @@ exports.addNewCard = async ( req, res, next ) => {
 };
 
 exports.getUserdata = async ( req, res, next ) => {
-	function trim( str, regex ) {
-		return str.replace( new RegExp( regex, "g" ), "" );
-	}
+	const verified = await req.verifyJwt( req.query.token );
+	if ( !verified ) { return res.json( { error: true } ); }
 
-	const token = trim( req.query.token, "\"" );
-	try {
-		const tokenData = await jwt.verify( token, process.env.SECRET );
-	} catch ( error ) {
-		res.json( { error: true } );
-	}
-
-	const db = await mongo.connect( process.env.DATABASE );
 	res.json( {} );
 };
 
 exports.getItems = async ( req, res, next ) => {
-	function trim( str, regex ) {
-		return str.replace( new RegExp( regex, "g" ), "" );
-	}
-
-	let token = trim( req.query.token, "\"" );
-	try {
-		token = await jwt.verify( token, process.env.SECRET );
-	} catch ( error ) {
-		return res.json( { error: true } );
-	}
+	const verified = await req.verifyJwt( req.query.token );
+	if ( !verified ) { return res.json( { error: true } ); }
 
 	const db = await mongo.connect( process.env.DATABASE );
 
-	const query = { userid: token.username };
+	const query = { userid: verified.username };
     const projection = { _id: 1, title: 1, front: 1, back: 1, position: 1 };
 
 	const cards = await db.collection( "cards" )

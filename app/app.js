@@ -27,8 +27,13 @@ app.use( require( "connect-flash" )() );
 
 app.use( ( req, res, next ) => {
     res.locals.h = require( "./helpers/helpers" );
-    res.locals.flashes = req.flash();
+	res.locals.flashes = req.flash();
     next();
+} );
+
+app.use( ( req, res, next ) => {
+	req.verifyJwt = require( "./handlers/tokenHandler" );
+	return next();
 } );
 
 app.use( "/", require( "./routes/index" ) );
