@@ -70,7 +70,7 @@ function setEventListeners() {
 					var title = titleNode[0].value;
 				}
 
-				request( "POST", `${url}/api/update?userId=${username}&updatedItem=${item.value}&oldItem=${originalItem}&cardSide=${cardSide}&title=${title}` );
+				request( "POST", `${url}/api/update?userid=${username}&updatedItem=${item.value}&oldItem=${originalItem}&cardSide=${cardSide}&title=${title}` );
 				originalItem = item.value;
 			}
 		} );
@@ -93,7 +93,7 @@ function setEventListeners() {
 					parent[0].children[0].value = title.value;
 				}
 
-				request( "POST", `${url}/api/update?userId=${username}&updatedTitle=${title.value}&title=${originalTitle}` );
+				request( "POST", `${url}/api/update?userid=${username}&updatedTitle=${title.value}&title=${originalTitle}` );
 				originalTitle = title.value;
 			}
 		} );

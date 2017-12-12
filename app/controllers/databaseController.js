@@ -9,12 +9,12 @@ exports.updateDatabase = async ( req, res, next ) => {
     const update = {};
 
     if ( req.query.updatedItem === undefined ) {
-        query.userid = req.query.userId;
+        query.userid = req.query.userid;
         query.title = req.query.title;
 
         update.$set = { title: req.query.updatedTitle };
     } else {
-        query.userid = req.query.userId;
+        query.userid = req.query.userid;
         query.title = req.query.title;
         query[req.query.cardSide] = req.query.oldItem;
 
