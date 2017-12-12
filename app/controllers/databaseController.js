@@ -100,3 +100,29 @@ exports.getUserdata = async ( req, res, next ) => {
 	const db = await mongo.connect( process.env.DATABASE );
 	res.json( {} );
 };
+
+exports.getItems = async ( req, res, next ) => {
+	function trim( str, regex ) {
+		return str.replace( new RegExp( regex, "g" ), "" );
+	}
+
+	let token = trim( req.query.token, "\"" );
+	try {
+		token = await jwt.verify( token, process.env.SECRET );
+	} catch ( error ) {
+		return res.json( { error: true } );
+	}
+
+	const db = await mongo.connect( process.env.DATABASE );
+
+	const query = { userid: token.username };
+    const projection = { _id: 1, title: 1, front: 1, back: 1, position: 1 };
+
+	const cards = await db.collection( "cards" )
+		.find( query, projection )
+		.sort( { position: 1 } )
+		.toArray();
+	
+	db.close();
+	return res.json( cards );
+}
