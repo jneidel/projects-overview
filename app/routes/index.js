@@ -20,10 +20,19 @@ router.get( "/account", appController.account );
 // API
 router.post( "/api/login", catchErrors( accountController.login ) );
 router.post( "/api/update", databaseController.updateDatabase );
-router.get( "/api/generate-cardId", databaseController.generateCardId );
+router.post( "/api/generate-cardId", databaseController.generateCardId );
 router.post( "/api/add-new-card", databaseController.addNewCard );
-router.get( "/api/get-userid", databaseController.getUserId );
-router.get( "/api/userdata", databaseController.getUserdata );
-router.get( "/api/getitems", databaseController.getItems );
+router.post( "/api/get-userid", databaseController.getUserId );
+router.post( "/api/userdata", databaseController.getUserdata );
+router.post( "/api/getitems", databaseController.getItems );
+
+router.get( "/api", ( req, res ) => {
+	req.flash( "error", "Access to the API denied." );
+	res.redirect( "/login" );
+} );
+router.get( "/api/:anything", ( req, res ) => {
+	req.flash( "error", "Access to the API denied." );
+	res.redirect( "/login" );
+} );
 
 module.exports = router;

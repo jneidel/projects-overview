@@ -19,7 +19,7 @@ const url = "http://localhost:8080";
 const username = parseJwt( token ).username;
 
 async function setItems() {
-	const data = await request( "GET", `${url}/api/getitems?token=${token}` );
+	const data = await request( "POST", `${url}/api/getitems?token=${token}` );
 	const cards = JSON.parse( data.body );
 
 	if ( cards.error ) {
@@ -37,7 +37,7 @@ async function setItems() {
 }
 
 /* async function getUserdata() {
-	let data = await request( "GET", `${url}/api/userdata?token=${token}` );
+	let data = await request( "POST", `${url}/api/userdata?token=${token}` );
 	data = JSON.parse( data.body );
 
 	if ( data.error ) {
@@ -176,7 +176,7 @@ function setEventListeners() {
 		newCard.className = "card addCardContainer";
 		newCard.addEventListener( "dblclick", cardListenerCallback );
 
-		const cardIdRequest = await request( "GET", `${url}/api/generate-cardId` );
+		const cardIdRequest = await request( "POST", `${url}/api/generate-cardId` );
 		const cardId = JSON.parse( cardIdRequest.body )._id;
 
 		request( "POST", `${url}/api/add-new-card?userid=${username}&_id=${cardId}` );
