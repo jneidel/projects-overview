@@ -57,7 +57,7 @@ exports.register = async ( req, res, next ) => {
         password: md5( req.body.password ),
         cards   : [],
 		settings: {},
-		logins	: [],
+		logins 	: [],
     };
 
     const response = db.collection( "users" ).insertOne( userDocument );
@@ -98,10 +98,10 @@ exports.login = async ( req, res, next ) => {
     if ( docs[0].password !== password ) {
         return next( null, false, { message: "Incorrect password." } );
 	}
-	
+
 	const loginDetails = {
 		time: Date.now(),
-	}
+	};
 	db.collection( "users" ).updateOne( { username }, { $push: { logins: loginDetails } } );
 
     db.close();

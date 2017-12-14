@@ -51,3 +51,7 @@ exports.logout = ( req, res ) => {
 exports.account = ( req, res, next ) => {
 	res.render( "account", { title: "Account" } );
 };
+
+exports.welcome = ( req, res ) => {
+	res.render( "welcome", { title: "Project Manager" } );
+};

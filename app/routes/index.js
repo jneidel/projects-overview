@@ -5,7 +5,8 @@ const accountController = require( "../controllers/accountController" );
 const databaseController = require( "../controllers/databaseController" );
 const { catchErrors } = require( "../handlers/errorHandlers" );
 
-router.get( "/", appController.renderItems );
+router.get( "/app", appController.renderItems );
+router.get( "/", appController.welcome );
 
 // Account
 router.get( "/login", appController.login );

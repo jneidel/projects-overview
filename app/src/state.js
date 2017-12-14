@@ -25,7 +25,7 @@ try { // POST login
 
         const token = await request( "POST", `${url}/api/login?username=${username}&password=${password}` );
         localStorage.setItem( "token", token.body );
-        window.location.replace( `${url}/` );
+        window.location.replace( `${url}/app` );
     } );
 } catch ( error ) {} // Not on login page 
 
@@ -71,5 +71,7 @@ if ( token ) {
     } );
     usernameElem.addEventListener( "mouseleave", ( e ) => {
         underlineElem.maxWidth = "0";
-    } );
+	} );
+
+	document.getElementsByClassName( "header-link-home" )[0].href = "/app";
 }
