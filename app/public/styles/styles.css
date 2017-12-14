@@ -12,11 +12,16 @@ body {
     color: #F5F7FA;
     min-height: 100vh;
     margin: 0;
-    font-family: "Open Sans";
+	font-family: "Open Sans";
+	font-size: 16px;
 }
 #content {
     grid-area: main;
-    overflow: hidden;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
 /* Header */
@@ -107,40 +112,27 @@ body {
 
 /* Flashes */
 .flash {
-    min-width: 310px;
-    margin: 0 50px 20px 50px;
-    padding: 0px 10px;
-    background: rgba(245, 247, 250, 0.1);
-    box-shadow: 0 0 3px #F5F7FA;
-    border-radius: 5px;
-    transition: all 0.6s ease-out;
+    background: rgba(51, 51, 51, 0.25);
+	padding: 4px 8px 4px 6px;
+	font-size: 1.25rem;
+	border-top-right-radius: 2px;
+	border-bottom-right-radius: 2px;
+	cursor: pointer;
+}
+.flash:hover {
+	background: rgba(51, 51, 51, 0.15);
 }
 .flash--success {
-    background: rgba(245, 247, 250, 0.1);
-    border: 3px solid #259F6C;
-    box-shadow: 0 0 3px #259F6C;
-}
-.flash--success:hover {
-    background: #259F6C;
-    color: #333;
+    border-left: 4px solid rgb(255, 230, 0);
 }
 .flash--error {
-    background: rgba(245, 247, 250, 0.1);
-    border: 3px solid #FC3A52;
-    box-shadow: 0 0 3px #FC3A52;
-}
-.flash--error:hover {
-    background: #FC3A52;
-    color: #333;
+	border-left: 4px solid #FC3A52;
 }
 .flash--info {
-    background: rgba(245, 247, 250, 0.1);
-    border: 3px solid #F5F7FA;
-    box-shadow: 0 0 3px #F5F7FA;
+    border-left: 4px solid #F5F7FA;
 }
-.flash--info:hover {
-    background: #F5F7FA;
-    color: #333;
+.flash__text {
+	margin: 0;
 }
 
 /* Input */

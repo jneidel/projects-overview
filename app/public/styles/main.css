@@ -77,6 +77,13 @@ span.addCardContainer:hover img.addCard {
     transform: rotateZ( 90deg );
 }
 
+/* Flashes */
+.flash {
+	width: auto;
+	margin-top: 20px;
+	margin-bottom: -40px;
+}
+
 /* Responsive Design */
 @media all and ( max-width: 842px ) {
     .addCardContainer {
