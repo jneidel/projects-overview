@@ -56,7 +56,8 @@ exports.register = async ( req, res, next ) => {
         // email: req.body.email.trim().toLowerCase(), validator.isEmail(), unique
         password: md5( req.body.password ),
         cards   : [],
-        settings: {},
+		settings: {},
+		logins	: [],
     };
 
     const response = db.collection( "users" ).insertOne( userDocument );
@@ -96,7 +97,13 @@ exports.login = async ( req, res, next ) => {
     }
     if ( docs[0].password !== password ) {
         return next( null, false, { message: "Incorrect password." } );
-    }
+	}
+	
+	const loginDetails = {
+		time: Date.now(),
+	}
+	db.collection( "users" ).updateOne( { username }, { $push: { logins: loginDetails } } );
+
     db.close();
 
     const token = await jws.sign( { username: req.query.username }, process.env.SECRET );
