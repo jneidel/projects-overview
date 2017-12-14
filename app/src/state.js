@@ -14,7 +14,7 @@ function parseJwt( token ) {
 
 try { // POST login
     document.getElementById( "login" ).addEventListener( "click", async ( e ) => {
-        const publicKeyFile = await request( "POST", "./public-key.pem" );
+        const publicKeyFile = await request( "GET", "./public-key.pem" );
         const publicKey = new rsa();
         publicKey.importKey( publicKeyFile.body, "pkcs8-public-pem" );
 

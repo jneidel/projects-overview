@@ -18,6 +18,7 @@ if ( !token ) {
 const url = "http://localhost:8080";
 const username = parseJwt( token ).username;
 
+// Render cards from database
 async function setItems() {
 	const data = await request( "POST", `${url}/api/getitems?token=${token}` );
 	const cards = JSON.parse( data.body );
@@ -26,8 +27,6 @@ async function setItems() {
 		window.location.replace( `${url}/logout?unverified=true` );
 	}
 
-	console.log( cards );
-
 	var vue = new Vue( {
 		el  : "#cards",
 		data: {
@@ -35,17 +34,6 @@ async function setItems() {
 		},
 	} );
 }
-
-/* async function getUserdata() {
-	let data = await request( "POST", `${url}/api/userdata?token=${token}` );
-	data = JSON.parse( data.body );
-
-	if ( data.error ) {
-		window.location.replace( `${url}/logout?unverified=true` );
-	}
-
-	return data;
-} */
 
 // Listening for item/title changes
 function setEventListeners() {
