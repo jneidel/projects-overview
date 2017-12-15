@@ -12,27 +12,64 @@ function parseJwt( token ) {
     return JSON.parse( window.atob( base64 ) );
 }
 
-try { // POST login
-    document.getElementById( "login" ).addEventListener( "click", async ( e ) => {
-        const publicKeyFile = await request( "GET", "./public-key.pem" );
-        const publicKey = new rsa();
-        publicKey.importKey( publicKeyFile.body, "pkcs8-public-pem" );
+async function accountHandler( func ) {
+	const publicKeyFile = await request( "GET", "./public-key.pem" );
+	const publicKey = new rsa();
+	publicKey.importKey( publicKeyFile.body, "pkcs8-public-pem" );
 
-        const username = document.getElementsByName( "username" )[0].value;
-        let password = document.getElementsByName( "password" )[0].value;
-        password = publicKey.encrypt( password, "base64" );
-        password = btoa( password );
+	function getFormData( isRegister = false ) {
+		const data = {
+			username: document.getElementsByName( "username" )[0].value,
+			encrypt( password, isConfirmPass ) {
+				password = publicKey.encrypt( password, "base64" );
+				password = btoa( password );
 
-        const token = await request( "POST", `${url}/api/login?username=${username}&password=${password}` );
-        localStorage.setItem( "token", token.body );
-        window.location.replace( `${url}/app` );
-    } );
-} catch ( error ) {} // Not on login page 
+				if ( isConfirmPass ) {
+					this.password_confirm = password;
+				} else {
+					this.password = password;
+				}
+			},
+		};
 
-try { // POST register
-    document.getElementById( "register" ).addEventListener( "click", ( e ) => {
-    } );
-} catch ( error ) {} // Not on register page
+		data.encrypt( document.getElementsByName( "password" )[0].value, false );
+
+		if ( isRegister ) {
+			data.encrypt( document.getElementsByName( "password_confirm" )[0].value, true );
+		}
+
+		return data;
+	}
+
+	try {
+		document.getElementById( "login" ).addEventListener( "click", async ( e ) => {
+			const token = await request( "POST", `${url}/api/login?username=${username}&password=${password}` );
+			localStorage.setItem( "token", token.body );
+			window.location.replace( `${url}/app` );
+		} );
+	} catch ( e ) {}
+	try {
+		document.getElementById( "register" ).addEventListener( "click", async ( e ) => {
+			const formData = getFormData( true );
+
+			let response = await request( "POST", `${url}/api/register`, { json: {
+				username        : formData.username,
+				password        : formData.password,
+				password_confirm: formData.password_confirm,
+			} } );
+			response = JSON.parse( response.body );
+
+			if ( response.error ) {
+				window.location.replace( `${url}/register` );
+			}
+			if ( response.success ) {
+				window.location.replace( `${url}/app` );
+			}
+		} );
+	} catch ( e ) {}
+}
+
+accountHandler();
 
 // Display username in place of login/register
 let token = localStorage.getItem( "token" );

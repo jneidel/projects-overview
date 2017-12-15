@@ -19,63 +19,44 @@ exports.validateRegister = ( req, res, next ) => {
     } ); */
     req.checkBody( "password", "Please supply a password." ).notEmpty();
     req.checkBody( "password_confirm", "Please supply a confirm password." ).notEmpty();
-    req.checkBody( "password_confirm", "Your passwords do not match." ).equals( req.body.password );
-
-    const errors = req.validationErrors();
+	req.checkBody( "password_confirm", "Your passwords do not match." ).equals( req.body.password );
+	
+	const errors = req.validationErrors();
     if ( errors ) {
-        req.flash( "error", errors.map( err => err.msg ) );
-        res.render( "register", {
-            title   : "Register",
-            username: req.body.username,
-            flashes : req.flash(),
-        } );
-        return next( new Error( "Validation Error" ) );
-    }
+		req.flash( "error", errors.map( err => err.msg ) );
+		res.json( { error: true } )
+	}
+
     return next();
 };
 
 exports.register = async ( req, res, next ) => {
-    const db = await mongo.connect( process.env.DATABASE );
+	const db = await mongo.connect( process.env.DATABASE );
 
     const username = await db.collection( "users" ).findOne( { username: req.body.username } );
     if ( username !== null ) {
-        req.flash( "error", "This username has already been registered." );
-        res.render( "register", {
-            title           : "Register",
-            username        : req.body.username,
-            password        : req.body.password,
-            password_confirm: req.body.password_confirm,
-            flashes         : req.flash(),
-        } );
+		req.flash( "error", "This username has already been registered." );
+		res.json( { error: true } );
         db.close();
-        return next();
     }
-
+ 
     const userDocument = {
-        username: req.body.username.trim(), // unique
+        username: req.body.username.trim(),
         // email: req.body.email.trim().toLowerCase(), validator.isEmail(), unique
-        password: md5( req.body.password ),
-        cards   : [],
+        password: req.body.password,
 		settings: {},
 		logins 	: [],
     };
 
-    const response = db.collection( "users" ).insertOne( userDocument );
+	const response = await db.collection( "users" ).insertOne( userDocument );
     if ( response.result.ok != 1 ) {
-        req.flash( "error", "Account could not be registered." );
-        res.render( "register", {
-            title           : "Register",
-            username        : req.body.username,
-            password        : req.body.password,
-            password_confirm: req.body.password_confirm,
-            flashes         : req.flash(),
-        } );
-        return next();
-    }
+		req.flash( "error", "Account could not be registered." );
+		res.json( { error: true } );
+		db.close();
+	}
 
     req.flash( "success", "Your account has been successfully registered." );
-    req.registered = true;
-    return next();
+	res.json( { success: true } );
 };
 
 exports.login = async ( req, res, next ) => {

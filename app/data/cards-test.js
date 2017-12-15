@@ -42,5 +42,14 @@ db.cards.insertMany([
     position: 5,
 }
 ]);
+db.users.drop();
+db.users.insertOne(
+	{
+		username: "jneidel",
+		password: "202cb962ac59075b964b07152d234b70",
+		logins: [],
+		settings: {},
+	}
+);
 db.cards.createIndex({userid: 1});
 db.cards.createIndex({position: 1});
