@@ -13,6 +13,12 @@ function parseJwt( token ) {
 }
 
 async function accountHandler( func ) {
+	try {
+		const checkIfLoginOrRegister = document.getElementsByName( "username" )[0].value;
+	} catch ( e ) {
+		return null;
+	}
+
 	const publicKeyFile = await request( "GET", "./public-key.pem" );
 	const publicKey = new rsa();
 	publicKey.importKey( publicKeyFile.body, "pkcs8-public-pem" );
@@ -41,13 +47,31 @@ async function accountHandler( func ) {
 		return data;
 	}
 
+	function checkResponse( res, errorRedirect ) {
+		if ( res.error ) {
+			window.location.replace( `${url}/${errorRedirect}` );
+		}
+		if ( res.token ) {
+			localStorage.setItem( "token", res.token );	
+			window.location.replace( `${url}/app` );
+		}
+	}
+
 	try {
 		document.getElementById( "login" ).addEventListener( "click", async ( e ) => {
-			const token = await request( "POST", `${url}/api/login?username=${username}&password=${password}` );
-			localStorage.setItem( "token", token.body );
-			window.location.replace( `${url}/app` );
+			const formData = getFormData();
+
+			let response = await request( "POST", `${url}/api/login`, { json: {
+				username: formData.username,
+				password: formData.password,
+			} } );
+			response = JSON.parse( response.body );
+
+			checkResponse( response, "login" );
+
 		} );
 	} catch ( e ) {}
+
 	try {
 		document.getElementById( "register" ).addEventListener( "click", async ( e ) => {
 			const formData = getFormData( true );
@@ -59,12 +83,7 @@ async function accountHandler( func ) {
 			} } );
 			response = JSON.parse( response.body );
 
-			if ( response.error ) {
-				window.location.replace( `${url}/register` );
-			}
-			if ( response.success ) {
-				window.location.replace( `${url}/app` );
-			}
+			checkResponse( response, "register" );
 		} );
 	} catch ( e ) {}
 }

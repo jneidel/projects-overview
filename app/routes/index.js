@@ -20,11 +20,16 @@ router.get( "/logout", appController.logout );
 router.get( "/account", appController.account );
 
 // API
-router.post( "/api/login", catchErrors( accountController.login ) );
+router.post( "/api/login",
+	encryptionController.decryptBody,
+	catchErrors( accountController.login ),
+	encryptionController.generateToken
+);
 router.post( "/api/register",
-	encryptionController.decryptRegister,
+	encryptionController.decryptBody,
 	accountController.validateRegister,
-	catchErrors( accountController.register )
+	catchErrors( accountController.register ),
+	encryptionController.generateToken
 );
 router.post( "/api/update", databaseController.updateDatabase );
 router.post( "/api/generate-cardId", databaseController.generateCardId );

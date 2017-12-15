@@ -55,29 +55,24 @@ exports.register = async ( req, res, next ) => {
 		db.close();
 	}
 
-    req.flash( "success", "Your account has been successfully registered." );
-	res.json( { success: true } );
+	req.flash( "success", "Your account has been successfully registered." );
+	return next();
 };
 
 exports.login = async ( req, res, next ) => {
+	const username = req.body.username;
+	const password = req.body.password;
+
     const db = await mongo.connect( process.env.DATABASE );
-
-    const privateKeyFile = await fs.readFile( "./private-key.pem" );
-    const privateKey = new rsa();
-    privateKey.importKey( privateKeyFile, "pkcs1-private-pem" );
-
-    const username = req.query.username;
-    let password = req.query.password;
-    password = atob( password );
-    password = privateKey.decrypt( password, "utf8" );
-    password = md5( password );
-
+    
     const docs = await db.collection( "users" ).find( { username } ).toArray();
     if ( !docs || docs.length === 0 ) {
-        return next( null, false, { message: "Incorrect username." } );
+		req.flash( "error", "Incorrect username." );
+		res.json( { error: true } );
     }
     if ( docs[0].password !== password ) {
-        return next( null, false, { message: "Incorrect password." } );
+		req.flash( "error", "Incorrect password." );
+		res.json( { error: true } );
 	}
 
 	const loginDetails = {
@@ -85,11 +80,10 @@ exports.login = async ( req, res, next ) => {
 	};
 	db.collection( "users" ).updateOne( { username }, { $push: { logins: loginDetails } } );
 
-    db.close();
-
-    const token = await jws.sign( { username: req.query.username }, process.env.SECRET );
+	db.close();
+	
     req.flash( "success", "You have been successfully logged in." );
-    res.json( token );
+	return next();
 };
 
 /* exports.isLoggedIn = (req, res, next) => {

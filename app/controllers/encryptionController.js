@@ -4,7 +4,9 @@ const rsa = require( "node-rsa" );
 const atob = require( "atob" );
 const md5 = require( "md5" );
 
-exports.decryptRegister = async ( req, res, next ) => {
+require( "dotenv" ).config( { path: "../variables.env" } );
+
+exports.decryptBody = async ( req, res, next ) => {
 	const privateKeyFile = await fs.readFile( "./private-key.pem" );
     const privateKey = new rsa();
     privateKey.importKey( privateKeyFile, "pkcs1-private-pem" );
@@ -17,7 +19,14 @@ exports.decryptRegister = async ( req, res, next ) => {
 	}
 
 	req.body.password = decrypt( req.body.password );
-	req.body.password_confirm = decrypt( req.body.password_confirm );
+	if ( req.body.password_confirm ) {
+		req.body.password_confirm = decrypt( req.body.password_confirm );
+	}
 	
 	return next();
+}
+
+exports.generateToken = async ( req, res, next ) => {
+	const token = await jws.sign( { username: req.body.username }, process.env.SECRET );
+	res.json( { token } );
 }
