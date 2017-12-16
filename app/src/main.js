@@ -1,21 +1,12 @@
-import request from "then-request";
-import jwt from "jsonwebtoken";
-
 /* globals Vue */
 /* eslint-disable no-alert */
-
-function parseJwt( token ) {
-    const base64Url = token.split( "." )[1];
-    const base64 = base64Url.replace( "-", "+" ).replace( "_", "/" );
-    return JSON.parse( window.atob( base64 ) );
-}
+/* url, $, request, parseJwt globally set in state.js */
 
 const token = localStorage.getItem( "token" );
 if ( !token ) {
 	window.location.replace( `${url}/login` );
 }
 
-const url = "http://localhost:8080";
 const username = parseJwt( token ).username;
 
 // Render cards from database

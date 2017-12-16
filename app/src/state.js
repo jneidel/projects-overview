@@ -1,17 +1,35 @@
 import request from "then-request";
-import jwt from "jsonwebtoken";
 import rsa from "node-rsa";
 
 /* eslint-disable no-empty */
 
-const url = "http://localhost:8080";
+// Set global variables
+window.url = "http://localhost:8080";
 
-function parseJwt( token ) {
+window.request = request;
+
+window.parseJwt = function parseJwt ( token ) {
     const base64Url = token.split( "." )[1];
     const base64 = base64Url.replace( "-", "+" ).replace( "_", "/" );
     return JSON.parse( window.atob( base64 ) );
 }
 
+window.$ = document.querySelectorAll.bind(document);
+
+Node.prototype.on = window.on = function (name, fn) {
+  this.addEventListener(name, fn);
+}
+
+NodeList.prototype.__proto__ = Array.prototype;
+
+NodeList.prototype.on = NodeList.prototype.addEventListener = function (name, fn) {
+  this.forEach(function (elem, i) {
+    elem.on(name, fn);
+  });
+}
+
+
+// Handle login/register
 async function accountHandler( func ) {
 	try {
 		const checkIfLoginOrRegister = document.getElementsByName( "username" )[0].value;
@@ -87,7 +105,6 @@ async function accountHandler( func ) {
 		} );
 	} catch ( e ) {}
 }
-
 accountHandler();
 
 // Display username in place of login/register
