@@ -25,6 +25,7 @@ exports.validateRegister = ( req, res, next ) => {
     if ( errors ) {
 		req.flash( "error", errors.map( err => err.msg ) );
 		res.json( { error: true } )
+		return;
 	}
 
     return next();
@@ -37,7 +38,8 @@ exports.register = async ( req, res, next ) => {
     if ( username !== null ) {
 		req.flash( "error", "This username has already been registered." );
 		res.json( { error: true } );
-        db.close();
+		db.close();
+		return;
     }
  
     const userDocument = {
@@ -53,6 +55,7 @@ exports.register = async ( req, res, next ) => {
 		req.flash( "error", "Account could not be registered." );
 		res.json( { error: true } );
 		db.close();
+		return;
 	}
 
 	req.flash( "success", "Your account has been successfully registered." );
@@ -73,6 +76,8 @@ exports.login = async ( req, res, next ) => {
     if ( docs[0].password !== password ) {
 		req.flash( "error", "Incorrect password." );
 		res.json( { error: true } );
+		db.close();
+		return;
 	}
 
 	const loginDetails = {

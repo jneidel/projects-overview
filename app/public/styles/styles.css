@@ -51,6 +51,9 @@ body {
     padding-top: 20px;
     padding-bottom: 18px;
 }
+#nav-link-register {
+	margin-right: 15px;
+}
 
 /* Header underlines */
 .header-underline {
@@ -68,6 +71,7 @@ body {
 .header-link-login:hover + .header-underline {
     max-width: 100%;
 }
+
 /* Header logo */
 #header-icon {
    height: 35px;
