@@ -18,12 +18,19 @@ async function setItems() {
 		window.location.replace( `${url}/logout?unverified=true` );
 	}
 
-	var vue = new Vue( {
-		el  : "#cards",
-		data: {
-			cards,
-		},
-	} );
+	function createVue() {
+		try {
+			var vue = new Vue( {
+				el  : "#cards",
+				data: {
+					cards,
+				},
+			} );
+		} catch ( e ) {
+			setTimeout( createVue, 100 );
+		}
+	}
+	createVue();
 }
 
 // Listening for item/title changes
