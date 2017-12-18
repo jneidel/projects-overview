@@ -1,32 +1,35 @@
 import request from "then-request";
 import rsa from "node-rsa";
 
+/* global url parseJwt */
 /* eslint-disable no-empty */
 
 // Set global variables
+/* eslint-disable */
 window.url = "http://localhost:8080";
 
 window.request = request;
 
-window.parseJwt = function parseJwt ( token ) {
+window.parseJwt = function parseJwt( token ) {
     const base64Url = token.split( "." )[1];
     const base64 = base64Url.replace( "-", "+" ).replace( "_", "/" );
     return JSON.parse( window.atob( base64 ) );
-}
+};
 
-window.$ = document.querySelectorAll.bind(document);
+window.$ = document.querySelectorAll.bind( document );
 
-Node.prototype.on = window.on = function (name, fn) {
-  this.addEventListener(name, fn);
-}
+Node.prototype.on = window.on = function( name, fn ) {
+  this.addEventListener( name, fn );
+};
 
 NodeList.prototype.__proto__ = Array.prototype;
 
-NodeList.prototype.on = NodeList.prototype.addEventListener = function (name, fn) {
-  this.forEach(function (elem, i) {
-    elem.on(name, fn);
-  });
-}
+NodeList.prototype.on = NodeList.prototype.addEventListener = function( name, fn ) {
+  this.forEach( ( elem, i ) => {
+    elem.on( name, fn );
+  } );
+};
+/* eslint-enable */
 
 
 // Handle login/register
@@ -70,7 +73,7 @@ async function accountHandler( func ) {
 			window.location.replace( `${url}/${errorRedirect}` );
 		}
 		if ( res.token ) {
-			localStorage.setItem( "token", res.token );	
+			localStorage.setItem( "token", res.token );
 			window.location.replace( `${url}/app` );
 		}
 	}
@@ -86,7 +89,6 @@ async function accountHandler( func ) {
 			response = JSON.parse( response.body );
 
 			checkResponse( response, "login" );
-
 		} );
 	} catch ( e ) {}
 

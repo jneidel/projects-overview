@@ -1,4 +1,4 @@
-/* globals Vue */
+/* globals Vue url parseJwt request */
 /* eslint-disable no-alert */
 /* url, $, request, parseJwt globally set in state.js */
 
@@ -10,7 +10,7 @@ if ( !token ) {
 const username = parseJwt( token ).username;
 
 // Render cards from database
-async function setItems() {
+async function drawItems() {
 	const data = await request( "POST", `${url}/api/getitems?token=${token}` );
 	const cards = JSON.parse( data.body );
 
@@ -34,11 +34,12 @@ async function setItems() {
 }
 
 // Listening for item/title changes
-function setEventListeners() {
-	function itemListener( item ) {
+
+const setListener = {
+	item( item ) {
 		let originalItem = item.value;
 
-		item.addEventListener( "keydown", () => {
+		item.addEventListener( "keydown", async () => {
 			if ( event.which === 13 ) {
 				const parentNode = item.parentNode.parentNode.parentNode;
 				const titleNode = parentNode.children;
@@ -56,13 +57,28 @@ function setEventListeners() {
 					var title = titleNode[0].value;
 				}
 
-				request( "POST", `${url}/api/update?userid=${username}&updatedItem=${item.value}&oldItem=${originalItem}&cardSide=${cardSide}&title=${title}` );
-				originalItem = item.value;
-			}
-		} );
-	}
+				const lastItem = titleNode[1].children[titleNode[1].children.length - 1].children[0];
+				if ( lastItem === item ) {
+					request( "POST", `${url}/api/add-new-item`, { json: {
+						token,
+						cardSide,
+						title,
+					} } );
 
-	function titleListener( title ) {
+					const newItemWrapper = parentNode.children[1].appendChild( document.createElement( "li" ) );
+					const newItem = newItemWrapper.appendChild( document.createElement( "input" ) );
+					newItem.type = "text";
+					newItem.classes = "item";
+
+					setListener.item( newItem );
+				}
+
+				await request( "POST", `${url}/api/update?userid=${username}&updatedItem=${item.value}&oldItem=${originalItem}&cardSide=${cardSide}&title=${title}` );
+				originalItem = item.value;
+	 		}
+		} );
+	},
+	title( title ) {
 		let originalTitle = title.value;
 
 		title.addEventListener( "keydown", () => {
@@ -83,17 +99,19 @@ function setEventListeners() {
 				originalTitle = title.value;
 			}
 		} );
-	}
+	},
+};
 
+function setEventListeners() {
 	const items = document.getElementsByClassName( "item" );
 	const titles = document.getElementsByClassName( "title" );
 
 	for ( const item of items ) {
-	    itemListener( item );
+	    setListener.item( item );
 	}
 
 	for ( const title of titles ) {
-	    titleListener( title );
+	    setListener.title( title );
 	}
 
 	const cards = document.getElementsByClassName( "card" );
@@ -143,14 +161,14 @@ function setEventListeners() {
 
 		for ( const item of cardToBeSet.children ) {
 			if ( item.children.length == 3 ) {
-				itemListener( item.children[2].children[0].children[0] );
+				setListener.item( item.children[2].children[0].children[0] );
 			} else {
-				itemListener( item.children[1].children[0].children[0] );
+				setListener.item( item.children[1].children[0].children[0] );
 			}
 		}
 
 		for ( const title of cardToBeSet.children ) {
-			titleListener( title.children[0] );
+			setListener.title( title.children[0] );
 		}
 
 		flipCard( cardToBeSet );
@@ -179,6 +197,6 @@ function setEventListeners() {
 }
 
 ( async function main() { // to ensure drawing items before setting listeners
-	await setItems();
+	await drawItems();
 	setEventListeners();
 } )();

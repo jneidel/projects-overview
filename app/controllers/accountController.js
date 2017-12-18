@@ -20,11 +20,11 @@ exports.validateRegister = ( req, res, next ) => {
     req.checkBody( "password", "Please supply a password." ).notEmpty();
     req.checkBody( "password_confirm", "Please supply a confirm password." ).notEmpty();
 	req.checkBody( "password_confirm", "Your passwords do not match." ).equals( req.body.password );
-	
+
 	const errors = req.validationErrors();
     if ( errors ) {
 		req.flash( "error", errors.map( err => err.msg ) );
-		res.json( { error: true } )
+		res.json( { error: true } );
 		return;
 	}
 
@@ -41,7 +41,7 @@ exports.register = async ( req, res, next ) => {
 		db.close();
 		return;
     }
- 
+
     const userDocument = {
         username: req.body.username.trim(),
         // email: req.body.email.trim().toLowerCase(), validator.isEmail(), unique
@@ -67,7 +67,7 @@ exports.login = async ( req, res, next ) => {
 	const password = req.body.password;
 
     const db = await mongo.connect( process.env.DATABASE );
-    
+
     const docs = await db.collection( "users" ).find( { username } ).toArray();
     if ( !docs || docs.length === 0 ) {
 		req.flash( "error", "Incorrect username." );
@@ -86,7 +86,7 @@ exports.login = async ( req, res, next ) => {
 	db.collection( "users" ).updateOne( { username }, { $push: { logins: loginDetails } } );
 
 	db.close();
-	
+
     req.flash( "success", "You have been successfully logged in." );
 	return next();
 };

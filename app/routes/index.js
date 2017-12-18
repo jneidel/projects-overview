@@ -3,7 +3,7 @@ const router = express.Router();
 const appController = require( "../controllers/appController" );
 const accountController = require( "../controllers/accountController" );
 const databaseController = require( "../controllers/databaseController" );
-const encryptionController = require( "../controllers/encryptionController" ); 
+const encryptionController = require( "../controllers/encryptionController" );
 const { catchErrors } = require( "../handlers/errorHandlers" );
 
 router.get( "/app", appController.renderItems );
@@ -37,6 +37,10 @@ router.post( "/api/add-new-card", databaseController.addNewCard );
 router.post( "/api/get-userid", databaseController.getUserId );
 router.post( "/api/userdata", databaseController.getUserdata );
 router.post( "/api/getitems", databaseController.getItems );
+router.post( "/api/add-new-item",
+	encryptionController.verifyToken,
+	databaseController.addNewItem
+);
 
 router.get( "/api", ( req, res ) => {
 	req.flash( "error", "Access to the API denied." );

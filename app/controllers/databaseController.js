@@ -27,7 +27,8 @@ exports.updateDatabase = async ( req, res, next ) => {
     const response = await db.collection( "cards" ).updateOne( query, update );
     if ( response.result.ok != 1 ) {
         next( new Error( "Insertion Error" ) );
-    }
+	}
+	res.sendStatus( 200 );
 };
 
 exports.generateCardId = async ( req, res, next ) => {
@@ -87,7 +88,6 @@ exports.addNewCard = async ( req, res, next ) => {
     if ( response.result.ok != 1 ) {
         return next( new Error( "Insertion Error" ) );
     }
-
     res.sendStatus( 200 );
 };
 
@@ -113,5 +113,21 @@ exports.getItems = async ( req, res, next ) => {
 		.toArray();
 
 	db.close();
-	return res.json( cards );
+	res.json( cards );
+};
+
+exports.addNewItem = async ( req, res, next ) => {
+	const db = await mongo.connect( process.env.DATABASE );
+
+	const query = { title: req.body.title, userid: req.body.username };
+	const insertionObj = {};
+	insertionObj[req.body.cardSide] = "";
+	const insertion = { $push: insertionObj };
+
+	const response = await db.collection( "cards" ).updateOne( query, insertion );
+	if ( response.result.ok != 1 ) {
+        next( new Error( "Insertion Error" ) );
+	}
+
+	res.sendStatus( 200 );
 };
