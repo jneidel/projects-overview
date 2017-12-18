@@ -9,9 +9,10 @@ const prod = process.env.PROD || false;
 
 module.exports = {
 	entry: {
-		main   : "./src/main.js",
-		account: "./src/account.js",
-		state  : "./src/state.js",
+		main      : "./src/main.js",
+		account   : "./src/account.js",
+		state     : "./src/state.js",
+		encryption: "./src/encryption.js",
 	},
 	output: {
 		filename: "[name].js",
@@ -20,11 +21,11 @@ module.exports = {
 	plugins: prod ? [
 		new minify( {}, { comments: false } ),
 		new webpack.LoaderOptionsPlugin( {
-			test: /\.js/,
+			test   : /\.js/,
 			options: {
 				loaders: [ "babel-loader" ],
-				presets: [ "@babel/preset-env" ]
-			}
-		} )
+				presets: [ "@babel/preset-env" ],
+			},
+		} ),
 	] : [],
 };

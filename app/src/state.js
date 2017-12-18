@@ -1,7 +1,6 @@
 import request from "then-request";
-import rsa from "node-rsa";
 
-/* global url parseJwt */
+/* global url parseJwt encryptWithPubKey */
 /* eslint-disable no-empty */
 
 // Set global variables
@@ -40,15 +39,11 @@ async function accountHandler( func ) {
 		return null;
 	}
 
-	const publicKeyFile = await request( "GET", "./public-key.pem" );
-	const publicKey = new rsa();
-	publicKey.importKey( publicKeyFile.body, "pkcs8-public-pem" );
-
-	function getFormData( isRegister = false ) {
+	async function getFormData( isRegister = false ) {
 		const data = {
 			username: document.getElementsByName( "username" )[0].value,
-			encrypt( password, isConfirmPass ) {
-				password = publicKey.encrypt( password, "base64" );
+			async encrypt( password, isConfirmPass ) {
+				password = await encryptWithPubKey( password );
 				password = btoa( password );
 
 				if ( isConfirmPass ) {
@@ -59,10 +54,10 @@ async function accountHandler( func ) {
 			},
 		};
 
-		data.encrypt( document.getElementsByName( "password" )[0].value, false );
+		await data.encrypt( document.getElementsByName( "password" )[0].value, false );
 
 		if ( isRegister ) {
-			data.encrypt( document.getElementsByName( "password_confirm" )[0].value, true );
+			await data.encrypt( document.getElementsByName( "password_confirm" )[0].value, true );
 		}
 
 		return data;
@@ -80,7 +75,7 @@ async function accountHandler( func ) {
 
 	try {
 		document.getElementById( "login" ).addEventListener( "click", async ( e ) => {
-			const formData = getFormData();
+			const formData = await getFormData();
 
 			let response = await request( "POST", `${url}/api/login`, { json: {
 				username: formData.username,
@@ -94,7 +89,7 @@ async function accountHandler( func ) {
 
 	try {
 		document.getElementById( "register" ).addEventListener( "click", async ( e ) => {
-			const formData = getFormData( true );
+			const formData = await getFormData( true );
 
 			let response = await request( "POST", `${url}/api/register`, { json: {
 				username        : formData.username,
