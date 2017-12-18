@@ -34,9 +34,12 @@
     "validator": "^9.1.2"
   },
   "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
     "babel-minify-webpack-plugin": "^0.2.0",
+    "babel-preset-env": "^1.6.1",
     "concurrently": "^3.5.1",
-    "nodemon": "^1.12.5",
-    "webpack": "^3.8.1"
+    "nodemon": "^1.13.3",
+    "webpack": "^3.10.0"
   }
 }

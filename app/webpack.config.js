@@ -2,6 +2,7 @@
 
 const path = require( "path" );
 const minify = require( "babel-minify-webpack-plugin" );
+const webpack = require( "webpack" );
 
 require( "dotenv" ).config( { path: "variables.env" } );
 const prod = process.env.PROD || false;
@@ -18,5 +19,12 @@ module.exports = {
 	},
 	plugins: prod ? [
 		new minify( {}, { comments: false } ),
+		new webpack.LoaderOptionsPlugin( {
+			test: /\.js/,
+			options: {
+				loaders: [ "babel-loader" ],
+				presets: [ "@babel/preset-env" ]
+			}
+		} )
 	] : [],
 };
