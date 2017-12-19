@@ -7,18 +7,18 @@ exports.updateDatabase = async ( req, res, next ) => {
   const query = {};
   const update = {};
 
-  if ( req.query.updatedItem === undefined ) {
-    query.userid = req.query.userid;
-    query.title = req.query.title;
+  if ( req.body.updatedItem === undefined ) {
+    query.userid = req.body.username;
+    query.title = req.body.title;
 
-    update.$set = { title: req.query.updatedTitle };
+    update.$set = { title: req.body.updatedTitle };
   } else {
-    query.userid = req.query.userid;
-    query.title = req.query.title;
-    query[req.query.cardSide] = req.query.oldItem;
+    query.userid = req.body.username;
+    query.title = req.body.title;
+    query[req.body.cardSide] = req.body.oldItem;
 
     const setObj = {};
-    setObj[`${req.query.cardSide}.$`] = req.query.updatedItem;
+    setObj[`${req.body.cardSide}.$`] = req.body.updatedItem;
     update.$set = setObj;
   }
 
@@ -50,34 +50,22 @@ exports.generateCardId = async ( req, res, next ) => {
   } );
 };
 
-exports.getUserId = async ( req, res, next ) => {
-  const db = await mongo.connect( process.env.DATABASE );
-
-  const query = { _id: req.query._id };
-  const projection = { userid: 1 };
-
-  const cursor = db.collection( "cards" ).find( query, projection );
-
-  cursor.forEach( ( doc ) => {
-    res.json( { userid: doc.userid } );
-  }, ( err ) => {
-    assert.equal( err, null );
-    return db.close();
-  } );
-};
-
 exports.addNewCard = async ( req, res, next ) => {
   const db = await mongo.connect( process.env.DATABASE );
 
   const lastPosition = await db.collection( "cards" ).aggregate( [
-    { $match: { userid: req.query.userid } },
+    { $match: { userid: req.body.username } },
     { $group: { position: { $max: "$position" }, _id: null } },
   ] ).toArray();
-  const newPosition = lastPosition[0].position + 1;
+
+  let newPosition = 1; // Fallback if first card
+  try {
+    newPosition = lastPosition[0].position + 1;
+  } catch ( e ) {} // eslint-disable-line no-empty
 
   const insertion = {
-    _id     : Number( req.query._id ),
-    userid  : req.query.userid,
+    _id     : Number( req.body._id ),
+    userid  : req.body.username,
     title   : "",
     front   : [ "" ],
     back    : [ "" ],
@@ -91,20 +79,10 @@ exports.addNewCard = async ( req, res, next ) => {
   res.sendStatus( 200 );
 };
 
-exports.getUserdata = async ( req, res, next ) => {
-  const verified = await req.verifyJwt( req.query.token );
-  if ( !verified ) { return res.json( { error: true } ); }
-
-  res.json( {} );
-};
-
 exports.getItems = async ( req, res, next ) => {
-  const verified = await req.verifyJwt( req.query.token );
-  if ( !verified ) { return res.json( { error: true } ); }
-
   const db = await mongo.connect( process.env.DATABASE );
 
-  const query = { userid: verified.username };
+  const query = { userid: req.body.username };
   const projection = { _id: 1, title: 1, front: 1, back: 1, position: 1 };
 
   const cards = await db.collection( "cards" )

@@ -32,9 +32,9 @@ exports.generateToken = async ( req, res, next ) => {
 };
 
 exports.verifyToken = async ( req, res, next ) => {
-  const verified = await req.verifyJwt( req.body.token );
-  if ( !verified ) { return res.json( { error: true } ); }
-  req.body.username = verified.username;
+  const verifiedToken = await req.verifyJwt( req.body.token );
+  if ( !verifiedToken ) { return res.json( { error: true } ); }
+  req.body.username = verifiedToken.username;
 
   return next();
 };

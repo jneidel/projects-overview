@@ -17,6 +17,7 @@
   "dependencies": {
     "assert": "^1.4.1",
     "atob": "^2.0.3",
+    "axios": "^0.17.1",
     "body-parser": "^1.18.2",
     "connect-flash": "^0.1.1",
     "dotenv": "^4.0.0",
@@ -30,8 +31,7 @@
     "mz": "^2.7.0",
     "node-rsa": "^0.4.2",
     "pug": "^2.0.0-rc.4",
-    "then-request": "^4.1.0",
-    "validator": "^9.1.2"
+    "validator": "^9.2.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

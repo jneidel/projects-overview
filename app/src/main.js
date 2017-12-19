@@ -1,6 +1,6 @@
-/* globals Vue url parseJwt request */
+/* globals Vue url parseJwt axios */
 /* eslint-disable no-alert */
-/* url, $, request, parseJwt globally set in state.js */
+/* url, $, axios, parseJwt globally set in state.js */
 
 const token = localStorage.getItem( "token" );
 if ( !token ) {
@@ -11,8 +11,8 @@ const username = parseJwt( token ).username;
 
 // Render cards from database
 async function drawItems() {
-  const data = await request( "POST", `${url}/api/getitems?token=${token}` );
-  const cards = JSON.parse( data.body );
+  const cardsRequest = await axios.post( "/api/getitems", { token } );
+  const cards = cardsRequest.data;
 
   if ( cards.error ) {
     window.location.replace( `${url}/logout?unverified=true` );
@@ -59,11 +59,11 @@ const setListener = {
 
         const lastItem = titleNode[1].children[titleNode[1].children.length - 1].children[0];
         if ( lastItem === item ) {
-          request( "POST", `${url}/api/add-new-item`, { json: {
+          axios.post( "/api/add-new-item", {
             token,
             cardSide,
             title,
-          } } );
+          } );
 
           const newItemWrapper = parentNode.children[1].appendChild( document.createElement( "li" ) );
           const newItem = newItemWrapper.appendChild( document.createElement( "input" ) );
@@ -73,7 +73,14 @@ const setListener = {
           setListener.item( newItem );
         }
 
-        await request( "POST", `${url}/api/update?userid=${username}&updatedItem=${item.value}&oldItem=${originalItem}&cardSide=${cardSide}&title=${title}` );
+        await axios.post( "/api/update", {
+          token,
+          updatedItem: item.value,
+          oldItem    : originalItem,
+          cardSide,
+          title,
+        } );
+
         originalItem = item.value;
 	 		}
     } );
@@ -81,7 +88,7 @@ const setListener = {
   title( title ) {
     let originalTitle = title.value;
 
-    title.addEventListener( "keydown", () => {
+    title.addEventListener( "keydown", async () => {
       if ( event.which === 13 ) {
         if ( title.value.length >= 20 ) {
           alert( `The title "${title.value}" will probably be cut off as its too long.
@@ -95,7 +102,12 @@ const setListener = {
           parent[0].children[0].value = title.value;
         }
 
-        request( "POST", `${url}/api/update?userid=${username}&updatedTitle=${title.value}&title=${originalTitle}` );
+        await axios.post( "/api/update", {
+          token,
+          updatedTitle: title.value,
+          title       : originalTitle,
+        } );
+
         originalTitle = title.value;
       }
     } );
@@ -180,10 +192,13 @@ function setEventListeners() {
     newCard.className = "card addCardContainer";
     newCard.addEventListener( "dblclick", cardListenerCallback );
 
-    const cardIdRequest = await request( "POST", `${url}/api/generate-cardId` );
-    const cardId = JSON.parse( cardIdRequest.body )._id;
+    const cardIdRequest = await axios.post( "/api/generate-cardId", { token } );
+    const cardId = cardIdRequest.data._id;
 
-    request( "POST", `${url}/api/add-new-card?userid=${username}&_id=${cardId}` );
+    axios.post( "/api/add-new-card", {
+      token,
+      _id: cardId,
+    } );
   }
 
   for ( const card of cards ) {

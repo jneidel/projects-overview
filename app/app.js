@@ -26,23 +26,23 @@ app.use( require( "express-session" )( {
 app.use( require( "connect-flash" )() );
 
 app.use( ( req, res, next ) => {
-  res.locals.h = require( "./helpers/helpers" );
+  res.locals.h = require( "./helpers/helpers" ); // eslint-disable-line global-require
   res.locals.flashes = req.flash();
   next();
 } );
 
 app.use( ( req, res, next ) => {
-  req.verifyJwt = require( "./handlers/tokenHandler" );
+  req.verifyJwt = require( "./handlers/tokenHandler" ); // eslint-disable-line global-require
   return next();
 } );
 
 app.use( "/", require( "./routes/index" ) );
+app.use( "/api", require( "./routes/api" ) );
 
 app.use( errorHandlers.notFound );
 app.use( errorHandlers.flashValidationErrors );
 app.use( errorHandlers.developmentErrors );
 
 app.listen( port, () => {
-  /* eslint-disable no-console */
-  console.log( `Server running on port ${port}.` );
+  console.log( `Server running on port ${port}.` ); // eslint-disable-line no-console
 } );

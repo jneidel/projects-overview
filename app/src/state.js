@@ -1,4 +1,4 @@
-import request from "then-request";
+import axios from "axios";
 
 /* global url parseJwt encryptWithPubKey */
 /* eslint-disable no-empty */
@@ -7,7 +7,7 @@ import request from "then-request";
 /* eslint-disable */
 window.url = "http://localhost:8080";
 
-window.request = request;
+window.axios = axios;
 
 window.parseJwt = function parseJwt( token ) {
     const base64Url = token.split( "." )[1];
@@ -77,13 +77,11 @@ async function accountHandler( func ) {
     document.getElementById( "login" ).addEventListener( "click", async ( e ) => {
       const formData = await getFormData();
 
-      let response = await request( "POST", `${url}/api/login`, { json: {
+      const response = await axios.post( "/api/login", {
         username: formData.username,
         password: formData.password,
-      } } );
-      response = JSON.parse( response.body );
-
-      checkResponse( response, "login" );
+      } );
+      checkResponse( response.data, "login" );
     } );
   } catch ( e ) {}
 
@@ -91,14 +89,12 @@ async function accountHandler( func ) {
     document.getElementById( "register" ).addEventListener( "click", async ( e ) => {
       const formData = await getFormData( true );
 
-      let response = await request( "POST", `${url}/api/register`, { json: {
+      const response = await axios.post( "/api/register", {
         username        : formData.username,
         password        : formData.password,
         password_confirm: formData.password_confirm,
-      } } );
-      response = JSON.parse( response.body );
-
-      checkResponse( response, "register" );
+      } );
+      checkResponse( response.data, "register" );
     } );
   } catch ( e ) {}
 }
