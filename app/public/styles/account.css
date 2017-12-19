@@ -1,0 +1,42 @@
+body {
+  grid-template-columns: 20vw auto 20vw;
+}
+#content {
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-top: 40px;
+}
+
+/* Settings */
+#settings {
+  display: flex;
+  flex-direction: column;
+}
+.settings-container {
+  display: inline-block;
+  width: auto;
+  margin-top: 25px;
+}
+h2 {
+  padding-bottom: 10px;
+  border-bottom: 1.5px solid rgba( 96, 125, 139, 0.8 );
+  width: 60vw;
+}
+input {
+  background-color: rgba(96, 125, 139, 0.205);
+  border: none;
+  outline: none;
+  color: #F5F7FA;
+  font-size: 18px;
+  width: auto;
+  caret-color: #333; /* Cursor color */
+  padding: 7px;
+  margin-bottom: 10px;
+}
+label {
+  display: block;
+  padding-bottom: 3px;
+}
+.settings-container:first-of-type {
+  margin-top: 0;
+}

@@ -1,5 +1,26 @@
 extends layout
 
+block styles
+  link( rel="stylesheet", href="/styles/account.css" )
+
+block content
+  #settings
+    .settings-container
+      h2 Change username
+      label( for="username" ) Username
+      input( name="username" type="text" v-bind:value="username" placeholder="Username" )
+      label( for="confirmation_username" ) Password (to confirm)
+      input( name="confirmation_username" type="password" placeholder="Password" )
+    .settings-container
+      h2 Change password
+      label( for="previous_password" ) Current password
+      input( name="previous_password" type="password" placeholder="Current password" )
+      label( for="password" ) Password
+      input( name="password" type="password" placeholder="Password" )
+      label( for="password_confirm" ) Confirm password
+      input( name="password_confirm" type="password" placeholder="Password" )
+
 block scripts
   script( src="/scripts/state.js")
   script( src="/scripts/account.js" )
+  script( src="/scripts/vue.js" )
