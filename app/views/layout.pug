@@ -1,38 +1,38 @@
 doctype html
 html
-    head
-        title= `${title} | Project Manager`
-        link( rel="stylesheet", href="styles/styles.css" )
-        link( rel="shortcut icon" type="image/png" href="/img/favicon.png" )
-        link( href="https://fonts.googleapis.com/css?family=Open+Sans|Raleway"  rel="stylesheet")
-        block styles
+  head
+    title= `${title} | Project Manager`
+    link( rel="stylesheet", href="styles/styles.css" )
+    link( rel="shortcut icon" type="image/png" href="/img/favicon.png" )
+    link( href="https://fonts.googleapis.com/css?family=Open+Sans|Raleway"  rel="stylesheet")
+    block styles
 
-    body
-        #header
-            block header
-                #nav-left
-                    a.header-link-home( href="/" )
-                        img#header-icon( src="img/icon.png" )
-                        div#header-logo-wrapper 
-                            img#header-logo( src="img/logo.png" )
-                    .header-underline
-                #nav-right
-                    .nav-container#nav-link-register
-                        a.header-link-register( href="/register" ) Register
-                        .header-underline
-                    .nav-container
-                        a.header-link-login( href="/login" ) Login
-                        .header-underline
+  body
+    #header
+      block header
+        #nav-left
+          a.header-link-home( href="/" )
+            img#header-icon( src="img/icon.png" )
+            div#header-logo-wrapper 
+                img#header-logo( src="img/logo.png" )
+          .header-underline
+        #nav-right
+          .nav-container#nav-link-register
+            a.header-link-register( href="/register" ) Register
+            .header-underline
+          .nav-container
+            a.header-link-login( href="/login" ) Login
+            .header-underline
         
-        #content
-            block flashes
-                if locals.flashes
-                    - const categories = Object.keys(locals.flashes)
-                        each category in categories
-                            each message in flashes[category]
-                                .flash( class=`flash--${category}` onClick="this.remove()" )
-                                    p.flash__text!= message
-            #inner
-                block content
+    #content
+      block flashes
+        if locals.flashes
+          - const categories = Object.keys(locals.flashes)
+            each category in categories
+              each message in flashes[category]
+                .flash( class=`flash--${category}` onClick="this.remove()" )
+                  p.flash__text!= message
+      #inner
+        block content
 
-        block scripts
+    block scripts

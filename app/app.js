@@ -18,22 +18,22 @@ app.use( bodyParser.json() );
 app.use( bodyParser.urlencoded( { extended: true } ) );
 app.use( require( "express-validator" )() );
 app.use( require( "express-session" )( {
-    secret           : process.env.SECRET,
-    key              : process.env.KEY,
-    resave           : false,
-    saveUninitialized: true,
+  secret           : process.env.SECRET,
+  key              : process.env.KEY,
+  resave           : false,
+  saveUninitialized: true,
 } ) );
 app.use( require( "connect-flash" )() );
 
 app.use( ( req, res, next ) => {
-    res.locals.h = require( "./helpers/helpers" );
-	res.locals.flashes = req.flash();
-    next();
+  res.locals.h = require( "./helpers/helpers" );
+  res.locals.flashes = req.flash();
+  next();
 } );
 
 app.use( ( req, res, next ) => {
-	req.verifyJwt = require( "./handlers/tokenHandler" );
-	return next();
+  req.verifyJwt = require( "./handlers/tokenHandler" );
+  return next();
 } );
 
 app.use( "/", require( "./routes/index" ) );
@@ -43,6 +43,6 @@ app.use( errorHandlers.flashValidationErrors );
 app.use( errorHandlers.developmentErrors );
 
 app.listen( port, () => {
-    /* eslint-disable no-console */
-    console.log( `Server running on port ${port}.` );
+  /* eslint-disable no-console */
+  console.log( `Server running on port ${port}.` );
 } );

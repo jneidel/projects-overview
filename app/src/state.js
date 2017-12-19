@@ -33,88 +33,88 @@ NodeList.prototype.on = NodeList.prototype.addEventListener = function( name, fn
 
 // Handle login/register
 async function accountHandler( func ) {
-	try {
-		const checkIfLoginOrRegister = document.getElementsByName( "username" )[0].value;
-	} catch ( e ) {
-		return null;
-	}
+  try {
+    const checkIfLoginOrRegister = document.getElementsByName( "username" )[0].value;
+  } catch ( e ) {
+    return null;
+  }
 
-	async function getFormData( isRegister = false ) {
-		const data = {
-			username: document.getElementsByName( "username" )[0].value,
-			async encrypt( password, isConfirmPass ) {
-				password = await encryptWithPubKey( password );
-				password = btoa( password );
+  async function getFormData( isRegister = false ) {
+    const data = {
+      username: document.getElementsByName( "username" )[0].value,
+      async encrypt( password, isConfirmPass ) {
+        password = await encryptWithPubKey( password );
+        password = btoa( password );
 
-				if ( isConfirmPass ) {
-					this.password_confirm = password;
-				} else {
-					this.password = password;
-				}
-			},
-		};
+        if ( isConfirmPass ) {
+          this.password_confirm = password;
+        } else {
+          this.password = password;
+        }
+      },
+    };
 
-		await data.encrypt( document.getElementsByName( "password" )[0].value, false );
+    await data.encrypt( document.getElementsByName( "password" )[0].value, false );
 
-		if ( isRegister ) {
-			await data.encrypt( document.getElementsByName( "password_confirm" )[0].value, true );
-		}
+    if ( isRegister ) {
+      await data.encrypt( document.getElementsByName( "password_confirm" )[0].value, true );
+    }
 
-		return data;
-	}
+    return data;
+  }
 
-	function checkResponse( res, errorRedirect ) {
-		if ( res.error ) {
-			window.location.replace( `${url}/${errorRedirect}` );
-		}
-		if ( res.token ) {
-			localStorage.setItem( "token", res.token );
-			window.location.replace( `${url}/app` );
-		}
-	}
+  function checkResponse( res, errorRedirect ) {
+    if ( res.error ) {
+      window.location.replace( `${url}/${errorRedirect}` );
+    }
+    if ( res.token ) {
+      localStorage.setItem( "token", res.token );
+      window.location.replace( `${url}/app` );
+    }
+  }
 
-	try {
-		document.getElementById( "login" ).addEventListener( "click", async ( e ) => {
-			const formData = await getFormData();
+  try {
+    document.getElementById( "login" ).addEventListener( "click", async ( e ) => {
+      const formData = await getFormData();
 
-			let response = await request( "POST", `${url}/api/login`, { json: {
-				username: formData.username,
-				password: formData.password,
-			} } );
-			response = JSON.parse( response.body );
+      let response = await request( "POST", `${url}/api/login`, { json: {
+        username: formData.username,
+        password: formData.password,
+      } } );
+      response = JSON.parse( response.body );
 
-			checkResponse( response, "login" );
-		} );
-	} catch ( e ) {}
+      checkResponse( response, "login" );
+    } );
+  } catch ( e ) {}
 
-	try {
-		document.getElementById( "register" ).addEventListener( "click", async ( e ) => {
-			const formData = await getFormData( true );
+  try {
+    document.getElementById( "register" ).addEventListener( "click", async ( e ) => {
+      const formData = await getFormData( true );
 
-			let response = await request( "POST", `${url}/api/register`, { json: {
-				username        : formData.username,
-				password        : formData.password,
-				password_confirm: formData.password_confirm,
-			} } );
-			response = JSON.parse( response.body );
+      let response = await request( "POST", `${url}/api/register`, { json: {
+        username        : formData.username,
+        password        : formData.password,
+        password_confirm: formData.password_confirm,
+      } } );
+      response = JSON.parse( response.body );
 
-			checkResponse( response, "register" );
-		} );
-	} catch ( e ) {}
+      checkResponse( response, "register" );
+    } );
+  } catch ( e ) {}
 }
 accountHandler();
 
 // Display username in place of login/register
 let token = localStorage.getItem( "token" );
 if ( token ) {
-	token = parseJwt( token );
+  token = parseJwt( token );
 
-	let username = token.username;
-	if ( username.length > 20 ) {
-		username = username.slice( 0, 20 );
-	}
+  let username = token.username;
+  if ( username.length > 20 ) {
+    username = username.slice( 0, 20 );
+  }
 
-    document.getElementById( "nav-right" ).innerHTML = `
+  document.getElementById( "nav-right" ).innerHTML = `
         <div class="nav-container">
             <a href="/account" class="nav-username">${username}</a>
             <div class="header-underline"></div>
@@ -126,22 +126,22 @@ if ( token ) {
 		</div>
     `;
 
-    // Underline hover
-    const usernameElem = document.getElementsByClassName( "nav-username" )[0];
-    const underlineElem = usernameElem.parentElement.childNodes[3].style;
+  // Underline hover
+  const usernameElem = document.getElementsByClassName( "nav-username" )[0];
+  const underlineElem = usernameElem.parentElement.childNodes[3].style;
 
+  underlineElem.maxWidth = "0";
+  underlineElem.height = "3px";
+  underlineElem.background = "#F5F7FA";
+  underlineElem.transition = "max-width 0.2s ease-in-out";
+  usernameElem.style.margin = "0";
+
+  usernameElem.addEventListener( "mouseover", ( e ) => {
+    underlineElem.maxWidth = "100%";
+  } );
+  usernameElem.addEventListener( "mouseleave", ( e ) => {
     underlineElem.maxWidth = "0";
-    underlineElem.height = "3px";
-    underlineElem.background = "#F5F7FA";
-    underlineElem.transition = "max-width 0.2s ease-in-out";
-    usernameElem.style.margin = "0";
+  } );
 
-    usernameElem.addEventListener( "mouseover", ( e ) => {
-        underlineElem.maxWidth = "100%";
-    } );
-    usernameElem.addEventListener( "mouseleave", ( e ) => {
-        underlineElem.maxWidth = "0";
-	} );
-
-	document.getElementsByClassName( "header-link-home" )[0].href = "/app";
+  document.getElementsByClassName( "header-link-home" )[0].href = "/app";
 }

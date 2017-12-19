@@ -4,142 +4,142 @@
 
 const token = localStorage.getItem( "token" );
 if ( !token ) {
-	window.location.replace( `${url}/login` );
+  window.location.replace( `${url}/login` );
 }
 
 const username = parseJwt( token ).username;
 
 // Render cards from database
 async function drawItems() {
-	const data = await request( "POST", `${url}/api/getitems?token=${token}` );
-	const cards = JSON.parse( data.body );
+  const data = await request( "POST", `${url}/api/getitems?token=${token}` );
+  const cards = JSON.parse( data.body );
 
-	if ( cards.error ) {
-		window.location.replace( `${url}/logout?unverified=true` );
-	}
+  if ( cards.error ) {
+    window.location.replace( `${url}/logout?unverified=true` );
+  }
 
-	function createVue() {
-		try {
-			var vue = new Vue( {
-				el  : "#cards",
-				data: {
-					cards,
-				},
-			} );
-		} catch ( e ) {
-			setTimeout( createVue, 100 );
-		}
-	}
-	createVue();
+  function createVue() {
+    try {
+      var vue = new Vue( {
+        el  : "#cards",
+        data: {
+          cards,
+        },
+      } );
+    } catch ( e ) {
+      setTimeout( createVue, 100 );
+    }
+  }
+  createVue();
 }
 
 // Listening for item/title changes
 
 const setListener = {
-	item( item ) {
-		let originalItem = item.value;
+  item( item ) {
+    let originalItem = item.value;
 
-		item.addEventListener( "keydown", async () => {
-			if ( event.which === 13 ) {
-				const parentNode = item.parentNode.parentNode.parentNode;
-				const titleNode = parentNode.children;
-				let cardSide;
+    item.addEventListener( "keydown", async () => {
+      if ( event.which === 13 ) {
+        const parentNode = item.parentNode.parentNode.parentNode;
+        const titleNode = parentNode.children;
+        let cardSide;
 
-				if ( parentNode.className.match( /back/ ) === null ) {
-					cardSide = "front";
-				} else {
-					cardSide = "back";
-				}
+        if ( parentNode.className.match( /back/ ) === null ) {
+          cardSide = "front";
+        } else {
+          cardSide = "back";
+        }
 
-				if ( titleNode.length == 3 ) {
-					var title = titleNode[1].value;
-				} else {
-					var title = titleNode[0].value;
-				}
+        if ( titleNode.length == 3 ) {
+          var title = titleNode[1].value;
+        } else {
+          var title = titleNode[0].value;
+        }
 
-				const lastItem = titleNode[1].children[titleNode[1].children.length - 1].children[0];
-				if ( lastItem === item ) {
-					request( "POST", `${url}/api/add-new-item`, { json: {
-						token,
-						cardSide,
-						title,
-					} } );
+        const lastItem = titleNode[1].children[titleNode[1].children.length - 1].children[0];
+        if ( lastItem === item ) {
+          request( "POST", `${url}/api/add-new-item`, { json: {
+            token,
+            cardSide,
+            title,
+          } } );
 
-					const newItemWrapper = parentNode.children[1].appendChild( document.createElement( "li" ) );
-					const newItem = newItemWrapper.appendChild( document.createElement( "input" ) );
-					newItem.type = "text";
-					newItem.classes = "item";
+          const newItemWrapper = parentNode.children[1].appendChild( document.createElement( "li" ) );
+          const newItem = newItemWrapper.appendChild( document.createElement( "input" ) );
+          newItem.type = "text";
+          newItem.classes = "item";
 
-					setListener.item( newItem );
-				}
+          setListener.item( newItem );
+        }
 
-				await request( "POST", `${url}/api/update?userid=${username}&updatedItem=${item.value}&oldItem=${originalItem}&cardSide=${cardSide}&title=${title}` );
-				originalItem = item.value;
+        await request( "POST", `${url}/api/update?userid=${username}&updatedItem=${item.value}&oldItem=${originalItem}&cardSide=${cardSide}&title=${title}` );
+        originalItem = item.value;
 	 		}
-		} );
-	},
-	title( title ) {
-		let originalTitle = title.value;
+    } );
+  },
+  title( title ) {
+    let originalTitle = title.value;
 
-		title.addEventListener( "keydown", () => {
-			if ( event.which === 13 ) {
-				if ( title.value.length >= 20 ) {
-					alert( `The title "${title.value}" will probably be cut off as its too long.
+    title.addEventListener( "keydown", () => {
+      if ( event.which === 13 ) {
+        if ( title.value.length >= 20 ) {
+          alert( `The title "${title.value}" will probably be cut off as its too long.
 							${title.value.length}` );
-				}
+        }
 
-				const parent = title.parentNode.parentNode.children;
-				if ( !title.parentNode.className.match( /back/ ) ) {
-					parent[1].children[1].value = title.value;
-				} else {
-					parent[0].children[0].value = title.value;
-				}
+        const parent = title.parentNode.parentNode.children;
+        if ( !title.parentNode.className.match( /back/ ) ) {
+          parent[1].children[1].value = title.value;
+        } else {
+          parent[0].children[0].value = title.value;
+        }
 
-				request( "POST", `${url}/api/update?userid=${username}&updatedTitle=${title.value}&title=${originalTitle}` );
-				originalTitle = title.value;
-			}
-		} );
-	},
+        request( "POST", `${url}/api/update?userid=${username}&updatedTitle=${title.value}&title=${originalTitle}` );
+        originalTitle = title.value;
+      }
+    } );
+  },
 };
 
 function setEventListeners() {
-	const items = document.getElementsByClassName( "item" );
-	const titles = document.getElementsByClassName( "title" );
+  const items = document.getElementsByClassName( "item" );
+  const titles = document.getElementsByClassName( "title" );
 
-	for ( const item of items ) {
+  for ( const item of items ) {
 	    setListener.item( item );
-	}
+  }
 
-	for ( const title of titles ) {
+  for ( const title of titles ) {
 	    setListener.title( title );
-	}
+  }
 
-	const cards = document.getElementsByClassName( "card" );
+  const cards = document.getElementsByClassName( "card" );
 
-	// flip cards
-	function flipCard( card ) {
-		let cardState = "front";
+  // flip cards
+  function flipCard( card ) {
+    let cardState = "front";
 
-		card.addEventListener( "dblclick", () => {
-			if ( cardState === "front" ) {
-				card.style.transform = "rotateY( 180deg )";
-				cardState = "back";
-			} else {
-				card.style.transform = "rotateY( 0deg )";
-				cardState = "front";
-			}
-		} );
-	}
+    card.addEventListener( "dblclick", () => {
+      if ( cardState === "front" ) {
+        card.style.transform = "rotateY( 180deg )";
+        cardState = "back";
+      } else {
+        card.style.transform = "rotateY( 0deg )";
+        cardState = "front";
+      }
+    } );
+  }
 
-	// Add new card
-	const cardListenerCallback = function cardListenerCallbackWrapper() {
-		setNewCardToInput( this, cardListenerCallback );
-	};
+  // Add new card
+  const cardListenerCallback = function cardListenerCallbackWrapper() {
+    setNewCardToInput( this, cardListenerCallback );
+  };
 
-	async function setNewCardToInput( cardToBeSet, callingFunction ) {
-		cardToBeSet.removeEventListener( "dblclick", callingFunction );
-		cardToBeSet.className = "card";
-		cardToBeSet.innerHTML = `
+  async function setNewCardToInput( cardToBeSet, callingFunction ) {
+    cardToBeSet.removeEventListener( "dblclick", callingFunction );
+    cardToBeSet.className = "card";
+    cardToBeSet.innerHTML = `
 			<div class="front inner">
 				<input class="title" type="text" placeholder="Add title">
 					<ul>
@@ -159,44 +159,44 @@ function setEventListeners() {
 			</div>
 		`;
 
-		for ( const item of cardToBeSet.children ) {
-			if ( item.children.length == 3 ) {
-				setListener.item( item.children[2].children[0].children[0] );
-			} else {
-				setListener.item( item.children[1].children[0].children[0] );
-			}
-		}
+    for ( const item of cardToBeSet.children ) {
+      if ( item.children.length == 3 ) {
+        setListener.item( item.children[2].children[0].children[0] );
+      } else {
+        setListener.item( item.children[1].children[0].children[0] );
+      }
+    }
 
-		for ( const title of cardToBeSet.children ) {
-			setListener.title( title.children[0] );
-		}
+    for ( const title of cardToBeSet.children ) {
+      setListener.title( title.children[0] );
+    }
 
-		flipCard( cardToBeSet );
+    flipCard( cardToBeSet );
 
-		const content = document.getElementById( "cards" );
-		const newCard = content.appendChild( document.createElement( "span" ) );
+    const content = document.getElementById( "cards" );
+    const newCard = content.appendChild( document.createElement( "span" ) );
 
-		newCard.innerHTML += `<img class="addCard" src="img/add.png">`;
-		newCard.className = "card addCardContainer";
-		newCard.addEventListener( "dblclick", cardListenerCallback );
+    newCard.innerHTML += `<img class="addCard" src="img/add.png">`;
+    newCard.className = "card addCardContainer";
+    newCard.addEventListener( "dblclick", cardListenerCallback );
 
-		const cardIdRequest = await request( "POST", `${url}/api/generate-cardId` );
-		const cardId = JSON.parse( cardIdRequest.body )._id;
+    const cardIdRequest = await request( "POST", `${url}/api/generate-cardId` );
+    const cardId = JSON.parse( cardIdRequest.body )._id;
 
-		request( "POST", `${url}/api/add-new-card?userid=${username}&_id=${cardId}` );
-	}
+    request( "POST", `${url}/api/add-new-card?userid=${username}&_id=${cardId}` );
+  }
 
-	for ( const card of cards ) {
-		const classes = card.className;
-		if ( !classes.match( /.addCardContainer/ ) ) {
-			flipCard( card );
-		} else {
-			card.addEventListener( "dblclick", cardListenerCallback );
-		}
-	}
+  for ( const card of cards ) {
+    const classes = card.className;
+    if ( !classes.match( /.addCardContainer/ ) ) {
+      flipCard( card );
+    } else {
+      card.addEventListener( "dblclick", cardListenerCallback );
+    }
+  }
 }
 
 ( async function main() { // to ensure drawing items before setting listeners
-	await drawItems();
-	setEventListeners();
+  await drawItems();
+  setEventListeners();
 } )();

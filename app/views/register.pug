@@ -1,20 +1,20 @@
 extends layout
 
 block styles
-    link( rel="stylesheet", href="styles/login-register.css" )
+  link( rel="stylesheet", href="styles/login-register.css" )
 
 block content
-    h1 Register
-    form.login( action="/register" method="POST" )
-        input.fields( name="username" type="text" placeholder="Username" required value=`${ username || "" }` )
-        // input.fields( name="email" type="email" placeholder="Email Address" required )
-        input.fields( name="password" type="password" placeholder="Password" required value=`${ password || "" }` )
-        input.fields( name="password_confirm" type="password" placeholder="Confirm Password" required value=`${ password_confirm || ""}` )
-    button.button#register Register
-    .dots
-        img( src="img/dots.png" )
-    a.button( href="/login" ) Login
+  h1 Register
+  form.login( action="/register" method="POST" )
+    input.fields( name="username" type="text" placeholder="Username" required value=`${ username || "" }` )
+    // input.fields( name="email" type="email" placeholder="Email Address" required )
+    input.fields( name="password" type="password" placeholder="Password" required value=`${ password || "" }` )
+    input.fields( name="password_confirm" type="password" placeholder="Confirm Password" required value=`${ password_confirm || ""}` )
+  button.button#register Register
+  .dots
+    img( src="img/dots.png" )
+  a.button( href="/login" ) Login
 
 block scripts
-    script( src="/scripts/encryption.js" )
-    script( src="/scripts/state.js" )
+  script( src="/scripts/encryption.js" )
+  script( src="/scripts/state.js" )

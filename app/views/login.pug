@@ -1,18 +1,18 @@
 extends layout
 
 block styles
-	link( rel="stylesheet", href="styles/login-register.css" )
+  link( rel="stylesheet", href="styles/login-register.css" )
 
 block content
-	h1 Login
-	form.login( action="/login" method="POST" )
-		input.fields( name="username" type="text" placeholder="Username" required )
-		input.fields( name="password" type="password" placeholder="Password" required )
-	button.button#login Log In
-	.dots
-		img( src="img/dots.png" )
-	a.button( href="/register" ) Register
+  h1 Login
+  form.login( action="/login" method="POST" )
+    input.fields( name="username" type="text" placeholder="Username" required )
+    input.fields( name="password" type="password" placeholder="Password" required )
+  button.button#login Log In
+  .dots
+    img( src="img/dots.png" )
+  a.button( href="/register" ) Register
 
 block scripts
-	script( src="/scripts/encryption.js" )
-	script( src="/scripts/state.js" )
+  script( src="/scripts/encryption.js" )
+  script( src="/scripts/state.js" )

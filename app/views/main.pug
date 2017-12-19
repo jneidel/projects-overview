@@ -1,26 +1,26 @@
 extends layout
 
 block styles
-	link( rel="stylesheet", href="/styles/main.css" )
+  link( rel="stylesheet", href="/styles/main.css" )
 
 block content
-	#cards
-		span.card( v-for="card in cards" v-bind:id="card._id" )
-			.front.inner
-				input.title( type="text" v-bind:value="card.title" placeholder="Add title" )
-				ul
-					li( v-for="item in card.front" )
-						input.item( type="text" v-bind:value="item" )
-			.back.inner
-				p.future Future
-				input.title( type="text" v-bind:value="card.title" placeholder="Add title" )
-				ul
-					li( v-for="item in card.back" )
-						input.item( type="text" v-bind:value="item" )
-		span.card.addCardContainer
-			img.addCard( src="/img/add.png" )
+  #cards
+    span.card( v-for="card in cards" v-bind:id="card._id" )
+      .front.inner
+        input.title( type="text" v-bind:value="card.title" placeholder="Add title" )
+        ul
+          li( v-for="item in card.front" )
+            input.item( type="text" v-bind:value="item" )
+      .back.inner
+        p.future Future
+        input.title( type="text" v-bind:value="card.title" placeholder="Add title" )
+        ul
+          li( v-for="item in card.back" )
+            input.item( type="text" v-bind:value="item" )
+    span.card.addCardContainer
+      img.addCard( src="/img/add.png" )
 
 block scripts
-	script( src="/scripts/state.js" ) 
-	script( src="/scripts/main.js" )
-	script( src="/scripts/vue.js" )
+  script( src="/scripts/state.js" ) 
+  script( src="/scripts/main.js" )
+  script( src="/scripts/vue.js" )

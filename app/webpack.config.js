@@ -8,24 +8,24 @@ require( "dotenv" ).config( { path: "variables.env" } );
 const prod = process.env.PROD || false;
 
 module.exports = {
-	entry: {
-		main      : "./src/main.js",
-		account   : "./src/account.js",
-		state     : "./src/state.js",
-		encryption: "./src/encryption.js",
-	},
-	output: {
-		filename: "[name].js",
-		path    : path.resolve( __dirname, "public/scripts" ),
-	},
-	plugins: prod ? [
-		new minify( {}, { comments: false } ),
-		new webpack.LoaderOptionsPlugin( {
-			test   : /\.js/,
-			options: {
-				loaders: [ "babel-loader" ],
-				presets: [ "@babel/preset-env" ],
-			},
-		} ),
-	] : [],
+  entry: {
+    main      : "./src/main.js",
+    account   : "./src/account.js",
+    state     : "./src/state.js",
+    encryption: "./src/encryption.js",
+  },
+  output: {
+    filename: "[name].js",
+    path    : path.resolve( __dirname, "public/scripts" ),
+  },
+  plugins: prod ? [
+    new minify( {}, { comments: false } ),
+    new webpack.LoaderOptionsPlugin( {
+      test   : /\.js/,
+      options: {
+        loaders: [ "babel-loader" ],
+        presets: [ "@babel/preset-env" ],
+      },
+    } ),
+  ] : [],
 };
