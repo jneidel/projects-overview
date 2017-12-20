@@ -97,3 +97,34 @@ exports.login = async ( req, res, next ) => {
     req.flash( "error", "You must be logged in to visit this page." );
     res.redirect( "back" );
 }; */
+
+exports.updateUsername = async ( req, res, next ) => {
+  const username = req.body.username;
+  const newUsername = req.body.newUsername;
+  const password = req.body.password;
+
+  const db = await mongo.connect( process.env.DATABASE );
+
+  if ( req.body.username === req.body.newUsername ) {
+    // handle no changes
+  }
+  // check password
+  
+  // check dublicate name
+
+  // check password / name empty
+
+  db.collection( "users" ).updateOne(
+    { username: username },
+    { $set: { username: newUsername } }
+  );
+
+  db.collection( "cards" ).updateMany(
+    { username: username },
+    { $set: { username: newUsername } }
+  );
+
+  req.body.username = req.body.newUsername;
+  req.flash( "success", "Changed username" );
+  next();
+}

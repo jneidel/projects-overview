@@ -44,7 +44,6 @@ async function accountHandler( func ) {
       username: document.getElementsByName( "username" )[0].value,
       async encrypt( password, isConfirmPass ) {
         password = await encryptWithPubKey( password );
-        password = btoa( password );
 
         if ( isConfirmPass ) {
           this.password_confirm = password;

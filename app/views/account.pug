@@ -6,7 +6,7 @@ block styles
 block content
   #settings
     .settings-container
-      h2 Change username
+      h2#tss Change username
       label( for="username" ) Username
       input( name="username" type="text" v-bind:value="username" placeholder="Username" )
       label( for="confirmation_username" ) Password (to confirm)
@@ -24,3 +24,4 @@ block scripts
   script( src="/scripts/state.js")
   script( src="/scripts/account.js" )
   script( src="/scripts/vue.js" )
+  script( src="/scripts/encryption.js" )

@@ -8,12 +8,12 @@ exports.updateDatabase = async ( req, res, next ) => {
   const update = {};
 
   if ( req.body.updatedItem === undefined ) {
-    query.userid = req.body.username;
+    query.username = req.body.username;
     query.title = req.body.title;
 
     update.$set = { title: req.body.updatedTitle };
   } else {
-    query.userid = req.body.username;
+    query.username = req.body.username;
     query.title = req.body.title;
     query[req.body.cardSide] = req.body.oldItem;
 
@@ -54,7 +54,7 @@ exports.addNewCard = async ( req, res, next ) => {
   const db = await mongo.connect( process.env.DATABASE );
 
   const lastPosition = await db.collection( "cards" ).aggregate( [
-    { $match: { userid: req.body.username } },
+    { $match: { username: req.body.username } },
     { $group: { position: { $max: "$position" }, _id: null } },
   ] ).toArray();
 
@@ -65,7 +65,7 @@ exports.addNewCard = async ( req, res, next ) => {
 
   const insertion = {
     _id     : Number( req.body._id ),
-    userid  : req.body.username,
+    username: req.body.username,
     title   : "",
     front   : [ "" ],
     back    : [ "" ],
@@ -82,7 +82,7 @@ exports.addNewCard = async ( req, res, next ) => {
 exports.getItems = async ( req, res, next ) => {
   const db = await mongo.connect( process.env.DATABASE );
 
-  const query = { userid: req.body.username };
+  const query = { username: req.body.username };
   const projection = { _id: 1, title: 1, front: 1, back: 1, position: 1 };
 
   const cards = await db.collection( "cards" )
@@ -97,7 +97,7 @@ exports.getItems = async ( req, res, next ) => {
 exports.addNewItem = async ( req, res, next ) => {
   const db = await mongo.connect( process.env.DATABASE );
 
-  const query = { title: req.body.title, userid: req.body.username };
+  const query = { title: req.body.title, username: req.body.username };
   const insertionObj = {};
   insertionObj[req.body.cardSide] = "";
   const insertion = { $push: insertionObj };
@@ -109,3 +109,9 @@ exports.addNewItem = async ( req, res, next ) => {
 
   res.sendStatus( 200 );
 };
+
+exports.getAccountData = async ( req, res, next ) => {
+  res.json( {
+    username: req.body.username,
+  } );
+}

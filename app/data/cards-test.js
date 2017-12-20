@@ -3,7 +3,7 @@ db.cards.drop();
 db.cards.insertMany([
 {
     _id: 1,
-    userid: "jneidel",
+    username: "jneidel",
     title: "Programming", 
     front: [ "foo", "baz", "bar", "" ], 
     back: [ "awe", "abc", "efd", "" ],
@@ -11,7 +11,7 @@ db.cards.insertMany([
 },
 {
     _id: 2,
-    userid: "jneidel",
+    username: "jneidel",
     title: "Reading", 
     front: [ "foo", "baz", "bar", "" ], 
     back: [ "awe", "abc", "efd", "" ],
@@ -19,7 +19,7 @@ db.cards.insertMany([
 },
 {
     _id: 3,
-    userid: "jneidel",
+    username: "jneidel",
     title: "Courses", 
     front: [ "foo", "baz", "bar", "" ], 
     back: [ "awe", "abc", "efd", "" ],
@@ -27,7 +27,7 @@ db.cards.insertMany([
 },
 {
     _id: 4,
-    userid: "jneidel",
+    username: "jneidel",
     title: "eBooks", 
     front: [ "foo", "baz", "bar", "" ], 
     back: [ "awe", "abc", "efd", "" ],
@@ -35,7 +35,7 @@ db.cards.insertMany([
 },
 {
 	_id: 5,
-	userid: "jneidel",
+	username: "jneidel",
 	title: "Audiobooks", 
     front: [ "foo", "baz", "bar", "" ], 
     back: [ "awe", "abc", "efd", "" ],
@@ -51,5 +51,6 @@ db.users.insertOne(
 		settings: {},
 	}
 );
-db.cards.createIndex({userid: 1});
+db.cards.createIndex({username: 1});
 db.cards.createIndex({position: 1});
+db.users.createIndex({username: 1});

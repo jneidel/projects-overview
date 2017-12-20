@@ -7,5 +7,8 @@ window.encryptWithPubKey = async function encryptWithPubKey( password ) {
   const publicKey = new rsa();
   publicKey.importKey( publicKeyFile.data, "pkcs8-public-pem" );
 
-  return publicKey.encrypt( password, "base64" );
+  password = publicKey.encrypt( password, "base64" );
+  password = btoa( password );
+
+  return password;
 };

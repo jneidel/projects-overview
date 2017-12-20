@@ -7,8 +7,6 @@ if ( !token ) {
   window.location.replace( `${url}/login` );
 }
 
-const username = parseJwt( token ).username;
-
 // Render cards from database
 async function drawItems() {
   const cardsRequest = await axios.post( "/api/getitems", { token } );

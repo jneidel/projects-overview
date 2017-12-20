@@ -36,6 +36,15 @@ router.post( "/add-new-item",
   encryptionController.verifyToken,
   databaseController.addNewItem
 );
+router.post( "/account-data",
+  encryptionController.verifyToken,
+  databaseController.getAccountData
+);
+router.post( "/update-username",
+  encryptionController.verifyToken,
+  accountController.updateUsername,
+  encryptionController.generateToken
+);
 
 router.get( "/", ( req, res ) => {
   req.flash( "error", "Access to the API denied." );
