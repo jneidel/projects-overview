@@ -1,28 +1,18 @@
-import axios from "axios";
-
-/* global url parseJwt encryptWithPubKey */
+/* global axios url encryptWithPubKey */
 /* eslint-disable no-empty */
 
 // Set global variables
 /* eslint-disable */
 window.url = "http://localhost:8080";
 
-window.axios = axios;
+window.axios = require( "axios" );
 
-window.parseJwt = function parseJwt( token ) {
-    const base64Url = token.split( "." )[1];
-    const base64 = base64Url.replace( "-", "+" ).replace( "_", "/" );
-    return JSON.parse( window.atob( base64 ) );
-};
-
+// bling.js
 window.$ = document.querySelectorAll.bind( document );
-
 Node.prototype.on = window.on = function( name, fn ) {
   this.addEventListener( name, fn );
 };
-
 NodeList.prototype.__proto__ = Array.prototype;
-
 NodeList.prototype.on = NodeList.prototype.addEventListener = function( name, fn ) {
   this.forEach( ( elem, i ) => {
     elem.on( name, fn );
@@ -30,6 +20,37 @@ NodeList.prototype.on = NodeList.prototype.addEventListener = function( name, fn
 };
 /* eslint-enable */
 
+async function getFormData( form ) {
+  /* return data from form with encrypted passwords
+   *
+   * formData = { 
+   *  username, 
+   *  password,
+   *  password_confirm
+   * }
+   */
+
+  const data = {
+    username: form.username,
+    encrypt: async function( password, isConfirmPass = false ) {
+      password = await encryptWithPubKey( password );
+
+      if ( isConfirmPass ) {
+        this.password_confirm = password;
+      } else {
+        this.password = password;
+      }
+    },
+  };
+
+  await data.encrypt( form.password );
+
+  if ( form.password_confirm ) {
+    await data.encrypt( form.password_confirm );
+  }
+
+  return data;
+}
 
 // Handle login/register
 async function accountHandler( func ) {
@@ -37,29 +58,6 @@ async function accountHandler( func ) {
     const checkIfLoginOrRegister = document.getElementsByName( "username" )[0].value;
   } catch ( e ) {
     return null;
-  }
-
-  async function getFormData( isRegister = false ) {
-    const data = {
-      username: document.getElementsByName( "username" )[0].value,
-      async encrypt( password, isConfirmPass ) {
-        password = await encryptWithPubKey( password );
-
-        if ( isConfirmPass ) {
-          this.password_confirm = password;
-        } else {
-          this.password = password;
-        }
-      },
-    };
-
-    await data.encrypt( document.getElementsByName( "password" )[0].value, false );
-
-    if ( isRegister ) {
-      await data.encrypt( document.getElementsByName( "password_confirm" )[0].value, true );
-    }
-
-    return data;
   }
 
   function checkResponse( res, errorRedirect ) {
@@ -74,7 +72,10 @@ async function accountHandler( func ) {
 
   try {
     document.getElementById( "login" ).addEventListener( "click", async ( e ) => {
-      const formData = await getFormData();
+      const formData = await getFormData( {
+        username: document.getElementsByName( "username" )[0].value,
+        password: document.getElementsByName( "password" )[0].value,
+      } );
 
       const response = await axios.post( "/api/login", {
         username: formData.username,
@@ -86,7 +87,11 @@ async function accountHandler( func ) {
 
   try {
     document.getElementById( "register" ).addEventListener( "click", async ( e ) => {
-      const formData = await getFormData( true );
+      const formData = await getFormData( {
+        username: document.getElementsByName( "username" )[0].value,
+        password: document.getElementsByName( "password" )[0].value, 
+        password_confirm: document.getElementsByName( "password_confirm" )[0].value,
+      } );
 
       const response = await axios.post( "/api/register", {
         username        : formData.username,
@@ -102,7 +107,9 @@ accountHandler();
 // Display username in place of login/register
 let token = localStorage.getItem( "token" );
 if ( token ) {
-  token = parseJwt( token );
+  const base64Url = token.split( "." )[1];
+  const base64 = base64Url.replace( "-", "+" ).replace( "_", "/" );
+  token = JSON.parse( window.atob( base64 ) );
 
   let username = token.username;
   if ( username.length > 20 ) {
@@ -140,3 +147,5 @@ if ( token ) {
 
   document.getElementsByClassName( "header-link-home" )[0].href = "/app";
 }
+
+exports.getFormData = getFormData;

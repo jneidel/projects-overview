@@ -1,6 +1,6 @@
-/* globals Vue url parseJwt axios */
+/* globals Vue url axios */
 /* eslint-disable no-alert */
-/* url, $, axios, parseJwt globally set in state.js */
+/* url, $, axios, globally set in state.js */
 
 const token = localStorage.getItem( "token" );
 if ( !token ) {
