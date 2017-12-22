@@ -51,19 +51,24 @@ const setListener = {
 
         if ( titleNode.length == 3 ) {
           var title = titleNode[1].value;
+          var lastItem = parentNode.children[2].children[parentNode.children[2].children.length - 1].children[0];
         } else {
           var title = titleNode[0].value;
+          var lastItem = titleNode[1].children[titleNode[1].children.length - 1].children[0];
         }
-
-        const lastItem = titleNode[1].children[titleNode[1].children.length - 1].children[0];
+        
         if ( lastItem === item ) {
           axios.post( "/api/add-new-item", {
             token,
             cardSide,
             title,
           } );
-
-          const newItemWrapper = parentNode.children[1].appendChild( document.createElement( "li" ) );
+          
+          if ( titleNode.length == 3 ) {
+            var newItemWrapper = parentNode.children[2].appendChild( document.createElement( "li" ) );
+          } else {
+            var newItemWrapper = parentNode.children[1].appendChild( document.createElement( "li" ) );
+          }
           const newItem = newItemWrapper.appendChild( document.createElement( "input" ) );
           newItem.type = "text";
           newItem.classes = "item";
