@@ -2,7 +2,8 @@
   "name": "project-manager",
   "version": "1.0.0",
   "description": "None",
-  "main": "start.js",
+  "main": "app.js",
+  "engines" : { "node" : "8.1.4" },
   "scripts": {
     "start": "concurrently \"npm run watch\" \"npm run build\" \"npm run testing\"  --names \"💻,📦,📡\" --prefix name",
     "watch": "nodemon app.js --ignore public/scripts/ --ignore tests/",
