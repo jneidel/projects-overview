@@ -5,6 +5,7 @@ const jws = require( "jsonwebtoken" );
 const fs = require( "mz/fs" );
 const rsa = require( "node-rsa" );
 const atob = require( "atob" );
+const reservedUsernames = require( "../data/reserved-usernames" );
 
 require( "dotenv" ).config( { path: "../variables.env" } );
 
@@ -21,12 +22,19 @@ exports.validateRegister = ( req, res, next ) => {
   req.checkBody( "password_confirm", "Please supply a confirm password." ).notEmpty();
   req.checkBody( "password_confirm", "Your passwords do not match." ).equals( req.body.password );
 
+  if ( ~reservedUsernames.indexOf( req.body.username ) ) {
+    req.flash( "error", "Username is reserved" );
+    res.json( { error: true } );
+  }
+
   const errors = req.validationErrors();
   if ( errors ) {
     req.flash( "error", errors.map( err => err.msg ) );
     res.json( { error: true } );
     return;
   }
+
+  // check here if username exists in database
 
   return next();
 };
