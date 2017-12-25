@@ -39,7 +39,7 @@ exports.validateRegister = ( req, res, next ) => {
   return next();
 };
 
-exports.register = async ( req, res, next ) => {
+exports.checkUniqueUsername = async ( req, res, next ) => {
   const db = await mongo.connect( process.env.DATABASE );
 
   const username = await db.collection( "users" ).findOne( { username: req.body.username } );
@@ -49,6 +49,12 @@ exports.register = async ( req, res, next ) => {
     db.close();
     return;
   }
+
+  next();
+};
+
+exports.registerUser = async ( req, res, next ) => {
+  const db = await mongo.connect( process.env.DATABASE );
 
   const userDocument = {
     username: req.body.username.trim(),
@@ -117,22 +123,22 @@ exports.updateUsername = async ( req, res, next ) => {
     // handle no changes
   }
   // check password
-  
+
   // check dublicate name
 
   // check password / name empty
 
   db.collection( "users" ).updateOne(
-    { username: username },
+    { username },
     { $set: { username: newUsername } }
   );
 
   db.collection( "cards" ).updateMany(
-    { username: username },
+    { username },
     { $set: { username: newUsername } }
   );
 
   req.body.username = req.body.newUsername;
   req.flash( "success", "Changed username" );
   next();
-}
+};

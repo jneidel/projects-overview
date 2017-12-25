@@ -114,4 +114,4 @@ exports.getAccountData = async ( req, res, next ) => {
   res.json( {
     username: req.body.username,
   } );
-}
+};

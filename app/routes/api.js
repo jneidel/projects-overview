@@ -13,7 +13,8 @@ router.post( "/login",
 router.post( "/register",
   encryptionController.decryptBody,
   accountController.validateRegister,
-  catchErrors( accountController.register ),
+  catchErrors( accountController.checkUniqueUsername ),
+  catchErrors( accountController.registerUser ),
   encryptionController.generateToken
 );
 router.post( "/update",

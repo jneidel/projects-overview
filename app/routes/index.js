@@ -10,10 +10,6 @@ router.get( "/", appController.welcome );
 
 router.get( "/login", appController.login );
 router.get( "/register", appController.register );
-router.post( "/register",
-  accountController.validateRegister,
-  accountController.register
-);
 router.get( "/logout", appController.logout );
 router.get( "/account", appController.account );
 
