@@ -115,3 +115,9 @@ exports.getAccountData = async ( req, res, next ) => {
     username: req.body.username,
   } );
 };
+
+exports.connectDatabase = async ( req, res, next ) => {
+  req.body.db = await mongo.connect( process.env.DATABASE )
+    .catch( () => { next( "Database connection error" ); } );
+  next();
+};

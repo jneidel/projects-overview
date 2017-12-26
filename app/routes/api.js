@@ -1,50 +1,51 @@
 const express = require( "express" );
 const router = express.Router();
-const accountController = require( "../controllers/accountController" );
-const databaseController = require( "../controllers/databaseController" );
-const encryptionController = require( "../controllers/encryptionController" );
+const account = require( "../controllers/accountController" );
+const database = require( "../controllers/databaseController" );
+const encryption = require( "../controllers/encryptionController" );
 const { catchErrors } = require( "../handlers/errorHandlers" );
 
 router.post( "/login",
-  encryptionController.decryptBody,
-  catchErrors( accountController.login ),
-  encryptionController.generateToken
+  encryption.decryptBody,
+  database.connectDatabase,
+  catchErrors( account.login ),
+  encryption.generateToken
 );
 router.post( "/register",
-  encryptionController.decryptBody,
-  accountController.validateRegister,
-  catchErrors( accountController.checkUniqueUsername ),
-  catchErrors( accountController.registerUser ),
-  encryptionController.generateToken
+  encryption.decryptBody,
+  account.validateRegister,
+  catchErrors( account.checkUniqueUsername ),
+  catchErrors( account.registerUser ),
+  encryption.generateToken
 );
 router.post( "/update",
-  encryptionController.verifyToken,
-  databaseController.updateDatabase
+  encryption.verifyToken,
+  database.updateDatabase
 );
 router.post( "/generate-cardId",
-  encryptionController.verifyToken,
-  databaseController.generateCardId
+  encryption.verifyToken,
+  database.generateCardId
 );
 router.post( "/add-new-card",
-  encryptionController.verifyToken,
-  databaseController.addNewCard
+  encryption.verifyToken,
+  database.addNewCard
 );
 router.post( "/getitems",
-  encryptionController.verifyToken,
-  databaseController.getItems
+  encryption.verifyToken,
+  database.getItems
 );
 router.post( "/add-new-item",
-  encryptionController.verifyToken,
-  databaseController.addNewItem
+  encryption.verifyToken,
+  database.addNewItem
 );
 router.post( "/account-data",
-  encryptionController.verifyToken,
-  databaseController.getAccountData
+  encryption.verifyToken,
+  database.getAccountData
 );
 router.post( "/update-username",
-  encryptionController.verifyToken,
-  accountController.updateUsername,
-  encryptionController.generateToken
+  encryption.verifyToken,
+  account.updateUsername,
+  encryption.generateToken
 );
 
 router.get( "/", ( req, res ) => {

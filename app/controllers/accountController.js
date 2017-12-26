@@ -79,8 +79,7 @@ exports.registerUser = async ( req, res, next ) => {
 exports.login = async ( req, res, next ) => {
   const username = req.body.username;
   const password = req.body.password;
-
-  const db = await mongo.connect( process.env.DATABASE );
+  const db = req.body.db;
 
   const docs = await db.collection( "users" ).find( { username } ).toArray();
   if ( !docs || docs.length === 0 ) {
