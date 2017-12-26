@@ -1,6 +1,6 @@
 exports.catchErrors = fn => function( req, res, next ) {
   try {
-    fn( req, res, next ).catch( next );
+    fn( req, res, next );
   } catch ( err ) {
     console.log( err );
     return next( err );
@@ -19,6 +19,11 @@ exports.flashValidationErrors = ( err, req, res, next ) => {
   errorKeys.forEach( key => req.flash( "error", err.errors[key].message ) );
   res.redirect( "back" );
 };
+
+exports.displayErrorMsg = ( err, req, res, next ) => {
+  req.flash( "error", err );
+  res.json( { error: true } );
+}
 
 exports.developmentErrors = ( err, req, res, next ) => {
   err.stack = err.stack || "";

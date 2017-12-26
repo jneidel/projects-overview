@@ -41,6 +41,7 @@ app.use( "/api", require( "./routes/api" ) );
 
 app.use( errorHandlers.notFound );
 app.use( errorHandlers.flashValidationErrors );
+app.use( errorHandlers.displayErrorMsg );
 app.use( errorHandlers.developmentErrors );
 
 app.listen( port, () => {
