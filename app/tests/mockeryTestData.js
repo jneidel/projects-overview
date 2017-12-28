@@ -3,9 +3,9 @@ const sinon = require( "sinon" );
 const mongo = {
   connect   : sinon.stub(),
   connect_re: {
-    close     : sinon.spy(),
-    catch     : sinon.spy(),
-  }, 
+    close: sinon.spy(),
+    catch: sinon.spy(),
+  },
   collection: sinon.stub(),
   findOne   : sinon.stub(),
   setup     : () => {
@@ -26,7 +26,7 @@ const mongo = {
     mongo.connect_re.catch.reset();
 
     mongo.setup();
-  }
+  },
 };
 
 mongo.setup();

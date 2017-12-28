@@ -15,7 +15,7 @@ const controller = require( "../controllers/databaseController" );
 
 describe( "databaseController", () => {
   describe( "connectDatabase", () => {
-   it( "should connect to database", ( done ) => {
+    it( "should connect to database", ( done ) => {
       controller.connectDatabase( { body: {} }, {}, () => {} );
 
       expect( mongo.connect.called ).toBeTruthy();
