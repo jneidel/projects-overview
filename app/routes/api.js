@@ -13,8 +13,8 @@ router.post( "/login",
 );
 router.post( "/register",
   encryption.decryptBody,
+  database.connectDatabase,
   account.validateRegister,
-  catchErrors( account.checkUniqueUsername ),
   catchErrors( account.registerUser ),
   encryption.generateToken
 );

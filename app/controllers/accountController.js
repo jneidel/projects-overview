@@ -9,7 +9,7 @@ const reservedUsernames = require( "../data/reserved-usernames" );
 
 require( "dotenv" ).config( { path: "../variables.env" } );
 
-exports.validateRegister = ( req, res, next ) => {
+exports.validateRegister = async ( req, res, next ) => {
   req.checkBody( "username", "Please supply a username." ).notEmpty();
   req.sanitizeBody( "username" );
   /* req.checkBody( "email", "Please supply a valid email address." ).isEmail();
@@ -34,15 +34,9 @@ exports.validateRegister = ( req, res, next ) => {
     return;
   }
 
-  // check here if username exists in database
-
-  return next();
-};
-
-exports.checkUniqueUsername = async ( req, res, next ) => {
-  const db = await mongo.connect( process.env.DATABASE );
-
+  const db = req.body.db;
   const username = await db.collection( "users" ).findOne( { username: req.body.username } );
+
   if ( username !== null ) {
     req.flash( "error", "This username has already been registered." );
     res.json( { error: true } );
@@ -54,7 +48,7 @@ exports.checkUniqueUsername = async ( req, res, next ) => {
 };
 
 exports.registerUser = async ( req, res, next ) => {
-  const db = await mongo.connect( process.env.DATABASE );
+  const db = req.body.db;
 
   const userDocument = {
     username: req.body.username.trim(),

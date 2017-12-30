@@ -5,39 +5,9 @@ const { mongo } = require( "./mockeryTestData" );
 
 /* global describe it */
 
-mockery.enable( {
-  warnOnUnregistered: false,
-} );
-
-mockery.registerMock( "mongodb", mongo );
 const controller = require( "../controllers/accountController" );
 
 describe( "accountController", () => {
-  describe( "checkUniqueUsername", () => {
-    const docs = [
-      {
-        req: { flash: sinon.spy(),
-          body : {
-            username: "jneidel",
-            password: "123",
-          } },
-        res : { json: sinon.spy() },
-        next: sinon.spy(),
-      },
-    ];
-
-    it( "should call findOne with req.body.username", async () => {
-      docs.forEach( async ( doc ) => {
-        mongo.resetSpies();
-
-        await controller.checkUniqueUsername( doc.req, doc.res, doc.next );
-
-        expect( mongo.findOne.callCount ).toBeTruthy();
-        expect( mongo.findOne.calledWith( { username: doc.req.body.username } ) ).toBeTruthy();
-      } );
-    } );
-  } );
-
   describe( "validateRegister", () => {
     const reservedUsernames = require( "../data/reserved-usernames" ); // eslint-disable-line global-require 
     const args = {
@@ -50,11 +20,12 @@ describe( "accountController", () => {
         },
         sanitizeBody    : sinon.spy(),
         validationErrors: () => false,
-        body            : { username: "123" },
+        body            : {
+          username: "123",
+          db      : mongo,
+        },
       },
-      res: {
-        json: sinon.spy(),
-      },
+      res: { json: sinon.spy() },
     };
     args.req.checkBody.returns( args.req.checkBody_re );
 
@@ -120,9 +91,17 @@ describe( "accountController", () => {
         expect( args.res.json.calledWith( { error: true } ) ).toBeTruthy( "incorrect json res on passed validation error" );
         // maybe: check error msg
       } );
+
+      args.req.validationErrors = () => false;
+    } );
+
+    it( "should call findOne with req.body.username", () => {
+      mongo.resetSpies();
+
+      controller.validateRegister( args.req, args.res, () => {} );
+
+      expect( mongo.findOne.callCount ).toBeTruthy();
+      expect( mongo.findOne.calledWith( { username: args.req.body.username } ) ).toBeTruthy();
     } );
   } );
-
-  mockery.deregisterAll();
-  mockery.disable();
 } );
