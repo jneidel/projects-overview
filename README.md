@@ -1,5 +1,7 @@
 # project-manager
 
+![](https://circleci.com/gh/jneidel/project-manager/tree/master.svg?style=shield&circle-token=98937429df5bf860a055272d7ded46b7c583503e)
+
 Currently under development.
 
 ## v2
