@@ -135,3 +135,14 @@ exports.updateUsername = async ( req, res, next ) => {
   req.flash( "success", "Changed username" );
   next();
 };
+
+exports.createCookie = ( req, res, next ) => {
+  res.clearCookie( "token" );
+  res.cookie( "token", req.token, {
+    maxAge  : 30 * 24 * 60 * 60 * 1000,
+    httpOnly: true,
+    Secure  : true,
+  } );
+
+  next();
+};

@@ -23,8 +23,8 @@ describe( "accountController", () => {
         username: "123",
         db      : mongo,
       },
-    }
-    const res = { json: sinon.spy() }
+    };
+    const res = { json: sinon.spy() };
 
     req.checkBody.returns( req.checkBody_re );
 
@@ -101,6 +101,26 @@ describe( "accountController", () => {
 
       expect( mongo.findOne.callCount ).toBeTruthy();
       expect( mongo.findOne.calledWith( { username: req.body.username } ) ).toBeTruthy();
+    } );
+  } );
+
+  describe( "createCookie", () => {
+    const res = {
+      clearCookie: sinon.spy(),
+      cookie     : sinon.spy(),
+    };
+
+    it( "should remove old cookie and create new one", () => {
+      controller.createCookie( { token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpuZWlkZWwiLCJpYXQiOjE1MTUwOTgxMTJ9.DrhM7_qMnhWaeKtRwg37oy-git4OAJ7-b1FMBTAmUdc" }, res, () => {} );
+
+      expect( res.clearCookie.calledWith( "token" ) ).toBeTruthy( "expected to remove token" );
+      expect( res.cookie.calledWith(
+        "token",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpuZWlkZWwiLCJpYXQiOjE1MTUwOTgxMTJ9.DrhM7_qMnhWaeKtRwg37oy-git4OAJ7-b1FMBTAmUdc", {
+          maxAge  : 30 * 24 * 60 * 60 * 1000,
+          httpOnly: true,
+          Secure  : true,
+        } ) ).toBeTruthy( "expected cookie to be created with right args" );
     } );
   } );
 } );
