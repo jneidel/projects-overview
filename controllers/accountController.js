@@ -144,5 +144,5 @@ exports.createCookie = ( req, res, next ) => {
     Secure  : true,
   } );
 
-  next();
+  res.json( { success: true } );
 };

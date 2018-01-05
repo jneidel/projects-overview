@@ -9,8 +9,9 @@ router.post( "/login",
   encryption.decryptBody,
   database.connectDatabase,
   catchErrors( account.login ),
-  encryption.generateToken
-  //account.createCookie
+  encryption.generateToken,
+  encryption.encryptToken,
+  account.createCookie
 );
 router.post( "/register",
   encryption.decryptBody,

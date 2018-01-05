@@ -108,6 +108,7 @@ describe( "accountController", () => {
     const res = {
       clearCookie: sinon.spy(),
       cookie     : sinon.spy(),
+      json       : () => {},
     };
 
     it( "should remove old cookie and create new one", () => {

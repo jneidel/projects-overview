@@ -68,6 +68,9 @@ async function accountHandler( func ) {
       localStorage.setItem( "token", res.token );
       window.location.replace( `${url}/app` );
     }
+    if ( res.success ) {
+      window.location.replace( `${url}/app` );
+    }
   }
 
   try {
