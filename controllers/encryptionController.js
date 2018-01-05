@@ -29,7 +29,7 @@ exports.decryptBody = async ( req, res, next ) => {
 
 exports.generateToken = async ( req, res, next ) => {
   const token = await jwt.sign( { username: req.body.username }, process.env.SECRET );
-  
+
   if ( req.body.password_confirm ) {
     res.json( { token } );
   }
