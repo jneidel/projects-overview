@@ -1,8 +1,8 @@
 # project-manager
 
-![](https://circleci.com/gh/jneidel/project-manager/tree/master.svg?style=shield&circle-token=98937429df5bf860a055272d7ded46b7c583503e)
-![](https://img.shields.io/badge/version-v2-blue.svg)
-![](https://img.shields.io/badge/currently-under%20development-brightgreen.svg)
+[![](https://circleci.com/gh/jneidel/project-manager/tree/master.svg?style=shield&circle-token=98937429df5bf860a055272d7ded46b7c583503e)](https://circleci.com/gh/jneidel/project-manager)
+[![](https://img.shields.io/badge/version-v2-blue.svg)](https://github.com/jneidel/project-manager/releases)
+[![](https://img.shields.io/badge/currently-under%20development-brightgreen.svg)](https://github.com/jneidel/project-manager)
 
 ## v2
 
