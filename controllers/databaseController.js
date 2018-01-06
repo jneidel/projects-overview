@@ -1,5 +1,6 @@
 const mongo = require( "mongodb" ).MongoClient;
 const assert = require( "assert" );
+const { throwUserError } = require( "../handlers/errorHandlers" );
 
 require( "dotenv" ).config( { path: "../variables.env" } );
 
@@ -118,6 +119,7 @@ exports.getAccountData = async ( req, res, next ) => {
 
 exports.connectDatabase = async ( req, res, next ) => {
   req.body.db = await mongo.connect( process.env.DATABASE )
-    .catch( () => { next( "Database connection error" ); } );
+    .catch( () => { throwUserError( "Database connection error", req, res ); } );
+
   next();
 };

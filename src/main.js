@@ -56,14 +56,14 @@ const setListener = {
           var title = titleNode[0].value;
           var lastItem = titleNode[1].children[titleNode[1].children.length - 1].children[0];
         }
-        
+
         if ( lastItem === item ) {
           axios.post( "/api/add-new-item", {
             token,
             cardSide,
             title,
           } );
-          
+
           if ( titleNode.length == 3 ) {
             var newItemWrapper = parentNode.children[2].appendChild( document.createElement( "li" ) );
           } else {

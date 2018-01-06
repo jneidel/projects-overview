@@ -18,7 +18,7 @@ const rsaObj = {
   importKey: sinon.spy(),
   encrypt  : sinon.stub(),
 };
-class rsa {
+class rsa { // eslint-disable-line no-restricted-syntax
   constructor() {
     return rsaObj;
   }
@@ -37,7 +37,7 @@ describe( "encryptionController", () => {
   describe( "encryptToken", () => {
     const req = {
       token: tokenStates.token,
-      run: sinon.spy(),
+      run  : sinon.spy(),
     };
 
     it( "should encrypt and parse token", async () => {

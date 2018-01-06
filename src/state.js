@@ -32,7 +32,7 @@ async function getFormData( form ) {
 
   const data = {
     username: form.username,
-    encrypt: async function( password, isConfirmPass = false ) {
+    async encrypt( password, isConfirmPass = false ) {
       password = await encryptWithPubKey( password );
 
       if ( isConfirmPass ) {
@@ -46,7 +46,7 @@ async function getFormData( form ) {
   await data.encrypt( form.password );
 
   if ( form.password_confirm ) {
-    await data.encrypt( form.password_confirm );
+    await data.encrypt( form.password_confirm, true );
   }
 
   return data;
@@ -91,8 +91,8 @@ async function accountHandler( func ) {
   try {
     document.getElementById( "register" ).addEventListener( "click", async ( e ) => {
       const formData = await getFormData( {
-        username: document.getElementsByName( "username" )[0].value,
-        password: document.getElementsByName( "password" )[0].value, 
+        username        : document.getElementsByName( "username" )[0].value,
+        password        : document.getElementsByName( "password" )[0].value,
         password_confirm: document.getElementsByName( "password_confirm" )[0].value,
       } );
 
@@ -101,6 +101,7 @@ async function accountHandler( func ) {
         password        : formData.password,
         password_confirm: formData.password_confirm,
       } );
+      localStorage.setItem( "repsonse", JSON.stringify( response.data ) );
       checkResponse( response.data, "register" );
     } );
   } catch ( e ) {}

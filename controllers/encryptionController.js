@@ -14,7 +14,7 @@ exports.decryptBody = async ( req, res, next ) => {
 
   function decrypt( pass ) {
     pass = atob( pass );
-    	pass = privateKey.decrypt( pass, "utf8" );
+  	pass = privateKey.decrypt( pass, "utf8" );
     pass = md5( pass );
     return pass;
   }
@@ -31,10 +31,11 @@ exports.generateToken = async ( req, res, next ) => {
   const token = await jwt.sign( { username: req.body.username }, process.env.SECRET );
 
   if ( req.body.password_confirm ) {
-    res.json( { token } );
+    return res.json( { token } );
   }
 
   req.token = token;
+
   next();
 };
 

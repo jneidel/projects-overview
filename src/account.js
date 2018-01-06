@@ -1,10 +1,10 @@
-/* global Vue axios encryptWithPubKey */
+/* global Vue axios encryptWithPubKey url */
 
 const token = localStorage.getItem( "token" );
-  
+
 if ( !token ) {
   window.location.replace( `${url}/login` );
-} 
+}
 
 async function renderAccount() {
   const accountDataRequest = await axios.post( "/api/account-data", { token } );
@@ -29,7 +29,7 @@ async function renderAccount() {
 }
 
 const setListener = {
-  username: async function( event ) {
+  async username( event ) {
     const username = document.getElementsByName( "username" )[0].value;
     let password = document.getElementsByName( "confirmation_username" )[0].value;
 
@@ -46,9 +46,9 @@ const setListener = {
         localStorage.setItem( "token", response.data.token );
         window.location.replace( `${url}/account` );
       }
-    }  
+    }
   },
-}
+};
 
 function setEventListeners() {
   // Change username
