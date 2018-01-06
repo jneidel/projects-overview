@@ -1,106 +1,123 @@
 const expect = require( "expect" );
 const sinon = require( "sinon" );
-const mockery = require( "mockery" );
 const { mongo } = require( "./mockeryTestData" );
 
 /* global describe it */
 
 const controller = require( "../controllers/accountController" );
 
+const sandbox = sinon.sandbox.create();
+const req = { flash: sandbox.spy() };
+const res = { json: sandbox.spy() };
+const next = sandbox.spy();
+
 describe( "accountController", () => {
   describe( "validateRegister", () => {
     const reservedUsernames = require( "../data/reserved-usernames" ); // eslint-disable-line global-require 
-    const req = {
-      flash       : sinon.spy(),
-      checkBody   : sinon.stub(),
-      checkBody_re: {
-        notEmpty: sinon.spy(),
-        equals  : sinon.spy(),
-      },
-      sanitizeBody    : sinon.spy(),
-      validationErrors: () => false,
-      body            : {
-        username: "123",
-        db      : mongo,
-      },
-    };
-    const res = { json: sinon.spy() };
 
-    req.checkBody.returns( req.checkBody_re );
+    function setupSandbox() {
+      sandbox.reset();
+      req.body = {
+        username        : "123",
+        password        : "123",
+        password_confirm: "123",
+      };
+    }
+    setupSandbox();
 
-    function setupForEach() {
-      req.flash.reset();
-      res.json.reset();
+    function setupData( doc, opt = {} ) {
+      if ( opt.username ) {
+        req.body.username = doc.username;
+      }
+      if ( opt.passwords ) {
+        req.body.password = doc.password;
+        req.body.password_confirm = doc.password_confirm;
+      }
     }
 
-    it( "should call all validation functions", () => {
-      controller.validateRegister( req, res, () => {} );
+    it( "should not throw an error with valid data", () => {
+      const testData = [
+        { username: "jneidel", password: "123", password_confirm: "123" },
+        { username: "Roy Osherove", password: "$%~91äüsj", password_confirm: "$%~91äüsj" },
+        { username: "pG7pAagEmDe3", password: "pG7pAagEmDe3", password_confirm: "pG7pAagEmDe3" },
+      ];
 
-      expect( req.checkBody_re.notEmpty.callCount ).toBe( 3, "checkBody.notEmpty wasnt called three times" );
-      expect( req.checkBody_re.equals.callCount ).toBe( 1, "checkBody.equals wasnt called" );
-      expect( req.sanitizeBody.callCount ).toBe( 1, "sanitizeBody wasnt called" );
+      testData.forEach( ( doc ) => {
+        setupSandbox();
+        setupData( doc, { username: 1, passwords: 1 } );
 
-      expect( req.checkBody.calledWith( "username", "Please supply a username." ) ).toBeTruthy( "checkBody wasnt called with username" );
-      expect( req.checkBody.calledWith( "password", "Please supply a password." ) ).toBeTruthy( "checkBody wasnt called with password" );
-      expect( req.checkBody.calledWith( "password_confirm", "Please supply a confirm password." ) ).toBeTruthy( "checkBody wasnt called with password_confirm" );
-      expect( req.checkBody.calledWith( "password_confirm", "Your passwords do not match." ) ).toBeTruthy( "checkBody.equals wasnt called with password_confirm" );
-      expect( req.sanitizeBody.calledWith( "username" ) ).toBeTruthy( "sanitizeBody wasnt called" );
+        controller.validateRegister( req, res, next );
+
+        expect( req.flash.callCount ).toBe( 0, "expect no flash" );
+        expect( res.json.callCount ).toBe( 0, "expect no res.json" );
+        expect( next.callCount ).toBe( 1, "expect next" );
+      } );
     } );
 
-    it( "should throw if username is reserved", () => {
+    it( "should throw an error on empty fields", () => {
+      const testData = [
+        { username: "jneidel", password: "", password_confirm: "123" },
+        { username: "", password: "////jk", password_confirm: "////jk" },
+        { username: "chingu", password: "this", password_confirm: "" },
+        { username: "", password: "", password_confirm: "" },
+      ];
+
+      testData.forEach( ( doc ) => {
+        setupSandbox();
+        setupData( doc, { username: 1, passwords: 1 } );
+
+        controller.validateRegister( req, res, next );
+
+        expect( req.flash.callCount ).toBe( 1, "expect flash" );
+        expect( res.json.callCount ).toBe( 1, "expect res.json" );
+        expect( next.callCount ).toBe( 0, "expect no next" );
+      } );
+    } );
+
+    it( "should throw an error if username is reserved", () => {
       const reservedUsernames = [ "test", "help", "github", "access", "admin", "bot", "calendar", "img", "issue", "javascript", "mail", "manual", "notify", "server", "shop", "source", "sysadmin", "weather", "you" ]; // eslint-disable-line no-irregular-whitespace
 
       reservedUsernames.forEach( ( username ) => {
-        setupForEach();
-        req.body.username = username;
+        setupSandbox();
+        setupData( { username }, { username: 1 } );
 
-        controller.validateRegister( req, res, () => {} );
+        controller.validateRegister( req, res, next );
 
-        expect( req.flash.callCount ).toBe( 1 );
-        expect( res.json.callCount ).toBe( 1 );
-
-        expect( req.flash.calledWith( "error", "Username is reserved" ) ).toBeTruthy( "incorrect flash on reserved username" );
-        expect( res.json.calledWith( { error: true } ) ).toBeTruthy( "incorrect json res on reserved username" );
+        expect( req.flash.callCount ).toBe( 1, "expected flash" );
+        expect( res.json.callCount ).toBe( 1, "expected res.json" );
+        expect( next.callCount ).toBe( 0, "expected no next" );
       } );
+    } );
 
+    it( "should not throw an error if username is not reserved", () => {
       const notReservedUsernames = [ "123", "jneidel", "nodejs", "mongodb", "express", "pug", "git", "webpack", "jwt", "sinon", "mocha", "vue", "eslint", "babel" ];
 
       notReservedUsernames.forEach( ( username ) => {
-        setupForEach();
-        req.body.username = username;
+        setupSandbox();
+        setupData( { username }, { username: 1 } );
 
-        controller.validateRegister( req, res, () => {} );
+        controller.validateRegister( req, res, next );
 
-        expect( req.flash.callCount ).toBe( 0, "incorrect flash on not reserved username" );
-        expect( res.json.callCount ).toBe( 0, "incorrect json res on not reserved username" );
+        expect( req.flash.callCount ).toBe( 0, "expected no flash" );
+        expect( res.json.callCount ).toBe( 0, "expected no res.json" );
+        expect( next.callCount ).toBe( 1, "expect next" );
       } );
     } );
+  } );
 
-    it( "should throw if validationErrors are passed", () => {
-      const errors = [ "Please supply a username.", "Please supply a password.", "Please supply a confirm password.", "Your passwords do not match." ];
-
-      errors.forEach( ( err ) => {
-        setupForEach();
-        req.validationErrors = () => [ err ];
-
-        controller.validateRegister( req, res, () => {} );
-
-        expect( req.flash.callCount ).toBe( 1, "incorrect flash on passed validation error" );
-        expect( res.json.callCount ).toBe( 1, "incorrect json res on passed validation error" );
-        expect( res.json.calledWith( { error: true } ) ).toBeTruthy( "incorrect json res on passed validation error" );
-        // maybe: check error msg
-      } );
-
-      req.validationErrors = () => false;
-    } );
-
-    it( "should call findOne with req.body.username", () => {
+  describe( "checkDublicateUsername", () => {
+    it( "should call findOne with req.body.username", async () => {
+      sandbox.reset();
       mongo.resetSpies();
+      req.body = {
+        db      : mongo,
+        username: "456",
+      };
 
-      controller.validateRegister( req, res, () => {} );
+      await controller.checkDublicateUsername( req, res, next );
 
-      expect( mongo.findOne.callCount ).toBeTruthy();
-      expect( mongo.findOne.calledWith( { username: req.body.username } ) ).toBeTruthy();
+      expect( mongo.findOne.callCount ).toBe( 1, "expect findOne" );
+      expect( mongo.findOne.calledWith( { username: req.body.username } ) ).toBeTruthy( "expect findOne called with username" );
     } );
   } );
 

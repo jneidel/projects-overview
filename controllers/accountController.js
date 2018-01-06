@@ -6,42 +6,36 @@ const fs = require( "mz/fs" );
 const rsa = require( "node-rsa" );
 const atob = require( "atob" );
 const reservedUsernames = require( "../data/reserved-usernames" );
+const validator = require( "validator" );
+const { throwUserError } = require( "../handlers/errorHandlers" );
 
 require( "dotenv" ).config( { path: "../variables.env" } );
 
-exports.validateRegister = async ( req, res, next ) => {
-  req.checkBody( "username", "Please supply a username." ).notEmpty();
-  req.sanitizeBody( "username" );
-  /* req.checkBody( "email", "Please supply a valid email address." ).isEmail();
-    req.sanitizeBody( "email" ).normalizeEmail( {
-        remove_dots            : false,
-        remove_extension       : false,
-        gmail_remove_subaddress: false,
-    } ); */
-  req.checkBody( "password", "Please supply a password." ).notEmpty();
-  req.checkBody( "password_confirm", "Please supply a confirm password." ).notEmpty();
-  req.checkBody( "password_confirm", "Your passwords do not match." ).equals( req.body.password );
+
+exports.validateRegister = ( req, res, next ) => {
+  if ( validator.isEmpty( req.body.username ) ||
+       validator.isEmpty( req.body.password ) ||
+       validator.isEmpty( req.body.password_confirm ) ) {
+    return throwUserError( "Empty form field", req, res );
+  }
+
+  // req.sanitizeBody( "username" );
+  // req.checkBody( "password_confirm", "Your passwords do not match." ).equals( req.body.password );
 
   if ( ~reservedUsernames.indexOf( req.body.username ) ) {
-    req.flash( "error", "Username is reserved" );
-    res.json( { error: true } );
+    return throwUserError( "Username is reserved", req, res );
   }
 
-  const errors = req.validationErrors();
-  if ( errors ) {
-    req.flash( "error", errors.map( err => err.msg ) );
-    res.json( { error: true } );
-    return;
-  }
+  next();
+};
 
+exports.checkDublicateUsername = async ( req, res, next ) => {
   const db = req.body.db;
   const username = await db.collection( "users" ).findOne( { username: req.body.username } );
 
-  if ( username !== null ) {
-    req.flash( "error", "This username has already been registered." );
-    res.json( { error: true } );
+  if ( username === null ) {
     db.close();
-    return;
+    return throwUserError( "Username is already registered.", req, res );
   }
 
   next();
@@ -60,10 +54,9 @@ exports.registerUser = async ( req, res, next ) => {
 
   const response = await db.collection( "users" ).insertOne( userDocument );
   if ( response.result.ok != 1 ) {
-    req.flash( "error", "Account could not be registered." );
-    res.json( { error: true } );
     db.close();
-    return;
+    req.flash( "error", "Account could not be registered." );
+    return res.json( { error: true } );
   }
 
   req.flash( "success", "Your account has been successfully registered." );

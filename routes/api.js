@@ -17,6 +17,7 @@ router.post( "/register",
   encryption.decryptBody,
   database.connectDatabase,
   account.validateRegister,
+  // account.checkDublicateUsername,
   catchErrors( account.registerUser ),
   encryption.generateToken
 );

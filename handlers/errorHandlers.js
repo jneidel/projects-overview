@@ -23,7 +23,7 @@ exports.flashValidationErrors = ( err, req, res, next ) => {
 exports.displayErrorMsg = ( err, req, res, next ) => {
   req.flash( "error", err );
   res.json( { error: true } );
-}
+};
 
 exports.developmentErrors = ( err, req, res, next ) => {
   err.stack = err.stack || "";
@@ -47,4 +47,9 @@ exports.productionErrors = ( err, req, res, next ) => {
     message: err.message,
     error  : {},
   } );
+};
+
+exports.throwUserError = ( msg, req, res ) => {
+  req.flash( "error", msg );
+  res.json( { error: true } );
 };
