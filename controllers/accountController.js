@@ -1,22 +1,21 @@
 const mongo = require( "mongodb" ).MongoClient;
-const assert = require( "assert" );
-const md5 = require( "md5" );
-const jws = require( "jsonwebtoken" );
 const fs = require( "mz/fs" );
-const rsa = require( "node-rsa" );
-const atob = require( "atob" );
-const reservedUsernames = require( "../data/reserved-usernames" );
 const validator = require( "validator" );
+const bcrypt = require( "bcrypt" );
+const reservedUsernames = require( "../data/reserved-usernames" );
 const { throwUserError } = require( "../handlers/errorHandlers" );
 
 require( "dotenv" ).config( { path: "../variables.env" } );
 
 
 exports.validateRegister = ( req, res, next ) => {
-  if ( validator.isEmpty( req.body.username ) ||
-       validator.isEmpty( req.body.password ) ||
-       validator.isEmpty( req.body.password_confirm ) ) {
-    return throwUserError( "Empty form field", req, res );
+  try {
+    if ( validator.isEmpty( req.body.username ) ||
+         bcrypt.compareSync( "", req.body.password ) ) {
+      return throwUserError( "Empty form field", req, res );
+    }
+  } catch ( error ) {
+    return throwUserError( "Register error", req, res );
   }
 
   // req.sanitizeBody( "username" );
@@ -59,7 +58,8 @@ exports.registerUser = async ( req, res, next ) => {
     return res.json( { error: true } );
   }
 
-  req.flash( "success", "Your account has been successfully registered." );
+  req.isRegister = true;
+  req.flash( "success", "Registration successful" );
   return next();
 };
 

@@ -3,7 +3,8 @@ const fs = require( "mz/fs" );
 const rsa = require( "node-rsa" );
 const atob = require( "atob" );
 const btoa = require( "btoa" );
-const md5 = require( "md5" );
+const bcrypt = require( "bcrypt" );
+const { throwUserError } = require( "../handlers/errorHandlers" );
 
 require( "dotenv" ).config( { path: "../variables.env" } );
 
@@ -12,16 +13,23 @@ exports.decryptBody = async ( req, res, next ) => {
   const privateKey = new rsa();
   privateKey.importKey( privateKeyFile, "pkcs1-private-pem" );
 
-  function decrypt( pass ) {
+  async function decrypt( pass ) {
     pass = atob( pass );
-  	pass = privateKey.decrypt( pass, "utf8" );
-    pass = md5( pass );
+    pass = privateKey.decrypt( pass, "utf8" );
     return pass;
   }
 
-  req.body.password = decrypt( req.body.password );
+  req.body.password = await decrypt( req.body.password );
+  req.body.password = await bcrypt.hash( req.body.password, 10 );
+
+
   if ( req.body.password_confirm ) {
-    req.body.password_confirm = decrypt( req.body.password_confirm );
+    req.body.password_confirm = await decrypt( req.body.password_confirm );
+
+    if ( !bcrypt.compareSync( req.body.password_confirm, req.body.password ) ) {
+      return throwUserError( "Passwords don't match", req, res );
+    }
+    req.body.password_confirm = null;
   }
 
   return next();
@@ -30,7 +38,7 @@ exports.decryptBody = async ( req, res, next ) => {
 exports.generateToken = async ( req, res, next ) => {
   const token = await jwt.sign( { username: req.body.username }, process.env.SECRET );
 
-  if ( req.body.password_confirm ) {
+  if ( req.isRegister ) {
     return res.json( { token } );
   }
 

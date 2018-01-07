@@ -18,9 +18,8 @@ describe( "accountController", () => {
     function setupSandbox() {
       sandbox.reset();
       req.body = {
-        username        : "123",
-        password        : "123",
-        password_confirm: "123",
+        username: "123",
+        password: "123",
       };
     }
     setupSandbox();
@@ -29,22 +28,21 @@ describe( "accountController", () => {
       if ( opt.username ) {
         req.body.username = doc.username;
       }
-      if ( opt.passwords ) {
+      if ( opt.password ) {
         req.body.password = doc.password;
-        req.body.password_confirm = doc.password_confirm;
       }
     }
 
     it( "should not throw an error with valid data", () => {
       const testData = [
-        { username: "jneidel", password: "123", password_confirm: "123" },
-        { username: "Roy Osherove", password: "$%~91äüsj", password_confirm: "$%~91äüsj" },
-        { username: "pG7pAagEmDe3", password: "pG7pAagEmDe3", password_confirm: "pG7pAagEmDe3" },
+        { username: "jneidel", password: "123" },
+        { username: "Roy Osherove", password: "$%~91äüsj" },
+        { username: "pG7pAagEmDe3", password: "pG7pAagEmDe3" },
       ];
 
       testData.forEach( ( doc ) => {
         setupSandbox();
-        setupData( doc, { username: 1, passwords: 1 } );
+        setupData( doc, { username: 1, password: 1 } );
 
         controller.validateRegister( req, res, next );
 
@@ -55,16 +53,16 @@ describe( "accountController", () => {
     } );
 
     it( "should throw an error on empty fields", () => {
+      const empty = "$2a$04$47WVMwgypHPsaD6YyhUdxeZAhilvwIrFlrxawuRnVgddS9.2c3ZHK";
       const testData = [
-        { username: "jneidel", password: "", password_confirm: "123" },
-        { username: "", password: "////jk", password_confirm: "////jk" },
-        { username: "chingu", password: "this", password_confirm: "" },
-        { username: "", password: "", password_confirm: "" },
+        { username: "jneidel", password: empty },
+        { username: "", password: "////jk" },
+        { username: "", password: empty },
       ];
 
       testData.forEach( ( doc ) => {
         setupSandbox();
-        setupData( doc, { username: 1, passwords: 1 } );
+        setupData( doc, { username: 1, password: 1 } );
 
         controller.validateRegister( req, res, next );
 

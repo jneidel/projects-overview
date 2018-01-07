@@ -1,7 +1,3 @@
-const mongo = require( "mongodb" ).MongoClient;
-const assert = require( "assert" );
-const jws = require( "jsonwebtoken" );
-
 require( "dotenv" ).config( { path: "../variables.env" } );
 
 exports.renderItems = async ( req, res ) => {

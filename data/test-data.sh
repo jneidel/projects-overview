@@ -46,7 +46,7 @@ db.users.drop();
 db.users.insertOne(
 	{
 		username: "jneidel",
-		password: "202cb962ac59075b964b07152d234b70",
+		password: "$2a$10$aofxmYLhabyVqsvyvpUYduwJk1UCZIlTYUtW1Mc9x9luhiaNEc2hu",
 		logins: [],
 		settings: {},
 	}
