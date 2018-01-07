@@ -1,6 +1,6 @@
 {
   "name": "project-manager",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "None",
   "main": "app.js",
   "engines": {
@@ -10,13 +10,13 @@
     "start": "concurrently \"npm run watch\" \"npm run build\" \"npm run testing\"  --names \"💻,📦,📡\" --prefix name",
     "watch": "nodemon app.js --ignore public/scripts/ --ignore tests/",
     "build": "webpack -w",
-    "testing": "nodemon --exec 'mocha ./tests/*.test.js' --ignore public/",
     "test": "mocha ./tests/*.test.js",
-    "prod": "node app.js"
+    "testing": "nodemon --exec 'mocha ./tests/*.test.js' --ignore public/",
+    "prod": "webpack; node app.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jneidel/project-manager.git"
+    "url": "https://github.com/jneidel/project-manager.git"
   },
   "author": "",
   "license": "ISC",
