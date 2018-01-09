@@ -20,16 +20,24 @@ exports.decryptBody = async ( req, res, next ) => {
   }
 
   req.body.password = await decrypt( req.body.password );
-  req.body.password = await bcrypt.hash( req.body.password, 10 );
-
 
   if ( req.body.password_confirm ) {
     req.body.password_confirm = await decrypt( req.body.password_confirm );
+  }
 
-    if ( !bcrypt.compareSync( req.body.password_confirm, req.body.password ) ) {
-      return throwUserError( "Passwords don't match", req, res );
+  return next();
+};
+
+exports.handlePasswords = ( req, res, next ) => {
+  if ( req.body.password_confirm ) {
+    if ( req.body.password_confirm !== req.body.password ) {
+      return throwUserError( "Passwords do not match", req, res );
     }
+
+    req.body.password = bcrypt.hashSync( req.body.password, 8 );
     req.body.password_confirm = null;
+  } else { // setting passwords to null as they wont be needed anymore
+    req.body.password = null;
   }
 
   return next();

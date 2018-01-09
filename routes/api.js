@@ -8,6 +8,7 @@ const { catchErrors } = require( "../handlers/errorHandlers" );
 router.post( "/login",
   encryption.decryptBody,
   database.connectDatabase,
+  encryption.handlePasswords,
   catchErrors( account.login ),
   encryption.generateToken,
   encryption.encryptToken,

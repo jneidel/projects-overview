@@ -22,7 +22,6 @@ describe( "accountController", () => {
         password: "123",
       };
     }
-    setupSandbox();
 
     function setupData( doc, opt = {} ) {
       if ( opt.username ) {
