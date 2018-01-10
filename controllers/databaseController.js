@@ -118,6 +118,11 @@ exports.getAccountData = async ( req, res, next ) => {
 };
 
 exports.connectDatabase = async ( req, res, next ) => {
+  /*
+   * In: -
+   * Out: db 
+   * Throw: connection error
+   */
   req.body.db = await mongo.connect( process.env.DATABASE )
     .catch( () => { throwUserError( "Database connection error", req, res ); } );
 

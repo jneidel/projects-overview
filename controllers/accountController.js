@@ -9,6 +9,14 @@ require( "dotenv" ).config( { path: "../variables.env" } );
 
 
 exports.validateRegister = ( req, res, next ) => {
+  /*
+   * In: username, password
+   * Out: -
+   * Throw:
+   *  - username empty
+   *  - password empty
+   *  - username reserved
+   */
   try {
     if ( validator.isEmpty( req.body.username ) ||
          bcrypt.compareSync( "", req.body.password ) ) {
@@ -29,6 +37,11 @@ exports.validateRegister = ( req, res, next ) => {
 };
 
 exports.checkDublicateUsername = async ( req, res, next ) => {
+  /*
+   * In: db
+   * Out: -
+   * Throw: dublicate username
+   */
   const db = req.body.db;
   const username = await db.collection( "users" ).findOne( { username: req.body.username } );
 
@@ -130,6 +143,10 @@ exports.updateUsername = async ( req, res, next ) => {
 };
 
 exports.createCookie = ( req, res, next ) => {
+  /*
+   * In: -
+   * Out: response: token as cookie 
+   */
   res.clearCookie( "token" );
   res.cookie( "token", req.token, {
     maxAge  : 30 * 24 * 60 * 60 * 1000,

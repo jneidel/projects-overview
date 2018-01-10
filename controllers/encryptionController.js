@@ -9,6 +9,10 @@ const { throwUserError } = require( "../handlers/errorHandlers" );
 require( "dotenv" ).config( { path: "../variables.env" } );
 
 exports.decryptBody = async ( req, res, next ) => {
+  /*
+   * In: encrypted passwords
+   * Out: decrypted passwords
+   */
   const privateKeyFile = await fs.readFile( "./private-key.pem" );
   const privateKey = new rsa();
   privateKey.importKey( privateKeyFile, "pkcs1-private-pem" );
@@ -29,6 +33,15 @@ exports.decryptBody = async ( req, res, next ) => {
 };
 
 exports.handlePasswords = ( req, res, next ) => {
+  /*
+   * In: decrypted passwords
+   * Out:
+   *  register: hashed password
+   *  login: -
+   * Throw:
+   *  register: not matching passwords 
+   *  login: -
+   */
   if ( req.body.password_confirm ) {
     if ( req.body.password_confirm !== req.body.password ) {
       return throwUserError( "Passwords do not match", req, res );
@@ -44,6 +57,12 @@ exports.handlePasswords = ( req, res, next ) => {
 };
 
 exports.generateToken = async ( req, res, next ) => {
+  /*
+   * In: username
+   * Out:
+   *  register: response: token
+   *  login: token
+   */
   const token = await jwt.sign( { username: req.body.username }, process.env.SECRET );
 
   if ( req.isRegister ) {
@@ -56,6 +75,11 @@ exports.generateToken = async ( req, res, next ) => {
 };
 
 exports.verifyToken = async ( req, res, next ) => {
+  /*
+   * In: token
+   * Out: username
+   * Throw: token not verified
+   */
   const verifiedToken = await req.verifyJwt( req.body.token );
   if ( !verifiedToken ) { return res.json( { error: true } ); }
   req.body.username = verifiedToken.username;
@@ -64,6 +88,10 @@ exports.verifyToken = async ( req, res, next ) => {
 };
 
 exports.encryptToken = async ( req, res, next ) => {
+  /*
+   * In: token
+   * Out: encrypted token
+   */
   const publicKeyFile = await fs.readFile( "./public/public-key.pem" );
   const publicKey = new rsa();
   publicKey.importKey( publicKeyFile, "pkcs8-public-pem" );
