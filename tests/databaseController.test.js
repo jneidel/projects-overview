@@ -1,7 +1,7 @@
 const expect = require( "expect" );
 const sinon = require( "sinon" );
 const mockery = require( "mockery" );
-const { mongo } = require( "./mockeryTestData" );
+const { mockReset, mongo } = require( "./mockeryTestData" );
 
 /* global describe it */
 
@@ -9,9 +9,9 @@ mockery.enable( {
   warnOnUnregistered: false,
 } );
 
-mongo.reset();
-
+mongo.setup();
 mockery.registerMock( "mongodb", mongo );
+
 const controller = require( "../controllers/databaseController" );
 
 describe( "databaseController", () => {

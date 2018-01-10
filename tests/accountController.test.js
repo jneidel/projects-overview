@@ -1,6 +1,6 @@
 const expect = require( "expect" );
 const sinon = require( "sinon" );
-const { mongo } = require( "./mockeryTestData" );
+const { mockReset, mongo } = require( "./mockeryTestData" );
 
 /* global describe it */
 
@@ -105,7 +105,8 @@ describe( "accountController", () => {
   describe( "checkDublicateUsername", () => {
     it( "should call findOne with req.body.username", async () => {
       sandbox.reset();
-      mongo.reset();
+      mockReset();
+      mongo.setup();
       req.body = {
         db      : mongo,
         username: "456",
