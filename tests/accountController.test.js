@@ -105,7 +105,7 @@ describe( "accountController", () => {
   describe( "checkDublicateUsername", () => {
     it( "should call findOne with req.body.username", async () => {
       sandbox.reset();
-      mongo.resetSpies();
+      mongo.reset();
       req.body = {
         db      : mongo,
         username: "456",

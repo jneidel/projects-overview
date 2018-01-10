@@ -1,12 +1,14 @@
 const sinon = require( "sinon" );
 
+const mockerySandbox = sinon.createSandbox();
+
 const mongo = {
-  connect   : sinon.stub(),
+  connect   : mockerySandbox.stub(),
   connect_re: {},
-  collection: sinon.stub(),
-  findOne   : sinon.stub(),
-  close     : sinon.spy(),
-  catch     : sinon.spy(),
+  collection: mockerySandbox.stub(),
+  findOne   : mockerySandbox.stub(),
+  close     : mockerySandbox.spy(),
+  catch     : mockerySandbox.spy(),
   setup     : () => {
     mongo.MongoClient = { connect: mongo.connect };
 
@@ -17,17 +19,12 @@ const mongo = {
 
     mongo.findOne.returns( Promise.resolve( { result: { ok: 1 } } ) );
   },
-  resetSpies: () => {
-    mongo.connect.reset();
-    mongo.collection.reset();
-    mongo.findOne.reset();
-    mongo.close.reset();
-    mongo.catch.reset();
-
-    mongo.setup();
-  },
 };
 
-mongo.setup();
+mongo.reset = () => {
+  mockerySandbox.reset();
+  mongo.setup();
+}
 
+exports.mockerySandbox = mockerySandbox;
 exports.mongo = mongo;

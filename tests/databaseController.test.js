@@ -1,14 +1,15 @@
 const expect = require( "expect" );
 const sinon = require( "sinon" );
 const mockery = require( "mockery" );
-const mockeryData = require( "./mockeryTestData" );
-const mongo = mockeryData.mongo;
+const { mongo } = require( "./mockeryTestData" );
 
 /* global describe it */
 
 mockery.enable( {
   warnOnUnregistered: false,
 } );
+
+mongo.reset();
 
 mockery.registerMock( "mongodb", mongo );
 const controller = require( "../controllers/databaseController" );
