@@ -17,22 +17,22 @@ exports.decryptBody = async ( req, res, next ) => {
   const privateKey = new rsa();
   privateKey.importKey( privateKeyFile, "pkcs1-private-pem" );
 
-  async function decrypt( pass ) {
+  function decrypt( pass ) {
     pass = atob( pass );
     pass = privateKey.decrypt( pass, "utf8" );
     return pass;
   }
 
-  req.body.password = await decrypt( req.body.password );
+  req.body.password = decrypt( req.body.password );
 
   if ( req.body.password_confirm ) {
-    req.body.password_confirm = await decrypt( req.body.password_confirm );
+    req.body.password_confirm = decrypt( req.body.password_confirm );
   }
 
   return next();
 };
 
-exports.handlePasswords = ( req, res, next ) => {
+exports.handlePasswords = ( req, res, next ) => { // eslint-disable-line no-irregular-whitespace
   /*
    * In: decrypted passwords
    * Out:

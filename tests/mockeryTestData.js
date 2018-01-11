@@ -36,7 +36,7 @@ const mongo = { // mock obj for mongodb functions
       mongod.users[0].logins.push( update.$push.logins.time );
     }
   },
-  setup     : ( data = {}, mongodData = {} ) => {
+  setup: ( data = {}, mongodData = {} ) => {
     /*
      * In: mongo, mongod setup data
      * Out: mongo obj ready for insertion as a mock

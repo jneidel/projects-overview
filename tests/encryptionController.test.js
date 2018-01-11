@@ -9,7 +9,7 @@ mockery.enable( {
   warnOnUnregistered: false,
 } );
 
-rsaMock.setup();
+rsaMock.setup( tokenStates );
 class rsa {
   constructor() {
     return rsaMock;
@@ -27,7 +27,7 @@ const next = sandbox.spy();
 
 function setupSandbox( data ) {
   sandbox.reset();
-  rsaMock.setup();
+  rsaMock.setup( tokenStates );
   req = data;
   req.flash = sandbox.spy();
 }

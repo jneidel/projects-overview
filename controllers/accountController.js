@@ -27,7 +27,8 @@ exports.validateRegister = ( req, res, next ) => {
   }
 
   // req.sanitizeBody( "username" );
-  // req.checkBody( "password_confirm", "Your passwords do not match." ).equals( req.body.password );
+  // req.checkBody( "password_confirm", 
+  // "Your passwords do not match." ).equals( req.body.password );
 
   if ( ~reservedUsernames.indexOf( req.body.username ) ) {
     return throwUserError( "Username is reserved", req, res );
