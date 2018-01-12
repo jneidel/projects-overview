@@ -1,7 +1,7 @@
 require( "dotenv" ).config( { path: "../variables.env" } );
 
 exports.renderItems = async ( req, res ) => {
-  res.render( "main", { title: "Project Manager" } );
+  res.render( "main", { title: "Project Manager", cards: req.cards } );
 };
 
 exports.login = ( req, res ) => {

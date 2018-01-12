@@ -37,7 +37,7 @@ exports.handlePasswords = ( req, res, next ) => { // eslint-disable-line no-irr
    * In: decrypted passwords
    * Out:
    *  register: hashed password
-   *  login: -
+   *  login: null password
    * Throw:
    *  register: not matching passwords 
    *  login: -
@@ -71,7 +71,7 @@ exports.generateToken = async ( req, res, next ) => {
 
   req.token = token;
 
-  next();
+  return next();
 };
 
 exports.verifyToken = async ( req, res, next ) => {
@@ -80,7 +80,7 @@ exports.verifyToken = async ( req, res, next ) => {
    * Out: username
    * Throw: token not verified
    */
-  const verifiedToken = await req.verifyJwt( req.body.token );
+  const verifiedToken = await req.verifyJwt( req.token );
   if ( !verifiedToken ) { return res.json( { error: true } ); }
   req.body.username = verifiedToken.username;
 
@@ -100,5 +100,23 @@ exports.encryptToken = async ( req, res, next ) => {
   token = btoa( token );
   req.token = token;
 
-  next();
+  return next();
 };
+
+exports.decryptToken = async ( req, res, next ) => {
+  /* 
+   * reversing encryptToken
+   *
+   * In: token
+   * Out: decrypted token
+   */
+  const privateKeyFile = await fs.readFile( "./private-key.pem" );
+  const privateKey = new rsa();
+  privateKey.importKey( privateKeyFile, "pkcs1-private-pem" );
+
+  let token = atob( req.token );
+  token = privateKey.decrypt( token, "utf8" );
+  req.token = token;
+
+  return next();
+}

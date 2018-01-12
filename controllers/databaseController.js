@@ -126,5 +126,21 @@ exports.connectDatabase = async ( req, res, next ) => {
   req.body.db = await mongo.connect( process.env.DATABASE )
     .catch( () => { throwUserError( "Database connection error", req, res ); } );
 
-  next();
+  return next();
+};
+
+exports.getCards = async ( req, res, next ) => {
+  /*
+   * In: db, username
+   * Out: card data for username
+   */
+  const query = { username: req.body.username };
+  const projection = { _id: 1, title: 1, front: 1, back: 1, position: 1 };
+
+  req.cards = await req.body.db.collection( "cards" )
+    .find( query, projection )
+    .sort( { position: 1 } )
+    .toArray();
+
+  return next();
 };
