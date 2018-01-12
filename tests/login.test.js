@@ -23,6 +23,7 @@ mockery.registerMock( "mongodb", mongo );
 const account = require( "../controllers/accountController" );
 const database = require( "../controllers/databaseController" );
 const encryption = require( "../controllers/encryptionController" );
+const header = require( "../controllers/headerController.js" );
 
 const sandbox = sinon.sandbox.create();
 let req;
@@ -47,7 +48,7 @@ function setupSandbox( doc ) {
 }
 
 describe( "login", () => {
-  it( "should not throw on valid login", async () => {
+  it( "should not throw on valid login", () => {
     const testData = [
       { req: {
         body: { username: "jneidel", password: "WjlWVmRnaXM4dE1pOG4yZ0x6RjBNcXdWcEZhRU0xN0dQN3VSS3NMUGtNQlI3SE9jbEpKdmVaVncxamNOeFRSQ0FYYk5BS0xTSGFYYXBiSlVaYm5MV241Sk4vc3BPbFpXcStmbUlqR0kwbEtneHorakh0aEpHd3NKRVhaVEFDZWFnQmFXcE05NmlKQStmdE5vUDBBUzR3YUVmVFhHV2lYQjJaTi9iTklEdnpJaEZSditMcjBEd0RIQnMrMHF3TytjUG5vZy9iSGdTQTBIcFpMaWppN091RDVsaWRUcStxdkpHY1M4UW10MXE1UkdDTHBUSiswWmxHUXQreHVOd3JzRmNOZXZjQWxJNktoK1NYMXlCMUdaR05DNTZvMjVmcG5ZaW1lSmdTbzh1NHMrUnA1V2Z5b01NN1JFeC9ETlVCaDBiV1RxekdSVk5VaElIVEhtbjdxemh3PT0=" } },
@@ -70,7 +71,7 @@ describe( "login", () => {
         testData[i].mongod.users = [ { username, password: hashedPass, logins: [] } ];
       }
     } )();
-
+    
     testData.forEach( async ( doc ) => {
       setupSandbox( { req: doc.req, res: doc.res, mongo: doc.mongo, mongod: doc.mongod } );
 
@@ -80,9 +81,10 @@ describe( "login", () => {
       await account.login( req, res, () => {} );
       await encryption.generateToken( req, res, () => {} );
       await encryption.encryptToken( req, res, () => {} );
-      account.createCookie( req, res, () => {} );
+      header.createCookie( req, res, () => {} );
 
       expect( req.body.username ).toBe( doc.req.body.username );
+      expect( req.body.password ).toBe( null );
       expect( req.token ).toBeTruthy( "expect token" );
       expect( res.cookie.callCount ).toBe( 1, "expect cookie" );
       expect( res.json.calledWith( { success: true } ) ).toBeTruthy( "expect success res.json" );

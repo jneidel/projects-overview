@@ -28,7 +28,7 @@ app.use( require( "connect-flash" )() );
 app.use( ( req, res, next ) => {
   res.locals.h = require( "./helpers/helpers" ); // eslint-disable-line global-require
   res.locals.flashes = req.flash();
-  next();
+  return next();
 } );
 
 app.use( ( req, res, next ) => {

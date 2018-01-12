@@ -6,7 +6,7 @@ const encryption = require( "../controllers/encryptionController" );
 const database = require( "../controllers/databaseController" );
 const { catchErrors } = require( "../handlers/errorHandlers" );
 
-router.get( "/app", 
+router.get( "/app",
   header.parseCookie,
   encryption.decryptToken,
   encryption.verifyToken,

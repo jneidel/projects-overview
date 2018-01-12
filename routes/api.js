@@ -3,6 +3,7 @@ const router = express.Router();
 const account = require( "../controllers/accountController" );
 const database = require( "../controllers/databaseController" );
 const encryption = require( "../controllers/encryptionController" );
+const header = require( "../controllers/headerController.js" );
 const { catchErrors } = require( "../handlers/errorHandlers" );
 
 router.post( "/login",
@@ -12,7 +13,7 @@ router.post( "/login",
   catchErrors( account.login ),
   encryption.generateToken,
   encryption.encryptToken,
-  account.createCookie
+  header.createCookie
 );
 router.post( "/register",
   encryption.decryptBody,

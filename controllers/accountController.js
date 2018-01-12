@@ -34,7 +34,7 @@ exports.validateRegister = ( req, res, next ) => {
     return throwUserError( "Username is reserved", req, res );
   }
 
-  next();
+  return next();
 };
 
 exports.checkDublicateUsername = async ( req, res, next ) => {
@@ -51,7 +51,7 @@ exports.checkDublicateUsername = async ( req, res, next ) => {
     return throwUserError( "Username is already registered.", req, res );
   }
 
-  next();
+  return next();
 };
 
 exports.registerUser = async ( req, res, next ) => {
@@ -140,20 +140,5 @@ exports.updateUsername = async ( req, res, next ) => {
 
   req.body.username = req.body.newUsername;
   req.flash( "success", "Changed username" );
-  next();
-};
-
-exports.createCookie = ( req, res, next ) => {
-  /*
-   * In: -
-   * Out: response: token as cookie 
-   */
-  res.clearCookie( "token" );
-  res.cookie( "token", req.token, {
-    maxAge  : 30 * 24 * 60 * 60 * 1000,
-    httpOnly: true,
-    Secure  : true,
-  } );
-
-  res.json( { success: true } );
+  return next();
 };

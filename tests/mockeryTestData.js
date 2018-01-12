@@ -43,13 +43,13 @@ const mongo = { // mock obj for mongodb functions
      */
     mongo.MongoClient = { connect: mongo.connect };
 
-    mongo.connect.returns( Promise.resolve( mongo ) );
+    mongo.connect.resolves( mongo );
     mongo.collection.returns( mongo );
 
-    mongo.findOne.returns( Promise.resolve( data.findOne ) );
+    mongo.findOne.resolves( data.findOne );
 
     mongo.find.returns( { toArray: mongo.toArray } );
-    mongo.toArray.returns( Promise.resolve( data.find ) );
+    mongo.toArray.resolves( data.find );
 
     mongod.setup( mongodData );
   },

@@ -126,7 +126,7 @@ describe( "accountController", () => {
       json       : () => {},
     };
 
-    it( "should remove old cookie and create new one", () => {
+    xit( "should remove old cookie and create new one", () => {
       controller.createCookie( { token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpuZWlkZWwiLCJpYXQiOjE1MTUwOTgxMTJ9.DrhM7_qMnhWaeKtRwg37oy-git4OAJ7-b1FMBTAmUdc" }, res, () => {} );
 
       expect( res.clearCookie.calledWith( "token" ) ).toBeTruthy( "expected to remove token" );
