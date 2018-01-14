@@ -1,7 +1,12 @@
 require( "dotenv" ).config( { path: "../variables.env" } );
 
 exports.renderItems = async ( req, res ) => {
-  res.render( "main", { title: "Project Manager", cards: req.cards } );
+  res.render( "main", {
+    title   : "App",
+    cards   : req.cards,
+    username: req.body.username,
+    homepage: "app",
+  } );
 };
 
 exports.login = ( req, res ) => {
@@ -13,11 +18,7 @@ exports.register = ( req, res ) => {
 };
 
 exports.logout = ( req, res ) => {
-  if ( req.query.unverified ) {
-    req.flash( "error", "Unverified token" );
-  } else {
-    req.flash( "success", "You have been sucessfully logged out." );
-  }
+  eq.flash( "success", "You have been sucessfully logged out." );
 
   res.render( "logout", { title: "Logout" } );
 };

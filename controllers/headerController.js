@@ -21,3 +21,9 @@ exports.parseCookie = ( req, res, next ) => {
 
   return next();
 };
+
+exports.removeCookie = ( req, res, next ) => {
+  res.clearCookie( "token" );
+
+  next();
+};

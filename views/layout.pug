@@ -17,13 +17,14 @@ html
                 img#header-logo( src="img/logo.png" )
           .header-underline
         #nav-right
-          .nav-container#nav-link-register
-            a.header-link-register( href="/register" ) Register
-            .header-underline
-          .nav-container
-            a.header-link-login( href="/login" ) Login
-            .header-underline
-        
+          block status
+            .nav-container#nav-link-register
+              a.header-link-register( href="/register" ) Register
+              .header-underline
+            .nav-container
+              a.header-link-login( href="/login" ) Login
+              .header-underline
+          
     #content
       block flashes
         if locals.flashes

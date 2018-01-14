@@ -2,37 +2,7 @@
 /* eslint-disable no-alert */
 /* url, $, axios, globally set in state.js */
 
-const token = localStorage.getItem( "token" );
-if ( !token ) {
-  window.location.replace( `${url}/login` );
-}
-
-// Render cards from database
-async function drawItems() {
-  const cardsRequest = await axios.post( "/api/getitems", { token } );
-  const cards = cardsRequest.data;
-
-  if ( cards.error ) {
-    window.location.replace( `${url}/logout?unverified=true` );
-  }
-
-  function createVue() {
-    try {
-      var vue = new Vue( {
-        el  : "#cards",
-        data: {
-          cards,
-        },
-      } );
-    } catch ( e ) {
-      setTimeout( createVue, 100 );
-    }
-  }
-  createVue();
-}
-
 // Listening for item/title changes
-
 const setListener = {
   item( item ) {
     let originalItem = item.value;
@@ -214,7 +184,5 @@ function setEventListeners() {
   }
 }
 
-( async function main() { // to ensure drawing items before setting listeners
-  await drawItems();
-  setEventListeners();
-} )();
+setEventListeners();
+document.getElementsByClassName( "header-link-home" )[0].href = "/app";

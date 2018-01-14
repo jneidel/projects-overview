@@ -101,7 +101,6 @@ async function accountHandler( func ) {
         password        : formData.password,
         password_confirm: formData.password_confirm,
       } );
-      localStorage.setItem( "repsonse", JSON.stringify( response.data ) );
       checkResponse( response.data, "register" );
     } );
   } catch ( e ) {}
@@ -109,47 +108,23 @@ async function accountHandler( func ) {
 accountHandler();
 
 // Display username in place of login/register
-let token = localStorage.getItem( "token" );
-if ( token ) {
-  const base64Url = token.split( "." )[1];
-  const base64 = base64Url.replace( "-", "+" ).replace( "_", "/" );
-  token = JSON.parse( window.atob( base64 ) );
+// Underline hover
+const usernameElem = document.getElementsByClassName( "nav-username" )[0];
+const underlineElem = usernameElem.parentElement.childNodes[3].style;
 
-  let username = token.username;
-  if ( username.length > 20 ) {
-    username = username.slice( 0, 20 );
-  }
+underlineElem.maxWidth = "0";
+underlineElem.height = "3px";
+underlineElem.background = "#F5F7FA";
+underlineElem.transition = "max-width 0.2s ease-in-out";
+usernameElem.style.margin = "0";
 
-  document.getElementById( "nav-right" ).innerHTML = `
-        <div class="nav-container">
-            <a href="/account" class="nav-username">${username}</a>
-            <div class="header-underline"></div>
-		</div>
-		<div class="nav-container">
-			<a href="/logout">
-				<img class="logout-icon" src="/img/logout.png">	
-			</a>
-		</div>
-    `;
-
-  // Underline hover
-  const usernameElem = document.getElementsByClassName( "nav-username" )[0];
-  const underlineElem = usernameElem.parentElement.childNodes[3].style;
-
+usernameElem.addEventListener( "mouseover", ( e ) => {
+  underlineElem.maxWidth = "100%";
+} );
+usernameElem.addEventListener( "mouseleave", ( e ) => {
   underlineElem.maxWidth = "0";
-  underlineElem.height = "3px";
-  underlineElem.background = "#F5F7FA";
-  underlineElem.transition = "max-width 0.2s ease-in-out";
-  usernameElem.style.margin = "0";
+} );
 
-  usernameElem.addEventListener( "mouseover", ( e ) => {
-    underlineElem.maxWidth = "100%";
-  } );
-  usernameElem.addEventListener( "mouseleave", ( e ) => {
-    underlineElem.maxWidth = "0";
-  } );
-
-  document.getElementsByClassName( "header-link-home" )[0].href = "/app";
-}
+document.getElementsByClassName( "header-link-home" )[0].href = "/app";
 
 exports.getFormData = getFormData;
