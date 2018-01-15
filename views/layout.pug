@@ -10,14 +10,23 @@ html
   body
     #header
       block header
+        - if ( !homepage ) { homepage = "/" }
         #nav-left
-          a.header-link-home( href="/" )
+          a.header-link-home( href=homepage )
             img#header-icon( src="img/icon.png" )
             div#header-logo-wrapper 
                 img#header-logo( src="img/logo.png" )
           .header-underline
         #nav-right
-          block status
+          if username
+            - if ( username.length > 20 ) { username = username.slice( 0, 20 ); }
+            .nav-container
+              a.nav-username( href="/account" )=username
+              .header-underline
+            .nav-container
+              a( href="/logout" )
+                img.logout-icon( src="/img/logout.png" )
+          else
             .nav-container#nav-link-register
               a.header-link-register( href="/register" ) Register
               .header-underline

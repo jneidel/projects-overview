@@ -185,4 +185,3 @@ function setEventListeners() {
 }
 
 setEventListeners();
-document.getElementsByClassName( "header-link-home" )[0].href = "/app";

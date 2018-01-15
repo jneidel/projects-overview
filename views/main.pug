@@ -5,15 +5,6 @@ include mixins/_cards
 block styles
   link( rel="stylesheet", href="/styles/main.css" )
 
-block status
-  - if ( username.length > 20 ) { username = username.slice( 0, 20 ); }
-  .nav-container
-    a.nav-username( href="/account" )=username
-    .header-underline
-  .nav-container
-    a( href="/logout" )
-      img.logout-icon( src="/img/logout.png" )
-
 block content
   #cards
     each card in cards

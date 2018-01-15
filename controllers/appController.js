@@ -1,20 +1,28 @@
 require( "dotenv" ).config( { path: "../variables.env" } );
 
-exports.renderItems = async ( req, res ) => {
+exports.renderApp = async ( req, res ) => {
   res.render( "main", {
     title   : "App",
     cards   : req.cards,
     username: req.body.username,
-    homepage: "app",
+    homepage: req.homepage,
   } );
 };
 
 exports.login = ( req, res ) => {
-  res.render( "login", { title: "Login" } );
+  res.render( "login", { 
+    title: "Login",
+    username: req.body.username,
+    homepage: req.homepage,
+    } );
 };
 
 exports.register = ( req, res ) => {
-  res.render( "register", { title: "Register" } );
+  res.render( "register", {
+    title: "Register",
+    username: req.body.username,
+    homepage: req.homepage,
+  } );
 };
 
 exports.logout = ( req, res ) => {
@@ -24,7 +32,11 @@ exports.logout = ( req, res ) => {
 };
 
 exports.account = ( req, res, next ) => {
-  res.render( "account", { title: "Account" } );
+  res.render( "account", {
+    title: "Account",
+    username: req.body.username,
+    homepage: req.homepage,
+  } );
 };
 
 exports.welcome = ( req, res ) => {

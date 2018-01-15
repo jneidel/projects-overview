@@ -77,12 +77,13 @@ exports.generateToken = async ( req, res, next ) => {
 exports.verifyToken = async ( req, res, next ) => {
   /*
    * In: token
-   * Out: username
+   * Out: username, homepage
    * Throw: token not verified
    */
   const verifiedToken = await req.verifyJwt( req.token );
   if ( !verifiedToken ) { return res.json( { error: true } ); }
   req.body.username = verifiedToken.username;
+  req.homepage = "/app";
 
   return next();
 };
