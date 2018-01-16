@@ -1,6 +1,5 @@
 /* globals Vue url axios */
 /* eslint-disable no-alert */
-/* url, $, axios, globally set in state.js */
 
 // Listening for item/title changes
 const setListener = {
@@ -47,7 +46,6 @@ const setListener = {
         }
 
         await axios.post( "/api/update", {
-          token,
           updatedItem: item.value,
           oldItem    : originalItem,
           cardSide,

@@ -1,15 +1,6 @@
-/* global Vue axios encryptWithPubKey url */
-
-const token = localStorage.getItem( "token" );
-
-if ( !token ) {
-  window.location.replace( `${url}/login` );
-}
+/* global Vue axios encryptWithPubKey url $ */
 
 async function renderAccount() {
-  const accountDataRequest = await axios.post( "/api/account-data", { token } );
-  const accountData = accountDataRequest.data;
-
   if ( accountData.error ) {
     window.location.replace( `${url}/logout?unverified=true` );
   }
@@ -59,4 +50,4 @@ function setEventListeners() {
 ( async function main() { // listeners will only work when set after vue
   await renderAccount();
   setEventListeners();
-} )();
+} );

@@ -1,7 +1,7 @@
 require( "dotenv" ).config( { path: "../variables.env" } );
 
 exports.renderApp = async ( req, res ) => {
-  res.render( "main", {
+  res.render( "app", {
     title   : "App",
     cards   : req.cards,
     username: req.body.username,
@@ -10,30 +10,30 @@ exports.renderApp = async ( req, res ) => {
 };
 
 exports.login = ( req, res ) => {
-  res.render( "login", { 
-    title: "Login",
+  res.render( "login", {
+    title   : "Login",
     username: req.body.username,
     homepage: req.homepage,
-    } );
+  } );
 };
 
 exports.register = ( req, res ) => {
   res.render( "register", {
-    title: "Register",
+    title   : "Register",
     username: req.body.username,
     homepage: req.homepage,
   } );
 };
 
 exports.logout = ( req, res ) => {
-  eq.flash( "success", "You have been sucessfully logged out." );
+  req.flash( "success", "You have been sucessfully logged out." );
 
   res.render( "logout", { title: "Logout" } );
 };
 
 exports.account = ( req, res, next ) => {
   res.render( "account", {
-    title: "Account",
+    title   : "Account",
     username: req.body.username,
     homepage: req.homepage,
   } );
