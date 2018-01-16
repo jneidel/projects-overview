@@ -43,8 +43,7 @@ exports.checkDublicateUsername = async ( req, res, next ) => {
    * Out: -
    * Throw: dublicate username
    */
-  const db = req.body.db;
-  const username = await db.collection( "users" ).findOne( { username: req.body.username } );
+  const username = await req.db.collection( "users" ).findOne( { username: req.body.username } );
 
   if ( username !== null ) {
     db.close();
@@ -55,8 +54,6 @@ exports.checkDublicateUsername = async ( req, res, next ) => {
 };
 
 exports.registerUser = async ( req, res, next ) => {
-  const db = req.body.db;
-
   const userDocument = {
     username: req.body.username.trim(),
     // email: req.body.email.trim().toLowerCase(), validator.isEmail(), unique
@@ -65,7 +62,7 @@ exports.registerUser = async ( req, res, next ) => {
     logins 	: [],
   };
 
-  const response = await db.collection( "users" ).insertOne( userDocument );
+  const response = await req.db.collection( "users" ).insertOne( userDocument );
   if ( response.result.ok != 1 ) {
     db.close();
     req.flash( "error", "Account could not be registered." );
@@ -79,9 +76,8 @@ exports.registerUser = async ( req, res, next ) => {
 exports.login = async ( req, res, next ) => {
   const username = req.body.username;
   const password = req.body.password;
-  const db = req.body.db;
 
-  const docs = await db.collection( "users" ).find( { username } ).toArray();
+  const docs = await req.db.collection( "users" ).find( { username } ).toArray();
 
   if ( !docs || docs.length === 0 ) {
     throwUserError( "Invalid username", req, res );
@@ -95,9 +91,7 @@ exports.login = async ( req, res, next ) => {
   const loginDetails = {
     time: Date.now(),
   };
-  db.collection( "users" ).updateOne( { username }, { $push: { logins: loginDetails } } );
-
-  db.close();
+  req.db.collection( "users" ).updateOne( { username }, { $push: { logins: loginDetails } } );
 
   req.flash( "success", "Successful login" );
   return next();
@@ -115,8 +109,6 @@ exports.updateUsername = async ( req, res, next ) => {
   const newUsername = req.body.newUsername;
   const password = req.body.password;
 
-  const db = await mongo.connect( process.env.DATABASE );
-
   if ( req.body.username === req.body.newUsername ) {
     // handle no changes
   }
@@ -126,12 +118,12 @@ exports.updateUsername = async ( req, res, next ) => {
 
   // check password / name empty
 
-  db.collection( "users" ).updateOne(
+  req.db.collection( "users" ).updateOne(
     { username },
     { $set: { username: newUsername } }
   );
 
-  db.collection( "cards" ).updateMany(
+  req.db.collection( "cards" ).updateMany(
     { username },
     { $set: { username: newUsername } }
   );

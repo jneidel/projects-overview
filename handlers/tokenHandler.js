@@ -21,4 +21,10 @@ exports.verifyTokenAPI = async ( req, res, next ) => {
   } catch ( e ) {
     throwUserError( "Error verifiying the token", req, res );
   }
-}
+};
+
+exports.setupToken = async ( req, res, next ) => {
+  await encryption.generateToken( req, res, () => {} );
+  await encryption.encryptToken( req, res, () => {} );
+  return header.createCookie( req, res, next );
+};

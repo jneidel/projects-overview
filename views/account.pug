@@ -8,7 +8,7 @@ block content
     .settings-container
       h2#tss Change username
       label( for="username" ) Username
-      input( name="username" type="text" v-bind:value="username" placeholder="Username" )
+      input( name="username" type="text" value=username placeholder="Username" )
       label( for="confirmation_username" ) Password (to confirm)
       input( name="confirmation_username" type="password" placeholder="Password" )
     .settings-container
@@ -21,6 +21,6 @@ block content
       input( name="password_confirm" type="password" placeholder="Password" )
 
 block scripts
-  script( src="/scripts/account.js" )
-  script( src="/scripts/vue.js" )
+  script( src="/scripts/accountHandler.js" )
+  script( src="/scripts/axios.js" )
   script( src="/scripts/encryptWithPubKey.js" )

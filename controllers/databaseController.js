@@ -123,7 +123,7 @@ exports.connectDatabase = async ( req, res, next ) => {
    * Out: db 
    * Throw: connection error
    */
-  req.body.db = await mongo.connect( process.env.DATABASE )
+  req.db = await mongo.connect( process.env.DATABASE )
     .catch( () => { throwUserError( "Database connection error", req, res ); } );
 
   return next();
@@ -137,7 +137,7 @@ exports.getCards = async ( req, res, next ) => {
   const query = { username: req.body.username };
   const projection = { _id: 1, title: 1, front: 1, back: 1, position: 1 };
 
-  req.cards = await req.body.db.collection( "cards" )
+  req.cards = await req.db.collection( "cards" )
     .find( query, projection )
     .sort( { position: 1 } )
     .toArray();

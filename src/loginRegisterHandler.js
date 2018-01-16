@@ -41,15 +41,6 @@ async function accountHandler( func ) {
     return null;
   }
 
-  function checkResponse( res, errorRedirect ) {
-    if ( res.error ) {
-      window.location.replace( `${url}/${errorRedirect}` );
-    }
-    if ( res.success ) {
-      window.location.replace( `${url}/app` );
-    }
-  }
-
   try {
     document.getElementById( "login" ).addEventListener( "click", async ( e ) => {
       const formData = await getFormData( {

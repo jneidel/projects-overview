@@ -9,10 +9,11 @@ const prod = process.env.PROD || false;
 
 module.exports = {
   entry: {
-    account             : "./src/account.js",
+    accountHandler      : "./src/accountHandler.js",
     appClickHandler     : "./src/appClickHandler.js",
-    encryptWithPubKey   : "./src/encryptWithPubKey.js",
-    globals             : "./src/globals.js",
+    axios               : "./src/globalVariables/axios.js",
+    encryptWithPubKey   : "./src/globalVariables/encryptWithPubKey.js",
+    globals             : "./src/globalVariables/globals.js",
     loginRegisterHandler: "./src/loginRegisterHandler.js",
   },
   output: {

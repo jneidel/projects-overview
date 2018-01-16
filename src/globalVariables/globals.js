@@ -1,9 +1,12 @@
-// Setting global variables to be shared across scripts
+/* 
+ * Setting global variables to be shared across scripts.
+ * 
+ * Axios and encryptWithPubKey have been excluded because
+ * of their size and will only be pulled in if needed.
+ */ 
 
 /* eslint-disable */
 window.url = "http://localhost:8080";
-
-window.axios = require( "axios" );
 
 // bling.js
 window.$ = document.querySelectorAll.bind( document );
@@ -15,4 +18,13 @@ NodeList.prototype.on = NodeList.prototype.addEventListener = function( name, fn
   this.forEach( ( elem, i ) => {
     elem.on( name, fn );
   } );
+};
+
+window.checkResponse = ( res, errorRedirect ) => {
+  if ( res.error ) {
+    window.location.replace( `${url}/${errorRedirect}` );
+  }
+  if ( res.success ) {
+    window.location.replace( `${url}/app` );
+  }
 };

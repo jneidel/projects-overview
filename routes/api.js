@@ -5,15 +5,13 @@ const database = require( "../controllers/databaseController" );
 const encryption = require( "../controllers/encryptionController" );
 const header = require( "../controllers/headerController.js" );
 const { catchErrors } = require( "../handlers/errorHandlers" );
-const { verifyTokenAPI } = require( "../handlers/tokenHandler" );
+const { verifyTokenAPI, setupToken } = require( "../handlers/tokenHandler" );
 
 router.post( "/login",
   encryption.decryptBody,
   database.connectDatabase,
   catchErrors( account.login ),
-  encryption.generateToken,
-  encryption.encryptToken,
-  header.createCookie
+  setupToken
 );
 router.post( "/register",
   encryption.decryptBody,
@@ -22,9 +20,7 @@ router.post( "/register",
   account.validateRegister,
   account.checkDublicateUsername,
   catchErrors( account.registerUser ),
-  encryption.generateToken,
-  encryption.encryptToken,
-  header.createCookie
+  setupToken
 );
 router.post( "/update",
   verifyTokenAPI,
@@ -52,8 +48,9 @@ router.post( "/account-data",
 );
 router.post( "/update-username",
   verifyTokenAPI,
+  database.connectDatabase,
   account.updateUsername,
-  encryption.generateToken
+  setupToken
 );
 
 router.get( "/", ( req, res ) => {
