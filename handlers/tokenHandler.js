@@ -1,17 +1,13 @@
-module.exports = async function verify( token ) {
-  const jwt = require( "jsonwebtoken" );
+const header = require( "../controllers/headerController.js" );
+const encryption = require( "../controllers/encryptionController" );
 
-  require( "dotenv" ).config( { path: "../variables.env" } );
-
-  function trim( str, regex ) {
-    return str.replace( new RegExp( regex, "g" ), "" );
-  }
-  token = trim( token, "\"" );
-
+exports.verifyToken = async ( req, res, next ) => {
   try {
-    const res = await jwt.verify( token, process.env.SECRET );
-    return { username: res.username };
-  } catch ( error ) {
-    return false;
+    header.parseToken( req, res, () => {} );
+    await encryption.decryptToken( req, res, () => {} );
+    await encryption.verifyToken( req, res, next );
+  } catch ( e ) { // no cookie available
+    req.body.username = undefined;
+    next();
   }
 };

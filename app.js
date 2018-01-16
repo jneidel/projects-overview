@@ -31,11 +31,6 @@ app.use( ( req, res, next ) => {
   return next();
 } );
 
-app.use( ( req, res, next ) => {
-  req.verifyJwt = require( "./handlers/tokenHandler" ); // eslint-disable-line global-require
-  return next();
-} );
-
 app.use( "/", require( "./routes/index" ) );
 app.use( "/api", require( "./routes/api" ) );
 

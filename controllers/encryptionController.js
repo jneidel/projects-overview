@@ -74,13 +74,27 @@ exports.generateToken = async ( req, res, next ) => {
   return next();
 };
 
+async function verifyJwt( token ) {
+  function trim( str, regex ) {
+    return str.replace( new RegExp( regex, "g" ), "" );
+  }
+  token = trim( token, "\"" );
+
+  try {
+    const res = await jwt.verify( token, process.env.SECRET );
+    return { username: res.username };
+  } catch ( error ) {
+    return false;
+  }
+}
+
 exports.verifyToken = async ( req, res, next ) => {
   /*
    * In: token
    * Out: username, homepage
    * Throw: token not verified
    */
-  const verifiedToken = await req.verifyJwt( req.token );
+  const verifiedToken = await verifyJwt( req.token );
   if ( !verifiedToken ) { return res.json( { error: true } ); }
   req.body.username = verifiedToken.username;
   req.homepage = "/app";

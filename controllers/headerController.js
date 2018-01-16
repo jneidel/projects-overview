@@ -15,7 +15,7 @@ exports.createCookie = ( req, res, next ) => {
   res.json( { success: true } );
 };
 
-exports.parseCookie = ( req, res, next ) => {
+exports.parseToken = ( req, res, next ) => {
   const cookies = cookieParser.parse( req.headers.cookie );
   req.token = cookies.token;
 

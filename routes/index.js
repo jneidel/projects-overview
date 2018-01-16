@@ -1,38 +1,25 @@
 const express = require( "express" );
 const router = express.Router();
 const app = require( "../controllers/appController" );
-const header = require( "../controllers/headerController.js" );
-const encryption = require( "../controllers/encryptionController" );
 const database = require( "../controllers/databaseController" );
-const { catchErrors } = require( "../handlers/errorHandlers" );
-
-async function parseDecryptVerifyToken( req, res, next ) {
-  try {
-    header.parseCookie( req, res, () => {} );
-    await encryption.decryptToken( req, res, () => {} );
-    await encryption.verifyToken( req, res, next );
-  } catch ( e ) { // no cookie available
-    req.body.username = undefined;
-    next();
-  }
-}
+const { verifyToken } = require( "../handlers/tokenHandler" );
 
 router.get( "/app",
-  parseDecryptVerifyToken,
+  verifyToken,
   database.connectDatabase,
   database.getCards,
   app.renderApp
 );
 router.get( "/login", 
-  parseDecryptVerifyToken,
+  verifyToken,
   app.login
 );
 router.get( "/register",
-  parseDecryptVerifyToken,
+  verifyToken,
   app.register
 );
 router.get( "/account",
-  parseDecryptVerifyToken,
+  verifyToken,
   app.account
 );
 router.get( "/",
