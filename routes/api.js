@@ -5,12 +5,11 @@ const database = require( "../controllers/databaseController" );
 const encryption = require( "../controllers/encryptionController" );
 const header = require( "../controllers/headerController.js" );
 const { catchErrors } = require( "../handlers/errorHandlers" );
-const { verifyToken } = require( "../handlers/tokenHandler" );
+const { verifyTokenAPI } = require( "../handlers/tokenHandler" );
 
 router.post( "/login",
   encryption.decryptBody,
   database.connectDatabase,
-  encryption.handlePasswords,
   catchErrors( account.login ),
   encryption.generateToken,
   encryption.encryptToken,
@@ -18,40 +17,41 @@ router.post( "/login",
 );
 router.post( "/register",
   encryption.decryptBody,
+  encryption.handlePasswords,
   database.connectDatabase,
   account.validateRegister,
-  // account.checkDublicateUsername,
+  account.checkDublicateUsername,
   catchErrors( account.registerUser ),
   encryption.generateToken,
   encryption.encryptToken,
   header.createCookie
 );
 router.post( "/update",
-  encryption.verifyToken,
+  verifyTokenAPI,
   database.updateDatabase
 );
 router.post( "/generate-cardId",
-  encryption.verifyToken,
+  verifyTokenAPI,
   database.generateCardId
 );
 router.post( "/add-new-card",
-  encryption.verifyToken,
+  verifyTokenAPI,
   database.addNewCard
 );
 router.post( "/getitems",
-  encryption.verifyToken,
+  verifyTokenAPI,
   database.getItems
 );
 router.post( "/add-new-item",
-  encryption.verifyToken,
+  verifyTokenAPI,
   database.addNewItem
 );
 router.post( "/account-data",
-  encryption.verifyToken,
+  verifyTokenAPI,
   database.getAccountData
 );
 router.post( "/update-username",
-  encryption.verifyToken,
+  verifyTokenAPI,
   account.updateUsername,
   encryption.generateToken
 );

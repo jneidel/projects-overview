@@ -27,11 +27,7 @@ const setListener = {
         }
 
         if ( lastItem === item ) {
-          axios.post( "/api/add-new-item", {
-            token,
-            cardSide,
-            title,
-          } );
+          axios.post( "/api/add-new-item", { cardSide, title } );
 
           if ( titleNode.length == 3 ) {
             var newItemWrapper = parentNode.children[2].appendChild( document.createElement( "li" ) );
@@ -73,11 +69,7 @@ const setListener = {
           parent[0].children[0].value = title.value;
         }
 
-        await axios.post( "/api/update", {
-          token,
-          updatedTitle: title.value,
-          title       : originalTitle,
-        } );
+        await axios.post( "/api/update", { updatedTitle: title.value, title: originalTitle } );
 
         originalTitle = title.value;
       }
@@ -163,13 +155,10 @@ function setEventListeners() {
     newCard.className = "card addCardContainer";
     newCard.addEventListener( "dblclick", cardListenerCallback );
 
-    const cardIdRequest = await axios.post( "/api/generate-cardId", { token } );
+    const cardIdRequest = await axios.post( "/api/generate-cardId" );
     const cardId = cardIdRequest.data._id;
 
-    axios.post( "/api/add-new-card", {
-      token,
-      _id: cardId,
-    } );
+    axios.post( "/api/add-new-card", { _id: cardId } );
   }
 
   for ( const card of cards ) {
