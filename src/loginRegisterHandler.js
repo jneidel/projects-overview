@@ -45,10 +45,6 @@ async function accountHandler( func ) {
     if ( res.error ) {
       window.location.replace( `${url}/${errorRedirect}` );
     }
-    if ( res.token ) {
-      localStorage.setItem( "token", res.token );
-      window.location.replace( `${url}/app` );
-    }
     if ( res.success ) {
       window.location.replace( `${url}/app` );
     }
@@ -87,25 +83,3 @@ async function accountHandler( func ) {
   } catch ( e ) {}
 }
 accountHandler();
-
-// Display username in place of login/register
-// Underline hover
-const usernameElem = document.getElementsByClassName( "nav-username" )[0];
-const underlineElem = usernameElem.parentElement.childNodes[3].style;
-
-underlineElem.maxWidth = "0";
-underlineElem.height = "3px";
-underlineElem.background = "#F5F7FA";
-underlineElem.transition = "max-width 0.2s ease-in-out";
-usernameElem.style.margin = "0";
-
-usernameElem.addEventListener( "mouseover", ( e ) => {
-  underlineElem.maxWidth = "100%";
-} );
-usernameElem.addEventListener( "mouseleave", ( e ) => {
-  underlineElem.maxWidth = "0";
-} );
-
-document.getElementsByClassName( "header-link-home" )[0].href = "/app";
-
-exports.getFormData = getFormData;

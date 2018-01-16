@@ -5,6 +5,7 @@ const database = require( "../controllers/databaseController" );
 const encryption = require( "../controllers/encryptionController" );
 const header = require( "../controllers/headerController.js" );
 const { catchErrors } = require( "../handlers/errorHandlers" );
+const { verifyToken } = require( "../handlers/tokenHandler" );
 
 router.post( "/login",
   encryption.decryptBody,
@@ -21,7 +22,9 @@ router.post( "/register",
   account.validateRegister,
   // account.checkDublicateUsername,
   catchErrors( account.registerUser ),
-  encryption.generateToken
+  encryption.generateToken,
+  encryption.encryptToken,
+  header.createCookie
 );
 router.post( "/update",
   encryption.verifyToken,

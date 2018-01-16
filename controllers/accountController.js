@@ -46,7 +46,7 @@ exports.checkDublicateUsername = async ( req, res, next ) => {
   const db = req.body.db;
   const username = await db.collection( "users" ).findOne( { username: req.body.username } );
 
-  if ( username === null ) {
+  if ( username !== null ) {
     db.close();
     return throwUserError( "Username is already registered.", req, res );
   }
@@ -72,7 +72,6 @@ exports.registerUser = async ( req, res, next ) => {
     return res.json( { error: true } );
   }
 
-  req.isRegister = true;
   req.flash( "success", "Registration successful" );
   return next();
 };
@@ -83,17 +82,16 @@ exports.login = async ( req, res, next ) => {
   const db = req.body.db;
 
   const docs = await db.collection( "users" ).find( { username } ).toArray();
-  if ( !docs || docs.length === 0 ) {
-    req.flash( "error", "Incorrect username." );
-    res.json( { error: true } );
-  }
-  /* if ( docs[0].password !== password ) {
-    req.flash( "error", "Incorrect password." );
-    res.json( { error: true } );
-    db.close();
-    return;
-  } */
 
+  if ( !docs || docs.length === 0 ) {
+    throwUserError( "Invalid username", req, res );
+  }
+  const passwordHash = docs[0].password;
+
+  if ( !bcrypt.compareSync( password, passwordHash ) ) {
+    throwUserError( "Invalid password", req, res );
+  }
+  
   const loginDetails = {
     time: Date.now(),
   };
@@ -101,7 +99,7 @@ exports.login = async ( req, res, next ) => {
 
   db.close();
 
-  req.flash( "success", "You have been successfully logged in." );
+  req.flash( "success", "Successful login" );
   return next();
 };
 

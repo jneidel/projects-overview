@@ -28,7 +28,7 @@ exports.register = ( req, res ) => {
 exports.logout = ( req, res ) => {
   req.flash( "success", "You have been sucessfully logged out." );
 
-  res.render( "logout", { title: "Logout" } );
+  res.redirect( "/login" );
 };
 
 exports.account = ( req, res, next ) => {

@@ -35,23 +35,15 @@ exports.decryptBody = async ( req, res, next ) => {
 exports.handlePasswords = ( req, res, next ) => { // eslint-disable-line no-irregular-whitespace
   /*
    * In: decrypted passwords
-   * Out:
-   *  register: hashed password
-   *  login: null password
-   * Throw:
-   *  register: not matching passwords 
-   *  login: -
+   * Out: register: hashed password
+   * Throw: not matching passwords 
    */
-  if ( req.body.password_confirm ) {
-    if ( req.body.password_confirm !== req.body.password ) {
-      return throwUserError( "Passwords do not match", req, res );
-    }
-
-    req.body.password = bcrypt.hashSync( req.body.password, 8 );
-    req.body.password_confirm = null;
-  } else { // setting passwords to null as they wont be needed anymore
-    req.body.password = null;
+  if ( req.body.password_confirm !== req.body.password ) {
+    return throwUserError( "Passwords do not match", req, res );
   }
+
+  req.body.password = bcrypt.hashSync( req.body.password, 8 );
+  req.body.password_confirm = null;
 
   return next();
 };
@@ -64,11 +56,6 @@ exports.generateToken = async ( req, res, next ) => {
    *  login: token
    */
   const token = await jwt.sign( { username: req.body.username }, process.env.SECRET );
-
-  if ( req.isRegister ) {
-    return res.json( { token } );
-  }
-
   req.token = token;
 
   return next();
@@ -95,7 +82,9 @@ exports.verifyToken = async ( req, res, next ) => {
    * Throw: token not verified
    */
   const verifiedToken = await verifyJwt( req.token );
-  if ( !verifiedToken ) { return res.json( { error: true } ); }
+  if ( !verifiedToken ) {
+    throwUserError( "Invalid token", req, res );
+  }
   req.body.username = verifiedToken.username;
   req.homepage = "/app";
 

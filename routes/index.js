@@ -1,6 +1,7 @@
 const express = require( "express" );
 const router = express.Router();
 const app = require( "../controllers/appController" );
+const header = require( "../controllers/headerController" );
 const database = require( "../controllers/databaseController" );
 const { verifyToken } = require( "../handlers/tokenHandler" );
 
@@ -25,6 +26,9 @@ router.get( "/account",
 router.get( "/",
   app.welcome
 );
-router.get( "/logout", app.logout );
+router.get( "/logout",
+  header.removeCookie,
+  app.logout
+);
 
 module.exports = router;
