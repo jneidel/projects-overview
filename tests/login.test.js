@@ -8,22 +8,13 @@ const { mongo, mongod, rsaMock, tokenStates } = require( "./mockeryTestData" );
 mockery.enable( {
   warnOnUnregistered: false,
 } );
-
-rsaMock.setup( tokenStates );
-class rsa {
-  constructor() {
-    return rsaMock;
-  }
-}
-// mongo.setup();
-
-// mockery.registerMock( "node-rsa", rsa );
 mockery.registerMock( "mongodb", mongo );
 
 const account = require( "../controllers/accountController" );
 const database = require( "../controllers/databaseController" );
 const encryption = require( "../controllers/encryptionController" );
 const header = require( "../controllers/headerController.js" );
+const { setupToken } = require( "../handlers/tokenHandler" );
 
 const sandbox = sinon.sandbox.create();
 let req;
@@ -36,7 +27,7 @@ function setupSandbox( doc ) {
    * In: testData document, req, res, next, mongo
    * Out: reset and configured globals req, res, next
    */
-  sandbox.reset();
+  sandbox.restore();
   mongo.setup( doc.mongo, doc.mongod );
   req = doc.req;
   res = doc.res;
@@ -79,9 +70,7 @@ describe( "login", () => {
       await database.connectDatabase( req, res, () => {} );
       encryption.handlePasswords( req, res, () => {} );
       await account.login( req, res, () => {} );
-      await encryption.generateToken( req, res, () => {} );
-      await encryption.encryptToken( req, res, () => {} );
-      header.createCookie( req, res, () => {} );
+      await setupToken( req, res, () => {} );
 
       expect( req.body.username ).toBe( doc.req.body.username );
       expect( req.body.password ).toBe( null );

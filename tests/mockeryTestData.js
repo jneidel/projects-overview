@@ -3,7 +3,7 @@ const sinon = require( "sinon" );
 const mockerySandbox = sinon.createSandbox();
 
 exports.mockReset = () => {
-  mockerySandbox.reset();
+  mockerySandbox.restore();
 };
 
 const mongod = { // simulated database
