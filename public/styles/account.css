@@ -17,26 +17,56 @@ body {
   width: auto;
   margin-top: 25px;
 }
+.settings-container:first-of-type {
+  margin-top: 0;
+}
 h2 {
   padding-bottom: 10px;
-  border-bottom: 1.5px solid rgba( 96, 125, 139, 0.8 );
+  box-shadow: 0 5px 10px -5px #F5F7FA;
   width: 60vw;
+  min-width: 350px;
+}
+label {
+  display: inline-block;
+  box-sizing: border-box;
+  width: 150px;
+  padding-bottom: 3px;
+  padding-right: 10px;
+}
+input, .input-button {
+  box-sizing: border-box;
+  width: 200px;
+  height: 40px;
+  border: 1px solid #F5F7FA;
+  border-radius: 3px;
+  font-size: 18px;
+  background: transparent;
+  color: #F5F7FA;
+  outline: none;
 }
 input {
-  background-color: rgba(96, 125, 139, 0.205);
-  border: none;
-  outline: none;
-  color: #F5F7FA;
-  font-size: 18px;
-  width: auto;
-  caret-color: #333; /* Cursor color */
   padding: 7px;
   margin-bottom: 10px;
 }
-label {
+.input-button {
   display: block;
-  padding-bottom: 3px;
+  margin-left: 150px;
+  background: transparent;
+  transition: background 0.4s ease-out;
 }
-.settings-container:first-of-type {
-  margin-top: 0;
+.input-button:hover {
+  border: 1px solid #dbdde0;
+  background: #dbdde05b;
+  cursor: pointer;
+}
+.settings-container .input-group:last-of-type {
+  /* Split of confirm password */
+  padding-top: 15px;
+}
+
+@media all and ( max-width: 580px ) {
+  #content {
+    align-items: center;
+    margin-top: 40px;
+  }
 }
