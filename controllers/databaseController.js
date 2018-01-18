@@ -1,4 +1,5 @@
 const mongo = require( "mongodb" ).MongoClient;
+const mongodb = require( "mongodb" );
 const assert = require( "assert" );
 const { throwUserError } = require( "../handlers/errorHandlers" );
 
@@ -123,7 +124,7 @@ exports.connectDatabase = async ( req, res, next ) => {
    * Out: db 
    * Throw: connection error
    */
-  req.db = await mongo.connect( process.env.DATABASE )
+  req.db = await mongodb.MongoClient.connect( process.env.DATABASE )
     .catch( () => { throwUserError( "Database connection error", req, res ); } );
 
   return next();

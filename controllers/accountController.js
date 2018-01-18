@@ -46,7 +46,6 @@ exports.checkDublicateUsername = async ( req, res, next ) => {
   const username = await req.db.collection( "users" ).findOne( { username: req.body.username } );
 
   if ( username !== null ) {
-    db.close();
     return throwUserError( "Username is already registered.", req, res );
   }
 
@@ -64,7 +63,6 @@ exports.registerUser = async ( req, res, next ) => {
 
   const response = await req.db.collection( "users" ).insertOne( userDocument );
   if ( response.result.ok != 1 ) {
-    db.close();
     req.flash( "error", "Account could not be registered." );
     return res.json( { error: true } );
   }
@@ -74,20 +72,26 @@ exports.registerUser = async ( req, res, next ) => {
 };
 
 exports.login = async ( req, res, next ) => {
+  /*
+   * In: username, unhashed password
+   * Out: login time, null password
+   * Throw: invalid username, invalid password
+   */
   const username = req.body.username;
   const password = req.body.password;
 
   const docs = await req.db.collection( "users" ).find( { username } ).toArray();
 
   if ( !docs || docs.length === 0 ) {
-    throwUserError( "Invalid username", req, res );
+    return throwUserError( "Invalid username", req, res );
   }
   const passwordHash = docs[0].password;
 
   if ( !bcrypt.compareSync( password, passwordHash ) ) {
-    throwUserError( "Invalid password", req, res );
+    return throwUserError( "Invalid password", req, res );
   }
-  
+  req.body.password = null;
+
   const loginDetails = {
     time: Date.now(),
   };

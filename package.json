@@ -7,7 +7,7 @@
     "node": "9.2.0"
   },
   "scripts": {
-    "start": "concurrently \"npm run watch\" \"npm run build\" \"npm run test\"  --names \"💻,📦,📡\" --prefix name",
+    "start": "concurrently \"npm run watch\" \"npm run build\" \"npm run testing\"  --names \"💻,📦,📡\" --prefix name",
     "watch": "nodemon app.js --ignore public/scripts/ --ignore tests/",
     "build": "webpack -w",
     "test": "mocha ./tests/*.test.js",
