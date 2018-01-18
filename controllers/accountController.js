@@ -3,7 +3,7 @@ const fs = require( "mz/fs" );
 const validator = require( "validator" );
 const bcrypt = require( "bcrypt" );
 const reservedUsernames = require( "../data/reserved-usernames" );
-const { throwUserError } = require( "../handlers/errorHandlers" );
+const { throwUserError, throwUserErrorWithState } = require( "../handlers/errorHandlers" );
 
 require( "dotenv" ).config( { path: "../variables.env" } );
 
@@ -90,7 +90,6 @@ exports.login = async ( req, res, next ) => {
   if ( !bcrypt.compareSync( password, passwordHash ) ) {
     return throwUserError( "Invalid password", req, res );
   }
-  req.body.password = null;
 
   const loginDetails = {
     time: Date.now(),
@@ -113,14 +112,29 @@ exports.updateUsername = async ( req, res, next ) => {
   const newUsername = req.body.newUsername;
   const password = req.body.password;
 
-  if ( req.body.username === req.body.newUsername ) {
-    // handle no changes
+  if ( newUsername === "" ) {
+    return throwUserErrorWithState( "Username can't be empty", { username: newUsername }, "/account", req, res );
   }
-  // check password
+  if ( password === "" ) {
+    return throwUserErrorWithState( "Password can't be empty", { username: newUsername }, "/account", req, res );
+  }
+  if ( username === newUsername ) {
+    req.flash( "info", "Username are indentical" );
+    return res.json( { info: true } );
+  }
 
-  // check dublicate name
+  const usernameExits = await req.db.collection( "users" ).find( { newUsername } ).toArray();
 
-  // check password / name empty
+  if ( !usernameExits || usernameExits.length !== 0 ) {
+    return throwUserErrorWithState( "Username is already in use", { username: newUsername }, "/account", req, res );
+  }
+
+  const docs = await req.db.collection( "users" ).find( { username } ).toArray();
+  const passwordHash = docs[0].password;
+
+  if ( !bcrypt.compareSync( password, passwordHash ) ) {
+    return throwUserErrorWithState( "Invalid password", { username: newUsername }, "/account", req, res );
+  }
 
   req.db.collection( "users" ).updateOne(
     { username },
@@ -133,6 +147,6 @@ exports.updateUsername = async ( req, res, next ) => {
   );
 
   req.body.username = req.body.newUsername;
-  req.flash( "success", "Changed username" );
+  req.flash( "success", "Username has been changed" );
   return next();
 };

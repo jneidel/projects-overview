@@ -8,13 +8,13 @@ const { catchErrors } = require( "../handlers/errorHandlers" );
 const { verifyTokenAPI, setupToken } = require( "../handlers/tokenHandler" );
 
 router.post( "/login",
-  encryption.decryptBody,
+  encryption.decryptPasswords,
   database.connectDatabase,
   catchErrors( account.login ),
   setupToken
 );
 router.post( "/register",
-  encryption.decryptBody,
+  encryption.decryptPasswords,
   encryption.handlePasswords,
   database.connectDatabase,
   account.validateRegister,
@@ -49,6 +49,7 @@ router.post( "/account-data",
 router.post( "/update-username",
   verifyTokenAPI,
   database.connectDatabase,
+  encryption.decryptPasswords,
   account.updateUsername,
   setupToken
 );

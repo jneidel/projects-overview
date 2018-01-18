@@ -32,11 +32,17 @@ exports.logout = ( req, res ) => {
 };
 
 exports.account = ( req, res, next ) => {
-  res.render( "account", {
+  const data = {
     title   : "Account",
     username: req.body.username,
     homepage: req.homepage,
-  } );
+  };
+
+  if ( req.query && req.query.username ) {
+    data.newUsername = req.query.username;
+  }
+
+  res.render( "account", data );
 };
 
 exports.welcome = ( req, res ) => {

@@ -8,7 +8,7 @@ const { throwUserError } = require( "../handlers/errorHandlers" );
 
 require( "dotenv" ).config( { path: "../variables.env" } );
 
-exports.decryptBody = async ( req, res, next ) => {
+exports.decryptPasswords = async ( req, res, next ) => {
   /*
    * In: encrypted passwords
    * Out: decrypted passwords

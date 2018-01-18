@@ -9,7 +9,7 @@ block content
       h2#tss Change username
       .input-group
         label( for="username" ) Username
-        input( name="username" type="text" value=username placeholder="Username" )
+        input( name="username" type="text" value=`${ newUsername || username }` placeholder="Username" )
       .input-group
         label( for="confirmation_username" ) Confirm changes
         input( name="confirmation_username" type="password" placeholder="Password" )

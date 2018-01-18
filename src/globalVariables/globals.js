@@ -23,8 +23,11 @@ NodeList.prototype.on = NodeList.prototype.addEventListener = function( name, fn
 window.checkResponse = ( res, errorRedirect ) => {
   if ( res.error ) {
     window.location.replace( `${url}/${errorRedirect}` );
-  }
-  if ( res.success ) {
+  } else if ( res.success ) {
     window.location.replace( `${url}/app` );
+  } else if ( res.info ) {
+    window.location.reload();
+  } else if ( res.state ) {
+    window.location.replace( url + res.state );
   }
 };

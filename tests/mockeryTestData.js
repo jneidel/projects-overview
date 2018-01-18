@@ -33,7 +33,7 @@ const mongo = { // mock obj for mongodb functions
     const update = args[1];
 
     if ( update && update.$push && update.$push.logins ) { // checks if insert login time login
-        mongod.users[0].logins.push( update.$push.logins.time );
+      mongod.users[0].logins.push( update.$push.logins.time );
     }
   },
   setup: ( data = {}, mongodData = {} ) => {

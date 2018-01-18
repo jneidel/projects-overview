@@ -53,3 +53,18 @@ exports.throwUserError = ( msg, req, res ) => {
   req.flash( "error", msg );
   res.json( { error: true } );
 };
+
+exports.throwUserErrorWithState = ( msg, state, redirectUrl, req, res ) => {
+  req.flash( "error", msg );
+
+  function serialize( obj ) {
+    const str = [];
+    for( let p in obj )
+      if ( obj.hasOwnProperty( p)) {
+        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+      }
+    return str.join("&");
+  }
+
+  res.json( { state: redirectUrl + "?" + serialize( state ) } );
+}

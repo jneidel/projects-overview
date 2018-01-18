@@ -64,7 +64,7 @@ function setupTestData() {
 }
 
 async function runLoginProcess( req, res ) {
-  await encryption.decryptBody( req, res, () => {} );
+  await encryption.decryptPasswords( req, res, () => {} );
   await database.connectDatabase( req, res, () => {} );
   await account.login( req, res, () => {} );
   await setupToken( req, res, () => {} );

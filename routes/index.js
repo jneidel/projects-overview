@@ -11,7 +11,7 @@ router.get( "/app",
   database.getCards,
   app.renderApp
 );
-router.get( "/login", 
+router.get( "/login",
   verifyToken,
   app.login
 );
