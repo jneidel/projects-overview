@@ -3,4 +3,5 @@ package-lock.json
 variables.env
 private-key.pem
 public/scripts
+public/styles
 todo.md
