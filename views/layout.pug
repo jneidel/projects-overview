@@ -45,5 +45,12 @@ html
       #inner
         block content
 
-    script( src="/scripts/globals.js" )
     block scripts
+
+    style.
+      html {
+        box-sizing: border-box;
+      }
+      *:not( img ), *:before, *:after {
+        box-sizing: inherit;
+      }
