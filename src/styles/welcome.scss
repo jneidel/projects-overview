@@ -10,19 +10,20 @@ body {
 	color: #F5F7FA;
 	display: flex;
 	justify-content: center;
-	align-items: center;
-}
-#hero::before {
-	width: 100vw;
-	height: 500px;
-	background-image: linear-gradient( 26deg, #15B7E4,  #3BECAB 75% );
-	background-repeat: no-repeat;
-	background-position: 0 50%;
-	transform: skewY( -3.2deg );
-	position: absolute;
-	z-index: -1;
-	top: -6%;
-	content: "";
+  align-items: center;
+
+  &::before {
+    width: 100vw;
+    height: 500px;
+    background-image: linear-gradient( 26deg, #15B7E4,  #3BECAB 75% );
+    background-repeat: no-repeat;
+    background-position: 0 50%;
+    transform: skewY( -3.2deg );
+    position: absolute;
+    z-index: -1;
+    top: -6%;
+    content: "";
+  }
 }
 
 /* Get started button */

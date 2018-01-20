@@ -2,65 +2,61 @@
 
 const webpack = require( "webpack" );
 const pathModule = require( "path" );
-const minify = require( "babel-minify-webpack-plugin" );
+const minifyModule = require( "babel-minify-webpack-plugin" );
+const ExtractTextPlugin = require( "extract-text-webpack-plugin" );
 
 require( "dotenv" ).config( { path: "variables.env" } );
 const prod = process.env.PROD || false;
 
+/* loaders */
+const scss = {
+  test: /\.scss$/,
+  loader: ExtractTextPlugin.extract( "raw-loader!sass-loader" ),
+};
+
+const babel = {
+  test: /\.js$/,
+  use : [ {
+    loader: "babel-loader",
+    options: { presets: [ "babel-preset-env" ] },
+  } ],
+};
+
+/* plugins */
+const uglify = new webpack.optimize.UglifyJsPlugin( {
+  compress: { warnings: false }
+} );
+
+const minify = new minifyModule( {}, { comments: false } );
+
+function bundleCss( out ) {
+  return new ExtractTextPlugin( `../styles/${out}.bundle.css` );
+};
+
+/* Set module */
 const config = { // common config
   module: {
-    loaders: prod ? [
-      {
-        test: /\.js$/,
-        use : [ {
-          loader: "babel-loader",
-          options: { presets: [ "babel-preset-env" ] },
-        } ],
-      },
-    ] : [],
+    loaders: prod ?
+      [ babel, scss ] :
+      [ scss ]
   },
-  plugins: prod ? [
-    new minify( {}, { comments: false } ),
-    new webpack.optimize.UglifyJsPlugin( {
-      compress: { warnings: false }
-    } ),
-  ] : [],
 }
 
+/* Set entry, output, plugins */
 const path = pathModule.resolve( __dirname, "public/scripts" );
+const res = [];
 
-const app = Object.assign( {}, config, {
-  name: "/app",
-  entry: "./src/scripts/bundles/app.bundle.js",
-  output: {
-    path, filename: "app.bundle.js",
-  },
+[ "app", "account", "loginRegister", "welcome" ].forEach( ( name ) => {
+  res.push( Object.assign( {}, config, { // Combine config and new obj
+    name: `/${name}`,
+    entry: `./src/bundles/${name}.bundle.js`,
+    output: {
+      path, filename: `${name}.bundle.js`,
+    },
+    plugins: prod ?
+      [ minify, uglify, bundleCss( name ) ] :
+      [ bundleCss( name ) ]
+  } ) );
 } );
 
-const account = Object.assign( {}, config, {
-  name: "/account",
-  entry: "./src/scripts/bundles/account.bundle.js",
-  output: {
-    path, filename: "account.bundle.js"
-  },
-} );
-
-const loginRegister = Object.assign( {}, config, {
-  name: "/login/register",
-  entry: "./src/scripts/bundles/loginRegister.bundle.js",
-  output: {
-    path, filename: "loginRegister.bundle.js"
-  },
-} );
-
-const welcome = Object.assign( {}, config, {
-  name: "/",
-  entry: "./src/scripts/bundles/welcome.bundle.js",
-  output: {
-    path, filename: "welcome.bundle.js"
-  },
-} );
-
-module.exports = [
-  app, account, loginRegister, welcome
-];
+module.exports = res;

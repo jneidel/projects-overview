@@ -1,6 +1,6 @@
 require( "dotenv" ).config( { path: "../variables.env" } );
 
-exports.renderApp = async ( req, res ) => {
+exports.app = async ( req, res ) => {
   res.render( "app", {
     title   : "App",
     cards   : req.cards,

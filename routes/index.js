@@ -9,7 +9,7 @@ router.get( "/app",
   verifyToken,
   database.connectDatabase,
   database.getCards,
-  app.renderApp
+  app.app
 );
 router.get( "/login",
   verifyToken,

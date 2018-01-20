@@ -9,9 +9,8 @@
   "scripts": {
     "start": "concurrently \"npm run watch\" \"npm run build\" \"npm run testing\"  --names \"💻,📦,📡\" --prefix name",
     "watch": "nodemon app.js --ignore public/scripts/ --ignore tests/",
-    "build": "concurrently \"npm run webpack\" \"npm run scss\" --names \"📦,💄\"",
+    "build": "npm run webpack",
     "webpack": "webpack -w",
-    "scss": "node-sass src/styles/ -o public/styles/ -w",
     "test": "mocha ./tests/*.test.js",
     "testing": "nodemon --exec 'mocha ./tests/*.test.js' --ignore public/",
     "prod": "webpack; node app.js"
@@ -49,10 +48,13 @@
     "babel-preset-env": "^1.6.1",
     "concurrently": "^3.5.1",
     "expect": "^1.20.2",
+    "extract-text-webpack-plugin": "^3.0.2",
     "mocha": "^4.1.0",
     "mockery": "^2.1.0",
     "node-sass": "^4.7.2",
     "nodemon": "^1.14.11",
+    "raw-loader": "^0.5.1",
+    "sass-loader": "^6.0.6",
     "sinon": "^4.1.6",
     "supertest": "^3.0.0",
     "webpack": "^3.10.0"
