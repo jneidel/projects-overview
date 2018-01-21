@@ -4,28 +4,26 @@ block styles
   link( rel="stylesheet", href="/styles/account.bundle.css" )
 
 block content
-  #settings
-    .settings-container
-      h2#tss Change username
-      .input-group
-        label( for="username" ) Username
-        input( name="username" type="text" value=`${ newUsername || username }` placeholder="Username" )
-      .input-group
-        label( for="confirmation_username" ) Confirm changes
-        input( name="confirmation_username" type="password" placeholder="Password" )
-      button.input-button( name="button_username" ) Submit
-    .settings-container
-      h2 Change password
-      .input-group
-        label( for="password" ) Password
-        input( name="password" type="password" placeholder="New password" )
-      .input-group
-        label( for="password_confirm" ) Repeat password
-        input( name="password_confirm" type="password" placeholder="New password" )
-      .input-group
-        label( for="previous_password" ) Confirm changes
-        input( name="previous_password" type="password" placeholder="Password" )
-      button.input-button( name="button_password" ) Submit
+  h2 Change username
+  .input-group
+    label( for="username" ) Username
+    input( name="username" type="text" value=`${ newUsername || username }` )
+  .input-group
+    label( for="confirmation_username" ) Confirm changes
+    input( name="confirmation_username" type="password" )
+  button( name="button_username" ) Submit
+  hr
+  h2 Change password
+  .input-group
+    label( for="password" ) Password
+    input( name="password" type="password" )
+  .input-group
+    label( for="password_confirm" ) Repeat password
+    input( name="password_confirm" type="password" )
+  .input-group
+    label( for="previous_password" ) Confirm changes
+    input( name="previous_password" type="password" )
+  button( name="button_password" ) Submit
 
 block scripts
   script( src="/scripts/account.bundle.js" )

@@ -5,11 +5,13 @@ block styles
 
 block content
   h1 Register
-  form.login( action="/register" method="POST" )
-    input.fields( name="username" type="text" placeholder="Username" required value=`${ username || "" }` )
-    // input.fields( name="email" type="email" placeholder="Email Address" required )
-    input.fields( name="password" type="password" placeholder="Password" required value=`${ password || "" }` )
-    input.fields( name="password_confirm" type="password" placeholder="Confirm Password" required value=`${ password_confirm || ""}` )
+  label( for="username" ) Username
+  input( name="username" type="text" required )
+  // input.fields( name="email" type="email" placeholder="Email Address" required )
+  label( for="password" ) Password
+  input( name="password" type="password" required )
+  label( for="password_confirm" ) Confirm password
+  input( name="password_confirm" type="password" required )
   button.button#register Register
   .dots
     img( src="img/dots.png" )

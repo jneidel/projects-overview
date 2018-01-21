@@ -1,0 +1,22 @@
+@import "../_variables.scss";
+
+/* Prefix form */
+
+@mixin form-input( $width, $padding, $margin-bottom, $label-font ) {
+  display: block;
+  width: $width;
+  font-size: 18px;  
+  color: $white;
+  background: transparent;
+  border: 1px solid $white;
+  border-radius: 3px;
+  caret-color: $white;
+  outline: none;
+  transition: box-shadow 0.3s ease-in;
+  padding: $padding;
+  margin-bottom: $margin-bottom - $label-font;
+
+  &:focus {
+    box-shadow: 0 0 7px $white;
+  }
+}

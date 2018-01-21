@@ -5,9 +5,10 @@ block styles
 
 block content
   h1 Login
-  form.login( action="/login" method="POST" )
-    input.fields( name="username" type="text" placeholder="Username" required )
-    input.fields( name="password" type="password" placeholder="Password" required )
+  label( for="username" ) Username
+  input( name="username" type="text" required )
+  label( for="password" ) Password
+  input( name="password" type="password" required )
   button.button#login Log In
   .dots
     img( src="img/dots.png" )

@@ -1,54 +1,44 @@
+@import "mixins/_patterns.scss";
+@import "mixins/_forms.scss";
+@import "mixins/_buttons.scss";
+
+$form-width: 250px;
+$form-padding: 10px;
+
+$form-margin: 20px;
+$form-labelFont: 16px;
+
 h1 {
     margin: 0;
-    padding: 0 0 30px 0; /* Unset default values */
+    padding: 0 0 30px 0;
     text-align: center;
 }
 #inner {
-    box-shadow: 0 0 5px #F5F7FA;
-    border-radius: 5px;
-    background: rgba(245, 247, 250, 0.1);
-    padding: 50px;
-    margin: 50px;
+  @include container;
+  padding: 50px;
+  margin: 50px;
 }
-.fields, .button {
-    display: block;
-    margin-bottom: 20px;
-    border: 1px solid #F5F7FA;
-    border-radius: 3px;
-    padding: 10px;
-    outline: none;
-    font-size: 18px; 
-    background: transparent;
-    color: #F5F7FA;
+
+input {
+  @include form-input( $form-width, $form-padding, $form-margin, $form-labelFont );
 }
-.fields {
-    width: 250px;
-    caret-color: #F5F7FA; /* Cursor color */
-    transition: box-shadow 0.3s ease-in; 
+label {
+  font-size: $form-labelFont;
 }
 .button {
-    width: 270px;
-    transition: all 0.4s ease-out;
+  @include btn-submit( $form-width, $form-padding );
+  margin-top: $form-margin;
 }
-.button:hover {
-    background: #F5F7FA;
-    color: rgba(25, 206, 222, 0.9); /* Broken */
-    cursor: pointer;
+a.button {
+  margin-top: 0;
 }
-input:focus:not([readonly]) {
-    box-shadow: 0 0 10px#fff;
-}
-#inner a {
-    width: 250px;
-    text-decoration: none;
-    font-size: 18px;
-    text-align: center;
-    margin: 10px 0 0 0;
-}
+
 .dots {
-    text-align: center;
-}
-img {
+  text-align: center;
+  margin: 10px 0;
+
+  img {
     width: 32px;
     height: 32px;
+  }
 }
