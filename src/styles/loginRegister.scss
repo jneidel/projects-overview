@@ -9,14 +9,17 @@ $form-margin: 20px;
 $form-labelFont: 16px;
 
 h1 {
-    margin: 0;
-    padding: 0 0 30px 0;
-    text-align: center;
+  margin: 0;
+  padding: 0 0 30px 0;
+  text-align: center;
+}
+#content {
+  min-height: calc( 100vh - $height-header );
 }
 #inner {
   @include container;
   padding: 50px;
-  margin: 50px;
+  margin: 10px;
 }
 
 input {

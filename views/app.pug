@@ -6,15 +6,14 @@ block styles
   link( rel="stylesheet", href="/styles/app.bundle.css" )
 
 block content
-  #cards
-    each card in cards
-      span.card( id=card._id )  
-        .front.inner
-          +frontCard( card )
-        .back.inner
-          +backCard( card )
-    span.card.addCardContainer
-      img.addCard( src="/img/add.png" )
+  each card in cards
+    span.card( id=card._id )  
+      .front.inner
+        +frontCard( card )
+      .back.inner
+        +backCard( card )
+  span.card.addCardContainer
+    img.addCard( src="/img/add.png" )
 
 block scripts
   script( src="/scripts/app.bundle.js" )

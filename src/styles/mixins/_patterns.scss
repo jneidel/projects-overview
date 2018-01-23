@@ -4,4 +4,8 @@
   box-shadow: 0 0 5px $white;
   border-radius: 5px;
   background: rgba( $white, .1 );
+
+  &:hover {
+    box-shadow: 0 0 8px $white;
+  }
 }

@@ -3,5 +3,5 @@ require( "../scripts/globalVariables/globals" );
 require( "../scripts/globalVariables/encryptWithPubKey" );
 require( "../scripts/loginRegister.js" );
 
-require( "../styles/global.scss" );
+require( "../styles/layout.scss" );
 require( "../styles/loginRegister.scss")

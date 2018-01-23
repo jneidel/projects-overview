@@ -39,7 +39,7 @@ html
           - const categories = Object.keys(locals.flashes)
             each category in categories
               each message in flashes[category]
-                .flash( class=`flash--${category}` onClick="this.remove()" )
+                .flash( class=`-${category}` onClick="this.remove()" )
                   p.flash__text!= message
       #inner
         block content

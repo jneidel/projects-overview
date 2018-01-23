@@ -1,19 +1,30 @@
+@import "_variables.scss";
+
+html {
+  font-size: $fontSize-standard;
+}
+
 body {
   display: grid;
   grid-template-columns: 6vw auto 6vw;
-  grid-template-rows: 60px auto;
+  grid-template-rows: $height-header auto;
   grid-template-areas: 
     "header header header"
     ". main .";
-  background-image: linear-gradient( 26deg, #15B7E4,  #3BECAB );
+  background-image: linear-gradient( 26deg, $blue, $green );
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
-  color: #F5F7FA;
   min-height: 100vh;
+	font-family: $font-text;
+  color: $white;
   margin: 0;
-	font-family: "Open Sans";
-	font-size: 16px;
+
+  @media all and ( max-width: 580px ) {
+    grid-template-areas: 
+      "header header header"
+      "main main main";
+  }
 }
 #content {
   grid-area: main;
@@ -21,7 +32,8 @@ body {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	align-items: center;
+  align-items: center;
+  margin: $margin-contentTop 0;
 }
 
 /* Header */
@@ -30,15 +42,15 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  box-shadow: 0 0 10px #F5F7FA;
+  box-shadow: 0 0 10px $white;
 }
 #header a {
-  text-decoration: none;
-  color: #F5F7FA;
+  color: $white;
   padding-bottom: 2px;
   border-bottom: 2px solid transparent;
   transition: border 0.3s ease;
   cursor: pointer;
+  text-decoration: none;
 }
 #nav-left {
   padding: 12px 25px;
@@ -62,20 +74,13 @@ body {
 .header-underline {
   max-width: 0;
   height: 3px;
-  background: #F5F7FA;
+  background: $white;
   transition: max-width 0.2s ease-in-out;
-}
-.header-link-home:hover + .header-underline {
-  max-width: 100%;
-}
-.header-link-register:hover + .header-underline {
-  max-width: 100%;
-}
-.header-link-login:hover + .header-underline {
-  max-width: 100%;
-}
-.nav-username:hover + .header-underline {
-  max-width: 100%;
+
+  .header-link-home:hover + &     { max-width: 100%; }
+  .header-link-register:hover + & { max-width: 100%; }
+  .header-link-login:hover + &    { max-width: 100%; }
+  .nav-username:hover + &         { max-width: 100%; }
 }
 
 /* Header logo */
@@ -88,9 +93,9 @@ body {
 #header-logo {
   height: 35px;
   width: auto; 
-  padding-left: 7px;
   transform: translateX( -100% );
   transition: transform 0.2s ease-in-out;
+  padding-left: 7px;
 }
 .header-link-home {
   display: block;
@@ -113,57 +118,41 @@ body {
 	padding: 3px 0 0 8px;
 }
 
-/* Responsive Design */
-@media all and ( max-width: 580px ) {
-    body {
-        grid-template-areas: 
-            "header header header"
-            "main main main";
-    }
-}
-
 /* Flashes */
 .flash {
-    background: rgba(51, 51, 51, 0.25);
+	font-size: 1.25rem;
+  background: rgba( $black, 0.25 );
 	padding: 4px 8px 4px 6px;
 	margin: 5px;
-	font-size: 1.25rem;
 	border-top-right-radius: 2px;
 	border-bottom-right-radius: 2px;
-	cursor: pointer;
-}
-.flash:nth-of-type(1) {
-	margin-top: 15px;
-}
-.flash:hover {
-	background: rgba(51, 51, 51, 0.15);
-}
-.flash--success {
-    border-left: 4px solid #FFC93C;
-}
-.flash--error {
-	border-left: 4px solid #FC3A52;
-}
-.flash--info {
-    border-left: 4px solid #F5F7FA;
-}
-.flash__text {
-	margin: 0;
+  cursor: pointer;
+  
+  &:hover {
+    background: rgba( $black, 0.15 );
+  }
+  &:nth-of-type( 1 ) {
+    margin-bottom: $margin-contentTop;
+  }
+  &.-success {
+    border-left: 4px solid $yellow;
+  }
+  &.-error {
+    border-left: 4px solid $red;
+  }
+  &.-info {
+    border-left: 4px solid $white;
+  }
+  &__text {
+    margin: 0;
+  }
 }
 
 /* Input */
-input::-webkit-input-placeholder {
-    color: rgba(245, 247, 250, 0.7);
-}
-input::-moz-placeholder {
-    color: rgba(245, 247, 250, 0.7);
-}
-input::-ms-input-placeholder {
-    color: rgba(245, 247, 250, 0.7);
-}
-input::placeholder {
-    color: rgba(245, 247, 250, 0.7);
-}
+input::-webkit-input-placeholder { color: rgba( $white, 0.7 ); }
+input::-moz-placeholder          { color: rgba( $white, 0.7 ); }
+input::-ms-input-placeholder     { color: rgba( $white, 0.7 ); }
+input::placeholder               { color: rgba( $white, 0.7 ); }
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
@@ -175,10 +164,10 @@ textarea:-webkit-autofill:focus,
 select:-webkit-autofill,
 select:-webkit-autofill:hover,
 select:-webkit-autofill:focus {
-  -webkit-text-fill-color: #F5F7FA;
+  -webkit-text-fill-color: $white;
   transition: background-color 5000s ease-in-out 0s;
 }
 
 ::-webkit-scrollbar { 
-    display: none; 
+  display: none; 
 }

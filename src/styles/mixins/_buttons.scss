@@ -5,7 +5,7 @@
 @mixin btn-submit( $width, $padding ) {
   display: block;
   width: $width;
-  font-size: 18px;  
+  font-size: $fontSize-standard;  
   color: $white;
   background: transparent;
   border: 1px solid $white;

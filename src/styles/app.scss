@@ -1,95 +1,88 @@
-h1 {
-    margin: 40px 0 0 0;
-}
+@import "mixins/_patterns.scss";
 
-/* Cards */
-#cards {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    perspective: 800px; /* Todo: scale up perspective for smaller screens */
-	margin: 40px 0;
+#inner {
+  display: flex;
+  justify-content: center;
+  // align-items: flex-start; cards only as big as their own content
+  flex-wrap: wrap;
+  perspective: 800px;
 }
 .card {
-    display: inline-block;
-    margin: 30px 20px;
-    padding: 20px;
-    box-shadow: 0 0 3px #F5F7FA;
-    border-radius: 5px;
-    background: rgba(245, 247, 250, 0.1);
-    cursor: pointer;
-    transition: transform 0.6s ease;
-    transform-style: preserve-3d;
-}
-.card:hover {
-	box-shadow: 0 0 8px #F5F7FA;
+  display: inline-block;
+  margin: $margin-betweenCards;
+  padding: 20px;
+  cursor: pointer;
+  transition: transform 0.6s ease;
+  transform-style: preserve-3d;
+
+  @include container;
 }
 
 /* Card Flip */
 .front, .back {
-    -webkit-backface-visibility: hidden;
-       -moz-backface-visibility: hidden;
-            backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+     -moz-backface-visibility: hidden;
+          backface-visibility: hidden;
 }
 .back {
-    position: absolute;
-    top: 20px;
-    left: -10;
-    transform: rotateY( 180deg );
+  position: absolute;
+  top: 20px;
+  left: -10;
+  transform: rotateY( 180deg );
 }
 .future {
-    position: absolute;
-    top: -20px;
-    left: 2px;
-    font-size: 10px;
-    color: rgba(245, 247, 250, 0.9);
+  position: absolute;
+  top: -20px;
+  left: 2px;
+  font-size: $fontSize-small;
+  color: rgba( $white, 0.85 );
 }
 
 /* Item Style */
-input[type=text] {
-    background-color: transparent;
-    border: none;
-    outline: none;
-    color: #F5F7FA;
-    font-size: 18px;
-    width: auto;
-    caret-color: #333; /* Cursor color */
+input {
+  width: auto;
+  color: #F5F7FA;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-size: $fontSize-standard;
+  caret-color: $color-cursor;
 }
 input.title {
-    font-size: 28px;
-    font-family: "Raleway";
+  font-family: $font-headline;
+  font-size: $fontSize-headline;
 }
 
 /* 'New card' Card Style */
 .addCardContainer {
-    width: 88px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 88px;
+  height: 88px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 img.addCard {
-    height: 48px;
-    width: 48px;
-    padding: 21px 0 21px 0;
-    transition: transform 0.3s ease-out;
-    transform-origin: 50% 50% 0;
-    user-select: none;
+  height: 48px;
+  width: 48px;
+  padding: 21px 0 21px 0;
+  transition: transform 0.3s ease-out;
+  transform-origin: 50% 50% 0;
+  user-select: none;
 }
 span.addCardContainer:hover img.addCard {
-    transform: rotateZ( 90deg );
+  transform: rotateZ( 90deg );
 }
 
 /* Flashes */
 .flash {
-	width: auto;
-	margin-top: 20px;
-	margin-bottom: -40px;
+  width: auto;
+  margin-top: 20px;
+  margin-bottom: -40px;
 }
 
 /* Responsive Design */
 @media all and ( max-width: 842px ) {
-    .addCardContainer {
-        margin: 20px 100px 60px 100px;
-    }
+  .addCardContainer {
+    margin: 20px 100px 60px 100px;
+  }
 }

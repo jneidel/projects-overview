@@ -5,12 +5,12 @@
 @mixin form-input( $width, $padding, $margin-bottom, $label-font ) {
   display: block;
   width: $width;
-  font-size: 18px;  
+  font-size: $fontSize-standard;
   color: $white;
   background: transparent;
   border: 1px solid $white;
   border-radius: 3px;
-  caret-color: $white;
+  caret-color: $color-cursor;
   outline: none;
   transition: box-shadow 0.3s ease-in;
   padding: $padding;
