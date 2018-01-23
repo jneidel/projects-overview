@@ -20,10 +20,15 @@ const setListener = {
 
         if ( titleNode.length == 3 ) {
           var title = titleNode[1].value;
-          var lastItem = parentNode.children[2].children[parentNode.children[2].children.length - 1].children[0];
+          var lastItem = parentNode
+            .children[2]
+            .children[parentNode.children[2].children.length - 1]
+            .children[1];
         } else {
           var title = titleNode[0].value;
-          var lastItem = titleNode[1].children[titleNode[1].children.length - 1].children[0];
+          var lastItem = titleNode[1]
+            .children[titleNode[1].children.length - 1]
+            .children[1];
         }
 
         if ( lastItem === item ) {
@@ -34,11 +39,15 @@ const setListener = {
           } else {
             var newItemWrapper = parentNode.children[1].appendChild( document.createElement( "li" ) );
           }
-          const newItem = newItemWrapper.appendChild( document.createElement( "input" ) );
-          newItem.type = "text";
-          newItem.classes = "item";
+          const span = newItemWrapper.appendChild( document.createElement( "span" ) );
+          const input = newItemWrapper.appendChild( document.createElement( "input" ) );
+          span.classes = "bullet";
+          span.innerHTML = "&#9679; &nbsp;&nbsp;";
+          span.style = "font-size: 0.8rem;";
+          input.type = "text";
+          input.classes = "item";
 
-          setListener.item( newItem );
+          setListener.item( input );
         }
 
         await axios.post( "/api/update", {
@@ -75,18 +84,38 @@ const setListener = {
       }
     } );
   },
+  bullet( bullet ) {
+    function removeItem() {
+      // remove local item
+      // api request to remove item from db
+    }
+
+    bullet.addEventListener( "mouseenter", () => {
+      bullet.style = "color: #333;";
+
+      bullet.addEventListener( "click", removeItem );
+    } );
+    bullet.addEventListener( "mouseleave", () => {
+      bullet.style = "color: #F5F7FA";
+
+      bullet.removeEventListener( "click", removeItem );
+    } );
+  },
 };
 
 function setEventListeners() {
   const items = document.getElementsByClassName( "item" );
   const titles = document.getElementsByClassName( "title" );
+  const bullets = document.getElementsByClassName( "bullet" );
 
   for ( const item of items ) {
-	    setListener.item( item );
+	  setListener.item( item );
   }
-
   for ( const title of titles ) {
-	    setListener.title( title );
+	  setListener.title( title );
+  }
+  for ( const bullet of bullets ) {
+    setListener.bullet( bullet );
   }
 
   const cards = document.getElementsByClassName( "card" );
@@ -97,7 +126,7 @@ function setEventListeners() {
 
     card.addEventListener( "dblclick", ( event ) => {
       const el = event.target.tagName;
-      const permitted = [ "SPAN", "DIV", "P" ];
+      const permitted = [ "DIV", "P" ];
       if ( ~permitted.indexOf( el ) ) {
         if ( cardState === "front" ) {
           card.style.transform = "rotateY( 180deg )";
@@ -119,24 +148,26 @@ function setEventListeners() {
     cardToBeSet.removeEventListener( "dblclick", callingFunction );
     cardToBeSet.className = "card";
     cardToBeSet.innerHTML = `
-			<div class="front inner">
-				<input class="title" type="text" placeholder="Add title">
-					<ul>
-						<li>
-							<input class="item" type="text" placeholder="Add items">
-						</li>
-					</ul>
-			</div>
-			<div class="back inner">
-				<p class="future">Future</p> 
-				<input class="title" type="text" placeholder="Add title">
-					<ul>
-						<li>
-							<input class="item" type="text" placeholder="Add items">
-						</li>
-					</ul>
-			</div>
-		`;
+      <div class="front inner">
+        <input class="title" type="text" placeholder="Add title">
+        <ul>
+          <li>
+            <span class="bullet">&#9679; &nbsp;&nbsp;</span>
+            <input class="item" type="text" placeholder="Add items">
+          </li>
+        </ul>
+      </div>
+      <div class="back inner">
+        <p class="future">Future</p> 
+        <input class="title" type="text" placeholder="Add title">
+        <ul>
+          <li>
+            <span class="bullet">&#9679; &nbsp;&nbsp;</span>
+            <input class="item" type="text" placeholder="Add items">
+          </li>
+        </ul>
+      </div>
+     `;
 
     for ( const item of cardToBeSet.children ) {
       if ( item.children.length == 3 ) {

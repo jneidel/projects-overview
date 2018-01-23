@@ -3,6 +3,7 @@ mixin frontCard( card = {} )
   ul
     each item in card.front
       li
+        span.bullet &#9679; <!-- This will emulate the li bullet point -->
         input.item( type="text" value=item )
 
 mixin backCard( card = {} )
@@ -11,4 +12,5 @@ mixin backCard( card = {} )
   ul
     each item in card.back
       li
+        span.bullet &#9679; &nbsp;&nbsp;
         input.item( type="text" value=item )

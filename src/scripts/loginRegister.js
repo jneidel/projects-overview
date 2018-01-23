@@ -1,4 +1,4 @@
-/* global encryptWithPubKey, url, axios */
+/* global encryptWithPubKey, url, axios, checkResponse */
 /* eslint-disable no-empty */
 
 async function getFormData( form ) {

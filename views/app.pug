@@ -7,12 +7,12 @@ block styles
 
 block content
   each card in cards
-    span.card( id=card._id )  
+    .card( id=card._id )  
       .front.inner
         +frontCard( card )
       .back.inner
         +backCard( card )
-  span.card.addCardContainer
+  .card.addCardContainer
     img.addCard( src="/img/add.png" )
 
 block scripts

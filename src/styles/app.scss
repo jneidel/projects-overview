@@ -16,6 +16,17 @@
   transform-style: preserve-3d;
 
   @include container;
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 10px;
+  }
+  .bullet {
+    font-size: 0.8rem;
+    margin-right: 3px;
+    user-select: none;
+  }
 }
 
 /* Card Flip */
@@ -78,6 +89,12 @@ span.addCardContainer:hover img.addCard {
   width: auto;
   margin-top: 20px;
   margin-bottom: -40px;
+}
+
+// Bullet
+.bullet__delete {
+  height: 6px;
+  width: 6px;
 }
 
 /* Responsive Design */
