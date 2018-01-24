@@ -54,6 +54,12 @@ router.post( "/update-username",
   setupToken
 );
 
+router.post( "/remove-item",
+  verifyTokenAPI,
+  database.connectDatabase,
+  database.removeItem
+);
+
 router.get( "/", ( req, res ) => {
   req.flash( "error", "Access to the API denied." );
   res.redirect( "/login" );

@@ -145,3 +145,26 @@ exports.getCards = async ( req, res, next ) => {
 
   return next();
 };
+
+exports.removeItem = async ( req, res, next ) => {
+  const username = req.body.username;
+  const title = req.body.title;
+  const side = req.body.side;
+
+  const projection = { _id: 0 };
+  projection[ side ] = 1;
+
+  const itemArray = await req.db.collection( "cards" ).find( { username, title }, projection ).toArray();;
+
+  if ( itemArray[0][ side ].length <= 1 ) {
+    req.flash( "info", "The last item of a card shall not be removed" )
+    return res.json( { info: true } );
+  } else {
+    const $pull = {};
+    $pull[ side ] = req.body.item;
+
+    await req.db.collection( "cards" ).update( { username, title }, { $pull } );
+  
+    return res.json( { success: true } );
+  }
+};

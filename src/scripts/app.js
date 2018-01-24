@@ -48,6 +48,7 @@ const setListener = {
           input.classes = "item";
 
           setListener.item( input );
+          setListener.bullet( span );
         }
 
         await axios.post( "/api/update", {
@@ -85,9 +86,20 @@ const setListener = {
     } );
   },
   bullet( bullet ) {
-    function removeItem() {
-      // remove local item
-      // api request to remove item from db
+    async function removeItem() {
+      const item = bullet.parentNode.children[1].value;
+      const title = bullet.parentNode.parentNode.parentNode.children[0].value;
+      let side = bullet.parentNode.parentNode.parentNode.className;
+      if ( side.match( /front/ ) ) {
+        side = "front";
+      } else {
+        side = "back";
+      }
+
+      bullet.parentNode.remove();
+
+      const response = await axios.post( "/api/remove-item", { title, item, side } );
+      checkResponse( response.data, "app", true );
     }
 
     bullet.addEventListener( "mouseenter", () => {
@@ -170,20 +182,21 @@ function setEventListeners() {
      `;
 
     for ( const item of cardToBeSet.children ) {
-      if ( item.children.length == 3 ) {
-        setListener.item( item.children[2].children[0].children[0] );
-      } else {
-        setListener.item( item.children[1].children[0].children[0] );
-      }
+      const side = item.children.length == 3 ? 2 : 1;
+      setListener.item( item.children[ side ].children[0].children[0] );
     }
-
     for ( const title of cardToBeSet.children ) {
-      setListener.title( title.children[0] );
+      const side = title.children.length == 3 ? 1 : 0;
+      setListener.title( title.children[ side ] );
+    }
+    for ( const bullet of cardToBeSet.children ) {
+      const side = bullet.children.length == 3 ? 2 : 1;
+      setListener.bullet( bullet.children[ side ].children[0].children[0] );
     }
 
     flipCard( cardToBeSet );
 
-    const content = document.getElementById( "cards" );
+    const content = document.getElementById( "inner" );
     const newCard = content.appendChild( document.createElement( "span" ) );
 
     newCard.innerHTML += `<img class="addCard" src="img/add.png">`;
