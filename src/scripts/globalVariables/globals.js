@@ -24,7 +24,7 @@ window.checkResponse = ( res, errorRedirect, successNoReload = false ) => {
   if ( res.error ) {
     window.location.replace( `${url}/${errorRedirect}` );
   } else if ( res.success ) {
-    window.location.replace( `${url}/app` );
+    if ( !successNoReload ) { window.location.replace( `${url}/app` ); }
   } else if ( res.info ) {
     window.location.reload();
   } else if ( res.state ) {

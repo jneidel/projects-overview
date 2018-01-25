@@ -1,5 +1,11 @@
-/* globals Vue url axios */
+/* globals Vue url axios $ checkResponse */
 /* eslint-disable no-alert */
+
+/* Visual DOM Selection Tree - always applies to the one above
+ *>div.item      // > signifies entry point item
+ *  span.class
+ *<   p.2ndChild // < signifies out point item
+ */
 
 // Listening for item/title changes
 const setListener = {
@@ -8,41 +14,45 @@ const setListener = {
 
     item.addEventListener( "keydown", async () => {
       if ( event.which === 13 ) {
-        const parentNode = item.parentNode.parentNode.parentNode;
-        const titleNode = parentNode.children;
-        let cardSide;
-
-        if ( parentNode.className.match( /back/ ) === null ) {
-          cardSide = "front";
-        } else {
-          cardSide = "back";
-        }
-
-        if ( titleNode.length == 3 ) {
-          var title = titleNode[1].value;
-          var lastItem = parentNode
-            .children[2]
-            .children[parentNode.children[2].children.length - 1]
-            .children[1];
-        } else {
-          var title = titleNode[0].value;
-          var lastItem = titleNode[1]
-            .children[titleNode[1].children.length - 1]
-            .children[1];
-        }
+        const innerCard = item.parentNode.parentNode.parentNode;
+        /*
+         *<div.inner
+         *  ul
+         *    li
+         *>     input.item
+         */
+        const side = innerCard.className.match( /back/ ) ? "back" : "front";
+        const ul = side === "back" ? innerCard.children[2] : innerCard.children[1];
+        /*
+         *>div.inner(.front/.back)
+         *  (p.future)
+         *  input.title
+         *< ul
+         */
+        const title = side === "back" ?
+          innerCard.children[1].value :
+          innerCard.children[0].value;
+        /*
+         *>div.inner(.front/.back)
+         *  (p.future)
+         *< input.title
+         */
+        const lastItem = ul[ul.length - 1].children[1];
+        /*
+         *>ul
+         *  li
+         *< li [-1]
+         */
 
         if ( lastItem === item ) {
-          axios.post( "/api/add-new-item", { cardSide, title } );
+          axios.post( "/api/add-new-item", { side, title } );
 
-          if ( titleNode.length == 3 ) {
-            var newItemWrapper = parentNode.children[2].appendChild( document.createElement( "li" ) );
-          } else {
-            var newItemWrapper = parentNode.children[1].appendChild( document.createElement( "li" ) );
-          }
-          const span = newItemWrapper.appendChild( document.createElement( "span" ) );
-          const input = newItemWrapper.appendChild( document.createElement( "input" ) );
+          const newItem = ul.appendchild( document.createelement( "li" ) );
+          const span = newItem.appendchild( document.createelement( "span" ) );
+          const input = newItem.appendchild( document.createelement( "input" ) );
+
           span.classes = "bullet";
-          span.innerHTML = "&#9679; &nbsp;&nbsp;";
+          span.innerhtml = "&#9679; &nbsp;&nbsp;";
           span.style = "font-size: 0.8rem;";
           input.type = "text";
           input.classes = "item";
@@ -52,9 +62,9 @@ const setListener = {
         }
 
         await axios.post( "/api/update", {
-          updatedItem: item.value,
-          oldItem    : originalItem,
-          cardSide,
+          updateditem: item.value,
+          olditem    : originalItem,
+          cardside   : side,
           title,
         } );
 
@@ -72,11 +82,18 @@ const setListener = {
 							${title.value.length}` );
         }
 
-        const parent = title.parentNode.parentNode.children;
-        if ( !title.parentNode.className.match( /back/ ) ) {
-          parent[1].children[1].value = title.value;
+        const cards = title.parentNode.parentNode.children;
+        /*
+         *<div.inner.front
+         *<div.inner.back
+         *  (p.future)
+         *> input.title
+         */
+        const side = title.parentNode.className.match( /back/ ) ? "back" : "front";
+        if ( side === "front" ) { // Update title on other card side
+          cards[1].children[1].value = title.value;
         } else {
-          parent[0].children[0].value = title.value;
+          cards[0].children[0].value = title.value;
         }
 
         await axios.post( "/api/update", { updatedTitle: title.value, title: originalTitle } );
@@ -88,14 +105,29 @@ const setListener = {
   bullet( bullet ) {
     async function removeItem() {
       const item = bullet.parentNode.children[1].value;
-      const title = bullet.parentNode.parentNode.parentNode.children[0].value;
-      let side = bullet.parentNode.parentNode.parentNode.className;
-      if ( side.match( /front/ ) ) {
-        side = "front";
-      } else {
-        side = "back";
-      }
-
+      /*
+       * li
+       *> span.bullet
+       *< input.item
+       */
+      const side = bullet.parentNode.parentNode.parentNode.className.match( /back/ ) ? "back" : "front";
+      /*
+       *<div.inner(.front/.back)
+       *  ul
+       *    li
+       *>     span.bullet
+       */
+      const title = side === "back" ?
+        bullet.parentNode.parentNode.parentNode.children[1].value :
+        bullet.parentNode.parentNode.parentNode.children[0].value;
+      /*
+       * div.inner
+       *  (p.future)
+       *< input.title
+       *  ul
+       *    li
+       *>     span.bullet
+       */
       bullet.parentNode.remove();
 
       const response = await axios.post( "/api/remove-item", { title, item, side } );
@@ -113,12 +145,26 @@ const setListener = {
       bullet.removeEventListener( "click", removeItem );
     } );
   },
+  itemSwitch( switchEl, toBack = false ) {
+    async function switchHandler() {
+      // move to back/front
+      // update db
+    }
+
+    switchEl.addEventListener( "mouseenter", () => {
+      switchEl.addEventListener( "click", switchHandler );
+    } );
+    switchEl.addEventListener( "mouseleave", () => {
+      switchEl.removeEventListener( "click", switchHandler );
+    } );
+  },
 };
 
 function setEventListeners() {
-  const items = document.getElementsByClassName( "item" );
-  const titles = document.getElementsByClassName( "title" );
-  const bullets = document.getElementsByClassName( "bullet" );
+  const items = $( ".item" );
+  const titles = $( ".title" );
+  const bullets = $( ".bullet" );
+  const switchElems = $( ".switch" );
 
   for ( const item of items ) {
 	  setListener.item( item );
@@ -128,6 +174,9 @@ function setEventListeners() {
   }
   for ( const bullet of bullets ) {
     setListener.bullet( bullet );
+  }
+  for ( const switchEl of switchElems ) {
+    setListener.itemSwitch( switchEl );
   }
 
   const cards = document.getElementsByClassName( "card" );
@@ -183,15 +232,42 @@ function setEventListeners() {
 
     for ( const item of cardToBeSet.children ) {
       const side = item.children.length == 3 ? 2 : 1;
-      setListener.item( item.children[ side ].children[0].children[0] );
+      setListener.item( item.children[side].children[0].children[1] );
+      /*
+       * item.childen[ side ].childeren[0].children[0]
+       *>div.inner(.front/.back)
+       *  (p.future)
+       *  input.title
+       *  ul
+       *    li
+       *      span.bullet
+       *      input.item 
+       */
     }
     for ( const title of cardToBeSet.children ) {
       const side = title.children.length == 3 ? 1 : 0;
-      setListener.title( title.children[ side ] );
+      setListener.title( title.children[side] );
+      /*
+       * title.children[ side ]
+       *>div.inner(.front/.back)
+       *  (p.future)
+       *  input.title
+       *  ul
+       */
     }
     for ( const bullet of cardToBeSet.children ) {
       const side = bullet.children.length == 3 ? 2 : 1;
-      setListener.bullet( bullet.children[ side ].children[0].children[0] );
+      setListener.bullet( bullet.children[side].children[0].children[0] );
+      /*
+       * bullet.children[ side ].children[0].children[0]
+       *>dov.inner(.front/.back)
+       *  (p.future)
+       *    input.title
+       *    ul
+       *      li
+       *        span.bullet
+       *        input.item
+       */
     }
 
     flipCard( cardToBeSet );

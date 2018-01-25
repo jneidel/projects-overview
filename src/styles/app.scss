@@ -22,11 +22,6 @@
     padding: 0;
     margin: 10px;
   }
-  .bullet {
-    font-size: 0.8rem;
-    margin-right: 3px;
-    user-select: none;
-  }
 }
 
 /* Card Flip */
@@ -51,7 +46,7 @@
 
 /* Item Style */
 input {
-  width: auto;
+  width: 200px;
   color: #F5F7FA;
   background-color: transparent;
   border: none;
@@ -60,6 +55,7 @@ input {
   caret-color: $color-cursor;
 }
 input.title {
+  width: auto;
   font-family: $font-headline;
   font-size: $fontSize-headline;
 }
@@ -82,6 +78,27 @@ img.addCard {
 }
 span.addCardContainer:hover img.addCard {
   transform: rotateZ( 90deg );
+}
+
+/* Switch, Bullets */
+
+.bullet {
+  font-size: 0.8rem;
+  margin-right: 3px;
+  user-select: none;
+}
+li:hover .switch {
+  visibility: visible;
+}
+.switch {
+  height: 12px;
+  width: 12px;
+  margin-left: 5px;
+  visibility: hidden;
+
+  &:hover g path {
+    fill: $black;
+  }
 }
 
 /* Flashes */
