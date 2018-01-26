@@ -11,16 +11,16 @@ exports.updateDatabase = async ( req, res, next ) => {
 
   if ( req.body.updatedItem === undefined ) {
     query.username = req.body.username;
-    query.title = req.body.title;
+    query.title = req.body.title ? req.body.title : null;
 
     update.$set = { title: req.body.updatedTitle };
   } else {
     query.username = req.body.username;
-    query.title = req.body.title;
-    query[req.body.cardSide] = req.body.oldItem;
+    query.title = req.body.title ? req.body.title : null;
+    query[req.body.side] = req.body.item;
 
     const setObj = {};
-    setObj[`${req.body.cardSide}.$`] = req.body.updatedItem;
+    setObj[`${req.body.side}.$`] = req.body.updatedItem;
     update.$set = setObj;
   }
 

@@ -7,7 +7,42 @@
  *<   p.2ndChild // < signifies out point item
  */
 
-// Listening for item/title changes
+const createNew = {
+  item( parent, side, setListener, options = false ) {
+    if ( options && options.last ) { // remove empty item to be added to the end later on
+      options.last.parentNode.remove();
+    }
+
+    const newItem = parent.appendChild( document.createElement( "li" ) );
+
+    const span = newItem.appendChild( document.createElement( "span" ) );
+    span.className = "bullet";
+    span.innerHTML = "&#9679;";
+
+    const input = newItem.appendChild( document.createElement( "input" ) );
+    input.className = "item";
+    input.type = "text";
+    input.value = options ? options.value : "";
+
+    const svg = newItem.appendChild( document.createElementNS( "http://www.w3.org/2000/svg", "svg" ) );
+    svg.setAttribute( "class", "switch" );
+    svg.setAttribute( "viewBox", "0 0 477.175 477.175" );
+    svg.setAttribute( "style", "enable-background:new 0 0 477.175 477.175;" );
+    const g = svg.appendChild( document.createElementNS( "http://www.w3.org/2000/svg", "g" ) );
+    const path = g.appendChild( document.createElementNS( "http://www.w3.org/2000/svg", "path" ) );
+    path.setAttribute( "fill", "#f5f7fa" );
+    path.setAttribute( "d", side === "front" ? "M360.731,229.075l-225.1-225.1c-5.3-5.3-13.8-5.3-19.1,0s-5.3,13.8,0,19.1l215.5,215.5l-215.5,215.5   c-5.3,5.3-5.3,13.8,0,19.1c2.6,2.6,6.1,4,9.5,4c3.4,0,6.9-1.3,9.5-4l225.1-225.1C365.931,242.875,365.931,234.275,360.731,229.075z   " : "M145.188,238.575l215.5-215.5c5.3-5.3,5.3-13.8,0-19.1s-13.8-5.3-19.1,0l-225.1,225.1c-5.3,5.3-5.3,13.8,0,19.1l225.1,225   c2.6,2.6,6.1,4,9.5,4s6.9-1.3,9.5-4c5.3-5.3,5.3-13.8,0-19.1L145.188,238.575z" );
+
+    setListener.item( input );
+    setListener.bullet( span );
+    setListener.itemSwitch( svg );
+
+    if ( options && options.last ) { // move previously removed empty item to last position
+      createNew.item( parent, side, setListener );
+    }
+  },
+};
+
 const setListener = {
   item( item ) {
     let originalItem = item.value;
@@ -22,22 +57,20 @@ const setListener = {
          *>     input.item
          */
         const side = innerCard.className.match( /back/ ) ? "back" : "front";
-        const ul = side === "back" ? innerCard.children[2] : innerCard.children[1];
+        const ul = innerCard.getElementsByTagName( "UL" )[0];
         /*
          *>div.inner(.front/.back)
          *  (p.future)
          *  input.title
          *< ul
          */
-        const title = side === "back" ?
-          innerCard.children[1].value :
-          innerCard.children[0].value;
+        const title = innerCard.getElementsByClassName( "title" )[0].value;
         /*
          *>div.inner(.front/.back)
          *  (p.future)
          *< input.title
          */
-        const lastItem = ul[ul.length - 1].children[1];
+        const lastItem = ul.children[ul.children.length - 1].children[1];
         /*
          *>ul
          *  li
@@ -47,24 +80,13 @@ const setListener = {
         if ( lastItem === item ) {
           axios.post( "/api/add-new-item", { side, title } );
 
-          const newItem = ul.appendchild( document.createelement( "li" ) );
-          const span = newItem.appendchild( document.createelement( "span" ) );
-          const input = newItem.appendchild( document.createelement( "input" ) );
-
-          span.classes = "bullet";
-          span.innerhtml = "&#9679; &nbsp;&nbsp;";
-          span.style = "font-size: 0.8rem;";
-          input.type = "text";
-          input.classes = "item";
-
-          setListener.item( input );
-          setListener.bullet( span );
+          createNew.item( ul, side, setListener );
         }
 
         await axios.post( "/api/update", {
-          updateditem: item.value,
-          olditem    : originalItem,
-          cardside   : side,
+          updatedItem: item.value,
+          item       : originalItem,
+          side,
           title,
         } );
 
@@ -147,7 +169,58 @@ const setListener = {
   },
   itemSwitch( switchEl, toBack = false ) {
     async function switchHandler() {
-      // move to back/front
+      const item = switchEl.parentNode.getElementsByClassName( "item" )[0];
+      /*
+       * li
+       *  span.bullet
+       *< input.item 
+       *> svg.switch 
+       */
+      const value = item.value;
+      const sideEl = switchEl.parentNode.parentNode.parentNode;
+      /*
+       *<div.inner
+       *  ul
+       *    li
+       *>     svg.switch
+       */
+      const side = sideEl.className.match( /back/ ) ? "back" : "front";
+      const title = sideEl.getElementsByClassName( "title" )[0];
+      /*
+       *>div.inner
+       *  (p.future)
+       *< input.title
+       */
+      const card = switchEl.parentNode.parentNode.parentNode.parentNode;
+      /*
+       *<div.card
+       *  div.inner
+       *    ul
+       *      li
+       *>       svg.switch
+       */
+      const otherSide = side === "back" ?
+        card.getElementsByClassName( "front" )[0] :
+        card.getElementsByClassName( "back" )[0];
+
+      const ul = otherSide.getElementsByTagName( "UL" )[0].children;
+      const lastItem = ul[ul.length - 1].getElementsByClassName( "item" )[0];
+      /*
+       *>div.inner
+       *  ul
+       *    li
+       *<     input.item
+       */
+
+      const options = { value };
+
+      if ( lastItem.value === "" ) {
+        options.last = lastItem;
+      }
+
+      createNew.item( otherSide.getElementsByTagName( "UL" )[0], otherSide, setListener, options );
+
+      item.parentNode.remove();
       // update db
     }
 
@@ -211,39 +284,19 @@ function setEventListeners() {
     cardToBeSet.innerHTML = `
       <div class="front inner">
         <input class="title" type="text" placeholder="Add title">
-        <ul>
-          <li>
-            <span class="bullet">&#9679; &nbsp;&nbsp;</span>
-            <input class="item" type="text" placeholder="Add items">
-          </li>
-        </ul>
+        <ul></ul>
       </div>
       <div class="back inner">
         <p class="future">Future</p> 
         <input class="title" type="text" placeholder="Add title">
-        <ul>
-          <li>
-            <span class="bullet">&#9679; &nbsp;&nbsp;</span>
-            <input class="item" type="text" placeholder="Add items">
-          </li>
-        </ul>
+        <ul></ul>
       </div>
      `;
 
-    for ( const item of cardToBeSet.children ) {
-      const side = item.children.length == 3 ? 2 : 1;
-      setListener.item( item.children[side].children[0].children[1] );
-      /*
-       * item.childen[ side ].childeren[0].children[0]
-       *>div.inner(.front/.back)
-       *  (p.future)
-       *  input.title
-       *  ul
-       *    li
-       *      span.bullet
-       *      input.item 
-       */
-    }
+    const ul = cardToBeSet.getElementsByTagName( "UL" );
+    createNew.item( ul[0], "front", setListener );
+    createNew.item( ul[1], "back", setListener );
+
     for ( const title of cardToBeSet.children ) {
       const side = title.children.length == 3 ? 1 : 0;
       setListener.title( title.children[side] );
@@ -253,20 +306,6 @@ function setEventListeners() {
        *  (p.future)
        *  input.title
        *  ul
-       */
-    }
-    for ( const bullet of cardToBeSet.children ) {
-      const side = bullet.children.length == 3 ? 2 : 1;
-      setListener.bullet( bullet.children[side].children[0].children[0] );
-      /*
-       * bullet.children[ side ].children[0].children[0]
-       *>dov.inner(.front/.back)
-       *  (p.future)
-       *    input.title
-       *    ul
-       *      li
-       *        span.bullet
-       *        input.item
        */
     }
 
