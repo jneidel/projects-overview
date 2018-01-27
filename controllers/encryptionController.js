@@ -1,5 +1,5 @@
-const jwt = require( "jsonwebtoken" );
 const fs = require( "mz/fs" );
+const jwt = require( "jsonwebtoken" );
 const rsa = require( "node-rsa" );
 const atob = require( "atob" );
 const btoa = require( "btoa" );
@@ -10,9 +10,11 @@ require( "dotenv" ).config( { path: "../variables.env" } );
 
 exports.decryptPasswords = async ( req, res, next ) => {
   /*
-   * In: encrypted passwords
-   * Out: decrypted passwords
+   * Out: decrypted password(s)
    */
+  const password = req.body.password;
+  const passwordConfirm = req.body.password_confirm;
+
   const privateKeyFile = await fs.readFile( "./private-key.pem" );
   const privateKey = new rsa();
   privateKey.importKey( privateKeyFile, "pkcs1-private-pem" );
@@ -23,26 +25,28 @@ exports.decryptPasswords = async ( req, res, next ) => {
     return pass;
   }
 
-  req.body.password = decrypt( req.body.password );
+  req.body.password = decrypt( password );
 
-  if ( req.body.password_confirm ) {
-    req.body.password_confirm = decrypt( req.body.password_confirm );
+  if ( passwordConfirm ) {
+    req.body.password_confirm = decrypt( passwordConfirm );
   }
 
   return next();
 };
 
-exports.handlePasswords = ( req, res, next ) => { // eslint-disable-line no-irregular-whitespace
+exports.hashPassword = ( req, res, next ) => {
   /*
-   * In: decrypted passwords
-   * Out: register: hashed password
-   * Throw: not matching passwords 
+   * Out: hashed password
+   * Throw: passwords not matching
    */
-  if ( req.body.password_confirm !== req.body.password ) {
+  const password = req.body.password;
+  const passwordConfirm = req.body.password_confirm;
+
+  if ( passwordConfirm !== password ) {
     return throwUserError( "Passwords do not match", req, res );
   }
 
-  req.body.password = bcrypt.hashSync( req.body.password, 8 );
+  req.body.password = bcrypt.hashSync( password, 8 );
   req.body.password_confirm = null;
 
   return next();
@@ -50,42 +54,42 @@ exports.handlePasswords = ( req, res, next ) => { // eslint-disable-line no-irr
 
 exports.generateToken = async ( req, res, next ) => {
   /*
-   * In: username
-   * Out:
-   *  register: response: token
-   *  login: token
+   * Out: token with username
    */
-  const token = await jwt.sign( { username: req.body.username }, process.env.SECRET );
+  const username = req.body.username;
+
+  const token = await jwt.sign( { username }, process.env.SECRET );
   req.token = token;
 
   return next();
 };
 
-async function verifyJwt( token ) {
-  function trim( str, regex ) {
-    return str.replace( new RegExp( regex, "g" ), "" );
-  }
-  token = trim( token, "\"" );
-
-  try {
-    const res = await jwt.verify( token, process.env.SECRET );
-    return { username: res.username };
-  } catch ( error ) {
-    return false;
-  }
-}
 
 exports.verifyToken = async ( req, res, next ) => {
   /*
-   * In: token
    * Out: username, homepage
-   * Throw: token not verified
+   * Throw: token invalid
    */
-  const verifiedToken = await verifyJwt( req.token );
-  if ( !verifiedToken ) {
+  async function verifyJwt( token ) {
+    function trim( str, regex ) {
+      return str.replace( new RegExp( regex, "g" ), "" );
+    }
+    token = trim( token, "\"" );
+
+    try {
+      const res = await jwt.verify( token, process.env.SECRET );
+      return { username: res.username };
+    } catch ( error ) {
+      return false;
+    }
+  }
+
+  const data = await verifyJwt( req.token );
+  if ( !data ) {
     throwUserError( "Invalid token", req, res );
   }
-  req.body.username = verifiedToken.username;
+
+  req.body.username = data.username;
   req.homepage = "/app";
 
   return next();
@@ -93,14 +97,15 @@ exports.verifyToken = async ( req, res, next ) => {
 
 exports.encryptToken = async ( req, res, next ) => {
   /*
-   * In: token
    * Out: encrypted token
    */
+  let token = req.token;
+
   const publicKeyFile = await fs.readFile( "./public/public-key.pem" );
   const publicKey = new rsa();
   publicKey.importKey( publicKeyFile, "pkcs8-public-pem" );
 
-  let token = publicKey.encrypt( req.token, "base64" );
+  token = publicKey.encrypt( token, "base64" );
   token = btoa( token );
   req.token = token;
 
@@ -109,16 +114,15 @@ exports.encryptToken = async ( req, res, next ) => {
 
 exports.decryptToken = async ( req, res, next ) => {
   /* 
-   * reversing encryptToken
-   *
-   * In: token
    * Out: decrypted token
    */
+  let token = req.token;
+
   const privateKeyFile = await fs.readFile( "./private-key.pem" );
   const privateKey = new rsa();
   privateKey.importKey( privateKeyFile, "pkcs1-private-pem" );
 
-  let token = atob( req.token );
+  token = atob( token );
   token = privateKey.decrypt( token, "utf8" );
   req.token = token;
 

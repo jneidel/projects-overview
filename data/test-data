@@ -47,7 +47,6 @@ db.users.insertOne(
 	{
 		username: "jneidel",
 		password: "$2a$10$aofxmYLhabyVqsvyvpUYduwJk1UCZIlTYUtW1Mc9x9luhiaNEc2hu",
-		logins: [],
 		settings: {},
 	}
 );

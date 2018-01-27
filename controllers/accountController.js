@@ -1,5 +1,3 @@
-const mongo = require( "mongodb" ).MongoClient;
-const fs = require( "mz/fs" );
 const validator = require( "validator" );
 const bcrypt = require( "bcrypt" );
 const reservedUsernames = require( "../data/reserved-usernames" );
@@ -8,44 +6,37 @@ const { throwUserError, throwUserErrorWithState } = require( "../handlers/errorH
 require( "dotenv" ).config( { path: "../variables.env" } );
 
 
-exports.validateRegister = ( req, res, next ) => {
+exports.validateRegister = async ( req, res, next ) => {
   /*
-   * In: username, password
-   * Out: -
    * Throw:
    *  - username empty
    *  - password empty
+   *  - username not ascii
    *  - username reserved
+   *  - dublicate username
    */
+  const username = req.body.username;
+  const password = req.body.password;
+  const db = req.db.collection( "users" );
+
   try {
-    if ( validator.isEmpty( req.body.username ) ||
-         bcrypt.compareSync( "", req.body.password ) ) {
+    if ( validator.isEmpty( username ) || bcrypt.compareSync( "", password ) ) {
       return throwUserError( "Empty form field", req, res );
     }
   } catch ( error ) {
     return throwUserError( "Register error", req, res );
   }
 
-  // req.sanitizeBody( "username" );
-  // req.checkBody( "password_confirm", 
-  // "Your passwords do not match." ).equals( req.body.password );
+  if ( !validator.isAscii( username ) ) {
+    return throwUserError( "Username must be ascii", req, res );
+  }
 
-  if ( ~reservedUsernames.indexOf( req.body.username ) ) {
+  if ( ~reservedUsernames.indexOf( username ) ) {
     return throwUserError( "Username is reserved", req, res );
   }
 
-  return next();
-};
-
-exports.checkDublicateUsername = async ( req, res, next ) => {
-  /*
-   * In: db
-   * Out: -
-   * Throw: dublicate username
-   */
-  const username = await req.db.collection( "users" ).findOne( { username: req.body.username } );
-
-  if ( username !== null ) {
+  const data = await db.findOne( { username } );
+  if ( data !== null ) {
     return throwUserError( "Username is already registered.", req, res );
   }
 
@@ -53,18 +44,22 @@ exports.checkDublicateUsername = async ( req, res, next ) => {
 };
 
 exports.registerUser = async ( req, res, next ) => {
-  const userDocument = {
-    username: req.body.username.trim(),
-    // email: req.body.email.trim().toLowerCase(), validator.isEmail(), unique
-    password: req.body.password,
+  /*
+   * Out: user data added to db
+   */
+  const username = req.body.username;
+  const password = req.body.password;
+  const db = req.db.collection( "users" );
+
+  const user = {
+    username,
+    password,
     settings: {},
-    logins 	: [],
   };
 
-  const response = await req.db.collection( "users" ).insertOne( userDocument );
+  const response = await db.insertOne( user );
   if ( response.result.ok != 1 ) {
-    req.flash( "error", "Account could not be registered." );
-    return res.json( { error: true } );
+    return throwUserError( "Error registering the account", req, res );
   }
 
   req.flash( "success", "Registration successful" );
@@ -73,80 +68,89 @@ exports.registerUser = async ( req, res, next ) => {
 
 exports.login = async ( req, res, next ) => {
   /*
-   * In: username, unhashed password
-   * Out: login time, null password
-   * Throw: invalid username, invalid password
+   * Throw:
+   *  - invalid username
+   *  - invalid password
    */
   const username = req.body.username;
   const password = req.body.password;
+  const db = req.db.collection( "users" );
 
-  const docs = await req.db.collection( "users" ).find( { username } ).toArray();
+  const data = await db.find( { username } ).toArray();
 
-  if ( !docs || docs.length === 0 ) {
+  if ( !data || data.length === 0 ) {
     return throwUserError( "Invalid username", req, res );
   }
-  const passwordHash = docs[0].password;
+
+  const passwordHash = data[0].password;
 
   if ( !bcrypt.compareSync( password, passwordHash ) ) {
     return throwUserError( "Invalid password", req, res );
   }
 
-  const loginDetails = {
-    time: Date.now(),
-  };
-  req.db.collection( "users" ).updateOne( { username }, { $push: { logins: loginDetails } } );
-
-  req.flash( "success", "Successful login" );
+  req.flash( "success", "Login successful" );
   return next();
 };
 
-/* exports.isLoggedIn = (req, res, next) => {
-    if ( req.isAuthenticated() ) return next();
-    
-    req.flash( "error", "You must be logged in to visit this page." );
-    res.redirect( "back" );
-}; */
-
 exports.updateUsername = async ( req, res, next ) => {
+  /*
+   * Out: update username in db
+   * Throw:
+   *  - empty username
+   *  - empty password
+   *  - unchanged username
+   *  - dublicate username
+   *  - reserved username
+   *  - invalid password
+   */
   const username = req.body.username;
   const newUsername = req.body.newUsername;
   const password = req.body.password;
+  const db = req.db.collection( "users" );
+
+  const errState = [ { username: newUsername }, "/account", req, res ];
 
   if ( newUsername === "" ) {
-    return throwUserErrorWithState( "Username can't be empty", { username: newUsername }, "/account", req, res );
+    return throwUserErrorWithState( "Username can't be empty", ...errState );
   }
   if ( password === "" ) {
-    return throwUserErrorWithState( "Password can't be empty", { username: newUsername }, "/account", req, res );
+    return throwUserErrorWithState( "Password can't be empty", ...errState );
   }
   if ( username === newUsername ) {
     req.flash( "info", "Username are indentical" );
     return res.json( { info: true } );
   }
-
-  const usernameExits = await req.db.collection( "users" ).find( { newUsername } ).toArray();
-
-  if ( !usernameExits || usernameExits.length !== 0 ) {
-    return throwUserErrorWithState( "Username is already in use", { username: newUsername }, "/account", req, res );
+  if ( ~reservedUsernames.indexOf( newUsername ) ) {
+    return throwUserErrorWithState( "Username is reserved", ...errState );
   }
 
-  const docs = await req.db.collection( "users" ).find( { username } ).toArray();
+  const usernameExits = await db.find( { newUsername } ).toArray();
+
+  if ( !usernameExits || usernameExits.length !== 0 ) {
+    return throwUserErrorWithState( "Username is already in use", ...errState );
+  }
+
+  const docs = await db.find( { username } ).toArray();
   const passwordHash = docs[0].password;
 
   if ( !bcrypt.compareSync( password, passwordHash ) ) {
-    return throwUserErrorWithState( "Invalid password", { username: newUsername }, "/account", req, res );
+    return throwUserErrorWithState( "Invalid password", ...errState );
   }
 
-  req.db.collection( "users" ).updateOne(
+  db.updateOne(
     { username },
     { $set: { username: newUsername } }
   );
 
-  req.db.collection( "cards" ).updateMany(
+  db.updateMany(
     { username },
     { $set: { username: newUsername } }
   );
 
   req.body.username = req.body.newUsername;
+
   req.flash( "success", "Username has been changed" );
   return next();
 };
+
+exports.updatePassword = async ( req, res, next ) => res.json( { success: true } );

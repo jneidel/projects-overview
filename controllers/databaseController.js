@@ -1,129 +1,108 @@
-const mongo = require( "mongodb" ).MongoClient;
-const mongodb = require( "mongodb" );
-const assert = require( "assert" );
-const { throwUserError, throwInternalError } = require( "../handlers/errorHandlers" );
+const { throwUserError } = require( "../handlers/errorHandlers" );
 
-require( "dotenv" ).config( { path: "../variables.env" } );
+/* eslint-disable global-require */
 
 exports.updateDatabase = async ( req, res, next ) => {
-  const query = {};
+  /*
+   * Out: updated item/title in db
+   */
+  const username = req.body.username;
+  const title = req.body.title;
+  const updatedTitle = req.body.updatedTitle;
+  const item = req.body.item;
+  const updatedItem = req.body.updatedItem;
+  const side = req.body.side;
+  const db = req.db.collection( "cards" );
+
+  const query = { username, title };
   const update = {};
 
-  if ( req.body.updatedItem === undefined ) {
-    query.username = req.body.username;
-    query.title = req.body.title ? req.body.title : null;
-
-    update.$set = { title: req.body.updatedTitle };
+  if ( updatedItem === undefined ) {
+    update.$set = { title: updatedTitle };
   } else {
-    query.username = req.body.username;
-    query.title = req.body.title ? req.body.title : null;
-    query[req.body.side] = req.body.item;
+    query[side] = item;
 
-    const setObj = {};
-    setObj[`${req.body.side}.$`] = req.body.updatedItem;
-    update.$set = setObj;
+    update.$set = {};
+    update.$set[`${side}.$`] = updatedItem;
   }
 
-  const db = await mongo.connect( process.env.DATABASE );
+  const response = await db.updateOne( query, update );
 
-  const response = await db.collection( "cards" ).updateOne( query, update );
-  if ( response.result.ok != 1 ) {
-    next( new Error( "Insertion Error" ) );
-  }
-  res.sendStatus( 200 );
+  res.json( { success: true } );
 };
 
 exports.generateCardId = async ( req, res, next ) => {
-  const db = await mongo.connect( process.env.DATABASE );
+  /*
+   * Out: available card id
+   */
+  const db = req.db.collection( "cards" );
 
-  const query = {};
-  const projection = { _id: 1 };
-
-  const cursor = db.collection( "cards" ).find( query, projection );
+  const cursor = db.find( {}, { _id: 1 } );
   cursor.sort( { _id: -1 } );
   cursor.limit( 1 );
 
   cursor.forEach( ( doc ) => {
-    res.status( 200 );
     res.json( { _id: doc._id + 1 } );
-  }, ( err ) => {
-    assert.equal( err, null );
-    return db.close();
   } );
 };
 
 exports.addNewCard = async ( req, res, next ) => {
-  const db = await mongo.connect( process.env.DATABASE );
+  /*
+   * Out: new card added to db
+   */
+  const username = req.body.username;
+  const db = req.db.collection( "cards" );
 
-  const lastPosition = await db.collection( "cards" ).aggregate( [
-    { $match: { username: req.body.username } },
+  const lastPosition = await db.aggregate( [
+    { $match: { username } },
     { $group: { position: { $max: "$position" }, _id: null } },
   ] ).toArray();
 
-  let newPosition = 1; // Fallback if first card
+  let newPosition = 1; // fallback if first card
   try {
     newPosition = lastPosition[0].position + 1;
   } catch ( e ) {} // eslint-disable-line no-empty
 
   const insertion = {
     _id     : Number( req.body._id ),
-    username: req.body.username,
+    username,
     title   : "",
     front   : [ "" ],
     back    : [ "" ],
     position: newPosition,
   };
 
-  const response = await db.collection( "cards" ).insertOne( insertion );
-  if ( response.result.ok != 1 ) {
-    return next( new Error( "Insertion Error" ) );
-  }
-  res.sendStatus( 200 );
-};
+  const response = await db.insertOne( insertion );
 
-exports.getItems = async ( req, res, next ) => {
-  const db = await mongo.connect( process.env.DATABASE );
-
-  const query = { username: req.body.username };
-  const projection = { _id: 1, title: 1, front: 1, back: 1, position: 1 };
-
-  const cards = await db.collection( "cards" )
-    .find( query, projection )
-    .sort( { position: 1 } )
-    .toArray();
-
-  db.close();
-  res.json( cards );
+  return res.json( { success: true } );
 };
 
 exports.addNewItem = async ( req, res, next ) => {
-  const db = await mongo.connect( process.env.DATABASE );
+  /*
+   * Out: new item added to db
+   */
+  const username = req.body.username;
+  const title = req.body.title;
+  const side = req.body.side;
+  const db = req.db.collection( "cards" );
 
-  const query = { title: req.body.title, username: req.body.username };
-  const insertionObj = {};
-  insertionObj[req.body.cardSide] = "";
-  const insertion = { $push: insertionObj };
+  const query = { title, username };
+  const insert = { $push: {} };
+  insert.$push[side] = "";
 
-  const response = await db.collection( "cards" ).updateOne( query, insertion );
-  if ( response.result.ok != 1 ) {
-    next( new Error( "Insertion Error" ) );
-  }
+  const response = await db.updateOne( query, insert );
 
-  res.sendStatus( 200 );
-};
-
-exports.getAccountData = async ( req, res, next ) => {
-  res.json( {
-    username: req.body.username,
-  } );
+  return res.json( { success: true } );
 };
 
 exports.connectDatabase = async ( req, res, next ) => {
   /*
-   * In: -
-   * Out: db 
+   * Out: req.db 
    * Throw: connection error
    */
+  const mongodb = require( "mongodb" );
+  require( "dotenv" ).config( { path: "../variables.env" } );
+
   req.db = await mongodb.MongoClient.connect( process.env.DATABASE )
     .catch( () => { throwUserError( "Database connection error", req, res ); } );
 
@@ -132,31 +111,29 @@ exports.connectDatabase = async ( req, res, next ) => {
 
 exports.getCards = async ( req, res, next ) => {
   /*
-   * In: db, username
-   * Out: card data for username
+   * Out: cards of username
    */
-  const query = { username: req.body.username };
-  const projection = { _id: 1, title: 1, front: 1, back: 1, position: 1 };
+  const username = req.body.username;
+  const db = req.db.collection( "cards" );
 
-  req.cards = await req.db.collection( "cards" )
-    .find( query, projection )
-    .sort( { position: 1 } )
-    .toArray();
+  req.cards = await db.find( { username }, { _id: 1, title: 1, front: 1, back: 1, position: 1 } )
+    .sort( { position: 1 } ).toArray();
 
   return next();
 };
 
 exports.removeItem = async ( req, res, next ) => {
   /*
-   * In: username, title, side, item
    * Out: remove item from card
    * Throw: item to remove is last item in array
    */
   const username = req.body.username;
   const title = req.body.title;
   const side = req.body.side;
+  const db = req.db.collection( "cards" );
 
-  const card = await req.db.collection( "cards" ).find( { username, title } ).toArray();
+  const card = await db.find( { username, title } ).toArray();
+
   if ( card[0][side].length <= 1 ) {
     req.flash( "info", "The last item of a card shall not be removed" );
     return res.json( { info: true } );
@@ -175,7 +152,6 @@ exports.removeItem = async ( req, res, next ) => {
 
 exports.appendItemToOtherSide = async ( req, res, next ) => {
   /*
-   * In: username, title, side, item
    * Out: add item to side array
    */
   const username = req.body.username;

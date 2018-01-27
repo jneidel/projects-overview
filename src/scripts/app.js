@@ -83,12 +83,13 @@ const setListener = {
           createNew.item( ul, side, setListener );
         }
 
-        await axios.post( "/api/update", {
+        const response = await axios.post( "/api/update", {
           updatedItem: item.value,
           item       : originalItem,
           side,
           title,
         } );
+        checkResponse( response.data, "app", true );
 
         originalItem = item.value;
 	 		}
@@ -319,10 +320,11 @@ function setEventListeners() {
     newCard.className = "card addCardContainer";
     newCard.addEventListener( "dblclick", cardListenerCallback );
 
-    const cardIdRequest = await axios.post( "/api/generate-cardId" );
+    const cardIdRequest = await axios.post( "/api/generate-card-id" );
     const cardId = cardIdRequest.data._id;
 
-    axios.post( "/api/add-new-card", { _id: cardId } );
+    const response = axios.post( "/api/add-new-card", { _id: cardId } );
+    checkResponse( response.data, "app", true );
   }
 
   for ( const card of cards ) {

@@ -7,7 +7,7 @@
     "node": "9.2.0"
   },
   "scripts": {
-    "start": "concurrently \"npm run watch\" \"npm run build\" \"npm run testing\"  --names \"💻,📦,📡\" --prefix name",
+    "start": "concurrently \"npm run watch\" \"npm run build\" --names \"💻,📦\" --prefix name",
     "watch": "nodemon app.js --ignore public/scripts/ --ignore tests/",
     "build": "npm run webpack",
     "webpack": "webpack -w",
@@ -22,7 +22,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "assert": "^1.4.1",
     "atob": "^2.0.3",
     "axios": "^0.17.1",
     "bcrypt": "^1.0.3",
@@ -33,13 +32,13 @@
     "dotenv": "^4.0.0",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
-    "jsonwebtoken": "^8.1.0",
+    "jsonwebtoken": "^8.1.1",
     "mongodb": "^2.2.33",
     "morgan": "^1.9.0",
     "mz": "^2.7.0",
     "node-rsa": "^0.4.2",
     "pug": "^2.0.0-rc.4",
-    "validator": "^9.2.0"
+    "validator": "^9.3.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -49,14 +48,13 @@
     "concurrently": "^3.5.1",
     "expect": "^1.20.2",
     "extract-text-webpack-plugin": "^3.0.2",
-    "mocha": "^4.1.0",
+    "mocha": "^5.0.0",
     "mockery": "^2.1.0",
     "node-sass": "^4.7.2",
     "nodemon": "^1.14.11",
     "raw-loader": "^0.5.1",
     "sass-loader": "^6.0.6",
     "sinon": "^4.1.6",
-    "supertest": "^3.0.0",
     "webpack": "^3.10.0"
   }
 }
