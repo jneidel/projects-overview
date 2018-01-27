@@ -1,7 +1,7 @@
 const mongo = require( "mongodb" ).MongoClient;
 const mongodb = require( "mongodb" );
 const assert = require( "assert" );
-const { throwUserError } = require( "../handlers/errorHandlers" );
+const { throwUserError, throwInternalError } = require( "../handlers/errorHandlers" );
 
 require( "dotenv" ).config( { path: "../variables.env" } );
 
@@ -147,23 +147,57 @@ exports.getCards = async ( req, res, next ) => {
 };
 
 exports.removeItem = async ( req, res, next ) => {
+  /*
+   * In: username, title, side, item
+   * Out: remove item from card
+   * Throw: item to remove is last item in array
+   */
   const username = req.body.username;
   const title = req.body.title;
   const side = req.body.side;
 
-  const projection = { _id: 0 };
-  projection[side] = 1;
-
-  const itemArray = await req.db.collection( "cards" ).find( { username, title }, projection ).toArray();
-
-  if ( itemArray[0][side].length <= 1 ) {
+  const card = await req.db.collection( "cards" ).find( { username, title } ).toArray();
+  if ( card[0][side].length <= 1 ) {
     req.flash( "info", "The last item of a card shall not be removed" );
     return res.json( { info: true } );
   }
+
   const $pull = {};
   $pull[side] = req.body.item;
 
   await req.db.collection( "cards" ).update( { username, title }, { $pull } );
+
+  if ( req.body.otherSide ) {
+    return next();
+  }
+  return res.json( { success: true } );
+};
+
+exports.appendItemToOtherSide = async ( req, res, next ) => {
+  /*
+   * In: username, title, side, item
+   * Out: add item to side array
+   */
+  const username = req.body.username;
+  const title = req.body.title;
+  const side = req.body.otherSide;
+  const db = req.db.collection( "cards" );
+
+  const card = await db.find( { username, title } ).toArray();
+  const arr = card[0][side];
+  if ( arr[arr.length - 1] === "" ) {
+    var emptyItem = true;
+
+    const $pullAll = {};
+    $pullAll[side] = [ "" ];
+
+    await db.update( { username, title }, { $pullAll } );
+  }
+
+  const update = { $push: {} };
+  update.$push[side] = emptyItem ? { $each: [ req.body.item, "" ] } : req.body.item;
+
+  await db.update( { username, title }, update );
 
   return res.json( { success: true } );
 };

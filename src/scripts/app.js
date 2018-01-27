@@ -176,7 +176,6 @@ const setListener = {
        *< input.item 
        *> svg.switch 
        */
-      const value = item.value;
       const sideEl = switchEl.parentNode.parentNode.parentNode;
       /*
        *<div.inner
@@ -185,6 +184,7 @@ const setListener = {
        *>     svg.switch
        */
       const side = sideEl.className.match( /back/ ) ? "back" : "front";
+      const otherSide = side === "back" ? "front" : "back";
       const title = sideEl.getElementsByClassName( "title" )[0];
       /*
        *>div.inner
@@ -199,11 +199,8 @@ const setListener = {
        *      li
        *>       svg.switch
        */
-      const otherSide = side === "back" ?
-        card.getElementsByClassName( "front" )[0] :
-        card.getElementsByClassName( "back" )[0];
-
-      const ul = otherSide.getElementsByTagName( "UL" )[0].children;
+      const otherCard = card.getElementsByClassName( otherSide )[0];
+      const ul = otherCard.getElementsByTagName( "UL" )[0].children;
       const lastItem = ul[ul.length - 1].getElementsByClassName( "item" )[0];
       /*
        *>div.inner
@@ -212,16 +209,20 @@ const setListener = {
        *<     input.item
        */
 
-      const options = { value };
+      const options = { value: item.value };
 
       if ( lastItem.value === "" ) {
         options.last = lastItem;
       }
 
-      createNew.item( otherSide.getElementsByTagName( "UL" )[0], otherSide, setListener, options );
+      createNew.item( otherCard.getElementsByTagName( "UL" )[0], otherCard, setListener, options );
 
       item.parentNode.remove();
-      // update db
+
+      const response = await axios.post( "/api/switch-item", {
+        title: title.value, item : item.value, side, otherSide,
+      } );
+      checkResponse( response.data, "app", true );
     }
 
     switchEl.addEventListener( "mouseenter", () => {

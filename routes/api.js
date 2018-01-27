@@ -53,11 +53,16 @@ router.post( "/update-username",
   account.updateUsername,
   setupToken
 );
-
 router.post( "/remove-item",
   verifyTokenAPI,
   database.connectDatabase,
   database.removeItem
+);
+router.post( "/switch-item",
+  verifyTokenAPI,
+  database.connectDatabase,
+  database.removeItem,
+  database.appendItemToOtherSide
 );
 
 router.get( "/", ( req, res ) => {
