@@ -114,3 +114,15 @@ li:hover .switch {
     margin: 20px 100px 60px 100px;
   }
 }
+
+/* Applying margin to inner insted of content as otherwise the card flip animation will be cut off */
+#inner {
+  margin: $margin-contentTop 0;
+}
+#content {
+  margin: 0;
+}
+.flash:nth-of-type( 1 ) {
+  margin-top: $margin-contentTop;
+  margin-bottom: 0;
+}
