@@ -3,7 +3,6 @@
 #inner {
   display: flex;
   justify-content: center;
-  // align-items: flex-start; cards only as big as their own content
   flex-wrap: wrap;
   perspective: 800px;
 }
@@ -12,7 +11,7 @@
   margin: $margin-betweenCards;
   padding: 20px;
   cursor: pointer;
-  transition: transform 0.6s ease;
+  transition: transform 0.6s ease, height 0.6s ease;
   transform-style: preserve-3d;
 
   @include container;
@@ -55,7 +54,7 @@ input {
   caret-color: $color-cursor;
 }
 input.title {
-  width: auto;
+  width: 250px;
   font-family: $font-headline;
   font-size: $fontSize-headline;
 }

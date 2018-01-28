@@ -235,11 +235,51 @@ const setListener = {
   },
 };
 
-function setEventListeners() {
+const height = {
+  default: 40, // padding, title
+  item: 22,
+  set( card ) {
+    const inner = card.getElementsByClassName( "front" )[0];
+    const items = inner.getElementsByClassName( "item" ).length;
+
+    card.style.height = this.calc( items );
+  },
+  calc( items ) {
+    return `${items * this.item + this.default}px`;
+  }
+}
+
+function flipCard( card ) {
+  let side = "front";
+
+  card.addEventListener( "dblclick", ( event ) => {
+    const tag = event.target.tagName;
+    const permitted = [ "DIV", "P" ];
+
+    if ( ~permitted.indexOf( tag ) ) {
+      const inner = card.getElementsByClassName( side === "back" ? "front" : "back" )[0];
+      const items = inner.getElementsByClassName( "item" ).length;
+      const style = card.style;
+
+      if ( side === "front" ) {
+        style.transform = "rotateY( 180deg )";
+        style.height = height.calc( items );
+        side = "back";
+      } else {
+        style.transform = "rotateY( 0deg )";
+        style.height = height.calc( items );
+        side = "front";
+      }
+    }
+  } );
+}
+
+( function setEventListeners() {
   const items = $( ".item" );
   const titles = $( ".title" );
   const bullets = $( ".bullet" );
   const switchElems = $( ".switch" );
+  const cards = $( ".card" );
 
   for ( const item of items ) {
 	  setListener.item( item );
@@ -252,27 +292,6 @@ function setEventListeners() {
   }
   for ( const switchEl of switchElems ) {
     setListener.itemSwitch( switchEl );
-  }
-
-  const cards = document.getElementsByClassName( "card" );
-
-  // flip cards
-  function flipCard( card ) {
-    let cardState = "front";
-
-    card.addEventListener( "dblclick", ( event ) => {
-      const el = event.target.tagName;
-      const permitted = [ "DIV", "P" ];
-      if ( ~permitted.indexOf( el ) ) {
-        if ( cardState === "front" ) {
-          card.style.transform = "rotateY( 180deg )";
-          cardState = "back";
-        } else {
-          card.style.transform = "rotateY( 0deg )";
-          cardState = "front";
-        }
-      }
-    } );
   }
 
   // Add new card
@@ -325,16 +344,17 @@ function setEventListeners() {
 
     const response = axios.post( "/api/add-new-card", { _id: cardId } );
     checkResponse( response.data, "app", true );
+
   }
 
   for ( const card of cards ) {
     const classes = card.className;
+    
     if ( !classes.match( /.addCardContainer/ ) ) {
       flipCard( card );
+      height.set( card );
     } else {
       card.addEventListener( "dblclick", cardListenerCallback );
     }
   }
-}
-
-setEventListeners();
+}() );
