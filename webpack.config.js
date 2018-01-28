@@ -4,6 +4,7 @@ const webpack = require( "webpack" );
 const pathModule = require( "path" );
 const minifyModule = require( "babel-minify-webpack-plugin" );
 const ExtractTextPlugin = require( "extract-text-webpack-plugin" );
+const browserSyncPlugin = require( "browser-sync-webpack-plugin" );
 
 require( "dotenv" ).config( { path: "variables.env" } );
 const prod = process.env.PROD || false;
@@ -28,6 +29,12 @@ const uglify = new webpack.optimize.UglifyJsPlugin( {
 } );
 
 const minify = new minifyModule( {}, { comments: false } );
+
+const browserSync = new browserSyncPlugin( {
+  host: "localhost",
+  port: 8080,
+  proxy: "http://localhost:8000/"
+}, {} );
 
 function bundleCss( out ) {
   return new ExtractTextPlugin( `../styles/${out}.bundle.css` );
@@ -55,7 +62,7 @@ const res = [];
     },
     plugins: prod ?
       [ minify, uglify, bundleCss( name ) ] :
-      [ bundleCss( name ) ]
+      [ bundleCss( name ), browserSync ]
   } ) );
 } );
 
