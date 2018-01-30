@@ -67,27 +67,40 @@ input.title {
   font-size: $fontSize-headline;
 }
 
-/* 'New card' Card Style */
+// Add card buttton
 .addCardContainer {
-  width: 88px;
-  height: 88px;
+  $gap: 30px;
+  $dimensions: 70px;
+  
+  position: fixed;
+  right: $gap;
+  bottom: $gap;
+  width: $dimensions;
+  height: $dimensions;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  @include container;
+
+  border-radius: 50%;
+  cursor: pointer;
+
+  &:hover .addCard {
+    transform: rotateZ( 90deg );
+  }
 }
-img.addCard {
-  height: 48px;
-  width: 48px;
-  padding: 21px 0 21px 0;
+.addCard {
+  $dimensions: 32px;
+
+  height: $dimensions;
+  width: $dimensions;
   transition: transform 0.3s ease-out;
   transform-origin: 50% 50% 0;
   user-select: none;
 }
-span.addCardContainer:hover img.addCard {
-  transform: rotateZ( 90deg );
-}
 
-/* Switch, Bullets */
+// Switch, Bullets
 
 .bullet {
   font-size: 0.8rem;
@@ -113,13 +126,6 @@ li:hover .switch {
   width: auto;
   margin-top: 20px;
   margin-bottom: -40px;
-}
-
-/* Responsive Design */
-@media all and ( max-width: 842px ) {
-  .addCardContainer {
-    margin: 20px 100px 60px 100px;
-  }
 }
 
 /* Applying margin to inner insted of content as otherwise the card flip animation will be cut off */

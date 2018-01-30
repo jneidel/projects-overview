@@ -57,6 +57,56 @@ const createNew = {
       createNew.item( parent, side, setListener );
     }
   },
+  async card() {
+    const card = $("#inner")[0].appendChild(document.createElement( "div" ));
+    card.classList.add( "card" );
+    card.innerHTML = `
+      <div class="front inner">
+        <input class="title" type="text" placeholder="Add title">
+        <ul></ul>
+      </div>
+      <div class="back inner">
+        <p class="future">Future</p> 
+        <input class="title" type="text" placeholder="Add title">
+        <ul></ul>
+      </div>
+    `;
+
+    const ul = card.getElementsByTagName( "UL" );
+    createNew.item( ul[0], "front", setListener );
+    createNew.item( ul[1], "back", setListener );
+
+    for ( const title of card.children ) {
+      const side = title.children.length == 3 ? 1 : 0;
+      setListener.title( title.children[side] );
+      /*
+      * title.children[ side ]
+      *>div.inner(.front/.back)
+      *  (p.future)
+      *  input.title
+      *  ul
+      */
+    }
+    
+    flipCard( card );
+    setHeight( card, "front" );
+
+    const cardIdRequest = await axios.post( "/api/generate-card-id" );
+    const cardId = cardIdRequest.data._id;
+
+    const response = await axios.post( "/api/add-new-card", { _id: cardId } );
+    checkResponse( response.data, "app", true );
+  },
+  addCard() {
+    // Appending 'add new card' button to body, as otherwise the grid would apply.
+    const addCardContainer = document.body.appendChild( document.createElement( "div" ) );
+    const addCard = addCardContainer.appendChild( document.createElement( "img" ) );
+    addCardContainer.classList.add( "addCardContainer" );
+    addCard.classList.add( "addCard" );
+    addCard.src = "/img/add.png";
+
+    addCardContainer.addEventListener( "click", createNew.card );
+  }
 };
 
 const setListener = {
@@ -296,70 +346,14 @@ function flipCard( card ) {
   for ( const switchEl of switchElems ) {
     setListener.itemSwitch( switchEl );
   }
-
-  // Add new card
-  const cardListenerCallback = function cardListenerCallbackWrapper() {
-    setNewCardToInput( this, cardListenerCallback );
-  };
-
-  async function setNewCardToInput( cardToBeSet, callingFunction ) {
-    cardToBeSet.removeEventListener( "dblclick", callingFunction );
-    cardToBeSet.className = "card";
-    cardToBeSet.innerHTML = `
-      <div class="front inner">
-        <input class="title" type="text" placeholder="Add title">
-        <ul></ul>
-      </div>
-      <div class="back inner">
-        <p class="future">Future</p> 
-        <input class="title" type="text" placeholder="Add title">
-        <ul></ul>
-      </div>
-     `;
-
-    const ul = cardToBeSet.getElementsByTagName( "UL" );
-    createNew.item( ul[0], "front", setListener );
-    createNew.item( ul[1], "back", setListener );
-
-    for ( const title of cardToBeSet.children ) {
-      const side = title.children.length == 3 ? 1 : 0;
-      setListener.title( title.children[side] );
-      /*
-       * title.children[ side ]
-       *>div.inner(.front/.back)
-       *  (p.future)
-       *  input.title
-       *  ul
-       */
-    }
-
-    flipCard( cardToBeSet );
-    setHeight( cardToBeSet, "front" );
-
-    const content = document.getElementById( "inner" );
-    const newCard = content.appendChild( document.createElement( "span" ) );
-
-    newCard.innerHTML += `<img class="addCard" src="img/add.png">`;
-    newCard.className = "card addCardContainer";
-    newCard.addEventListener( "dblclick", cardListenerCallback );
-
-    const cardIdRequest = await axios.post( "/api/generate-card-id" );
-    const cardId = cardIdRequest.data._id;
-
-    const response = await axios.post( "/api/add-new-card", { _id: cardId } );
-    checkResponse( response.data, "app", true );
-  }
-
-  for ( const card of cards ) { // setup cards
+  for ( const card of cards ) {
     const classes = card.className;
 
-    if ( !classes.match( /.addCardContainer/ ) ) {
-      flipCard( card );
-      setHeight( card, "front" );
+    flipCard( card );
+    setHeight( card, "front" );
 
-      document.getElementById( "inner" ).style.gridTemplateRows = `repeat( ${Math.ceil( ( window.innerHeight - 200 ) / 22 )}, 22px )`; // Fixes bug with implicit grid: the grid would grow with one container
-    } else {
-      card.addEventListener( "dblclick", cardListenerCallback );
-    }
+    document.getElementById( "inner" ).style.gridTemplateRows = `repeat( ${Math.ceil( ( window.innerHeight - 200 ) / 22 )}, 22px )`; // Fixes bug with implicit grid: the grid would grow with one container
   }
+
+  createNew.addCard(); 
 } )();
