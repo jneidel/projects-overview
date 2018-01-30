@@ -7,6 +7,22 @@
  *<   p.2ndChild // < signifies out point item
  */
 
+function setHeight( card, side ) {
+  const inner = card.getElementsByClassName( side )[0];
+  /*
+   *>div.card
+   *< div.inner
+   */
+  const items = inner.getElementsByClassName( "item" ).length;
+
+  try {
+    card.classList.remove( `-span${card.className.match( /-span(\d+)/ )[1]}` );
+  } catch ( err ) {} // eslint-disable-line no-empty
+
+  card.classList.add( `-span${items}` );
+  card.style.height = `${(items + 2) * 22}px`;
+}
+
 const createNew = {
   item( parent, side, setListener, options = false ) {
     if ( options && options.last ) { // remove empty item to be added to the end later on
@@ -81,6 +97,7 @@ const setListener = {
           axios.post( "/api/add-new-item", { side, title } );
 
           createNew.item( ul, side, setListener );
+          setHeight( innerCard.parentNode, side );
         }
 
         const response = await axios.post( "/api/update", {
@@ -235,20 +252,6 @@ const setListener = {
   },
 };
 
-const height = {
-  default: 40, // padding, title
-  item: 22,
-  set( card ) {
-    const inner = card.getElementsByClassName( "front" )[0];
-    const items = inner.getElementsByClassName( "item" ).length;
-
-    card.style.height = this.calc( items );
-  },
-  calc( items ) {
-    return `${items * this.item + this.default}px`;
-  }
-}
-
 function flipCard( card ) {
   let side = "front";
 
@@ -263,12 +266,12 @@ function flipCard( card ) {
 
       if ( side === "front" ) {
         style.transform = "rotateY( 180deg )";
-        style.height = height.calc( items );
         side = "back";
+        setHeight( card, side );
       } else {
         style.transform = "rotateY( 0deg )";
-        style.height = height.calc( items );
         side = "front";
+        setHeight( card, side );
       }
     }
   } );
@@ -331,6 +334,7 @@ function flipCard( card ) {
     }
 
     flipCard( cardToBeSet );
+    setHeight( cardToBeSet, "front" );
 
     const content = document.getElementById( "inner" );
     const newCard = content.appendChild( document.createElement( "span" ) );
@@ -342,19 +346,18 @@ function flipCard( card ) {
     const cardIdRequest = await axios.post( "/api/generate-card-id" );
     const cardId = cardIdRequest.data._id;
 
-    const response = axios.post( "/api/add-new-card", { _id: cardId } );
+    const response = await axios.post( "/api/add-new-card", { _id: cardId } );
     checkResponse( response.data, "app", true );
-
   }
 
-  for ( const card of cards ) {
+  for ( const card of cards ) { // setup cards
     const classes = card.className;
-    
+
     if ( !classes.match( /.addCardContainer/ ) ) {
       flipCard( card );
-      height.set( card );
+      setHeight( card, "front" );
     } else {
       card.addEventListener( "dblclick", cardListenerCallback );
     }
   }
-}() );
+} )();

@@ -13,9 +13,9 @@ const registerListener = {
 };
 
 document.getElementsByName( "button_username" )[0].addEventListener( "click", registerListener.username );
-document.getElementsByName( "confirmation_username" )[0].addEventListener( "keydown", () => { 
+document.getElementsByName( "confirmation_username" )[0].addEventListener( "keydown", () => {
   if ( event.which === 13 ) { registerListener.username(); }
 } );
-document.getElementsByName( "username" )[0].addEventListener( "keydown", () => { 
+document.getElementsByName( "username" )[0].addEventListener( "keydown", () => {
   if ( event.which === 13 ) { registerListener.username(); }
 } );
