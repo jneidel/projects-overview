@@ -91,10 +91,7 @@ const createNew = {
     flipCard( card );
     setHeight( card, "front" );
 
-    const cardIdRequest = await axios.post( "/api/generate-card-id" );
-    const cardId = cardIdRequest.data._id;
-
-    const response = await axios.post( "/api/add-new-card", { _id: cardId } );
+    const response = await axios.post( "/api/add-new-card" );
     checkResponse( response.data, "app", true );
   },
   addCard() {

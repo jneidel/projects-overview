@@ -41,9 +41,11 @@ exports.generateCardId = async ( req, res, next ) => {
   cursor.sort( { _id: -1 } );
   cursor.limit( 1 );
 
-  cursor.forEach( ( doc ) => {
-    res.json( { _id: doc._id + 1 } );
-  } );
+  cursor.forEach( doc => {
+    req.cardId = doc._id + 1;
+
+    return next();
+  });
 };
 
 exports.addNewCard = async ( req, res, next ) => {
@@ -51,6 +53,7 @@ exports.addNewCard = async ( req, res, next ) => {
    * Out: new card added to db
    */
   const username = req.body.username;
+  const cardId = req.cardId;
   const db = req.db.collection( "cards" );
 
   const lastPosition = await db.aggregate( [
@@ -64,7 +67,7 @@ exports.addNewCard = async ( req, res, next ) => {
   } catch ( e ) {} // eslint-disable-line no-empty
 
   const insertion = {
-    _id     : Number( req.body._id ),
+    _id     : Number( cardId ),
     username,
     title   : "",
     front   : [ "" ],

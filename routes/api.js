@@ -26,14 +26,10 @@ router.post( "/update",
   database.connectDatabase,
   database.updateDatabase
 );
-router.post( "/generate-card-id",
-  verifyTokenAPI,
-  database.connectDatabase,
-  database.generateCardId
-);
 router.post( "/add-new-card",
   verifyTokenAPI,
   database.connectDatabase,
+  database.generateCardId,
   database.addNewCard
 );
 router.post( "/add-new-item",
