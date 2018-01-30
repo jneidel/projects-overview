@@ -5,7 +5,7 @@
   width: 100%;
   display: grid;
   grid-template-columns: repeat( auto-fit, 300px );
-  grid-template-rows: 22px; // Other rows of the grid are implicit
+  grid-template-rows: 22px; // Will be changed in app.js
   grid-column-gap: $margin-betweenCards;
   justify-content: center;
   perspective: 800px;

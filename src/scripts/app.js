@@ -20,7 +20,7 @@ function setHeight( card, side ) {
   } catch ( err ) {} // eslint-disable-line no-empty
 
   card.classList.add( `-span${items}` );
-  card.style.height = `${(items + 2) * 22}px`;
+  card.style.height = `${( items + 2 ) * 22}px`;
 }
 
 const createNew = {
@@ -356,6 +356,8 @@ function flipCard( card ) {
     if ( !classes.match( /.addCardContainer/ ) ) {
       flipCard( card );
       setHeight( card, "front" );
+
+      document.getElementById( "inner" ).style.gridTemplateRows = `repeat( ${Math.ceil( ( window.innerHeight - 200 ) / 22 )}, 22px )`; // Fixes bug with implicit grid: the grid would grow with one container
     } else {
       card.addEventListener( "dblclick", cardListenerCallback );
     }
