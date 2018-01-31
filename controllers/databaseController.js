@@ -48,7 +48,7 @@ exports.generateCardId = async ( req, res, next ) => {
   } );
 
   const arr = await cursor.toArray();
-  if ( arr === [] ) {
+  if ( !arr.length ) {
     req.cardId = 1;
     return next();
   }
