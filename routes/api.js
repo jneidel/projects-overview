@@ -61,6 +61,11 @@ router.post( "/switch-item",
   database.removeItem,
   database.appendItemToOtherSide
 );
+router.post( "/remove-card",
+  verifyTokenAPI,
+  database.connectDatabase,
+  database.removeCard
+);
 
 router.get( "/", ( req, res ) => {
   req.flash( "error", "Access to the API denied." );

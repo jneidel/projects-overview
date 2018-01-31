@@ -1,5 +1,5 @@
 /* globals Vue url axios $ checkResponse */
-/* eslint-disable no-alert */
+/* eslint-disable no-alert, no-use-before-define */
 
 /* Visual DOM Selection Tree - always applies to the one above
  *>div.item      // > signifies entry point item
@@ -58,7 +58,7 @@ const createNew = {
     }
   },
   async card() {
-    const card = $("#inner")[0].appendChild(document.createElement( "div" ));
+    const card = $( "#inner" )[0].appendChild( document.createElement( "div" ) );
     card.classList.add( "card" );
     card.innerHTML = `
       <div class="front inner">
@@ -66,8 +66,13 @@ const createNew = {
         <ul></ul>
       </div>
       <div class="back inner">
-        <p class="future">Future</p> 
-        <input class="title" type="text" placeholder="Add title">
+        <p class="future">Future</p>
+        <div class="titleContainer">
+          <div class="removeWrapper">
+            <div class="remove">&#9679</div>
+          </div>        
+          <input class="title" type="text" placeholder="Add title">
+        </div>
         <ul></ul>
       </div>
     `;
@@ -77,19 +82,16 @@ const createNew = {
     createNew.item( ul[1], "back", setListener );
 
     for ( const title of card.children ) {
-      const side = title.children.length == 3 ? 1 : 0;
-      setListener.title( title.children[side] );
+      setListener.title( title.getElementsByClassName( "title" )[0] );
       /*
-      * title.children[ side ]
       *>div.inner(.front/.back)
-      *  (p.future)
       *  input.title
-      *  ul
       */
     }
-    
+
     flipCard( card );
     setHeight( card, "front" );
+    setListener.remove( card.getElementsByClassName( "remove" )[0] );
 
     const response = await axios.post( "/api/add-new-card" );
     checkResponse( response.data, "app", true );
@@ -103,7 +105,7 @@ const createNew = {
     addCard.src = "/img/add.png";
 
     addCardContainer.addEventListener( "click", createNew.card );
-  }
+  },
 };
 
 const setListener = {
@@ -123,14 +125,11 @@ const setListener = {
         const ul = innerCard.getElementsByTagName( "UL" )[0];
         /*
          *>div.inner(.front/.back)
-         *  (p.future)
-         *  input.title
          *< ul
          */
         const title = innerCard.getElementsByClassName( "title" )[0].value;
         /*
          *>div.inner(.front/.back)
-         *  (p.future)
          *< input.title
          */
         const lastItem = ul.children[ul.children.length - 1].children[1];
@@ -169,19 +168,18 @@ const setListener = {
 							${title.value.length}` );
         }
 
-        const cards = title.parentNode.parentNode.children;
+        const cards = title.parentNode.parentNode.getElementsByClassName( "inner" );
         /*
          *<div.inner.front
          *<div.inner.back
-         *  (p.future)
          *> input.title
          */
-        const side = title.parentNode.className.match( /back/ ) ? "back" : "front";
-        if ( side === "front" ) { // Update title on other card side
-          cards[1].children[1].value = title.value;
-        } else {
-          cards[0].children[0].value = title.value;
-        }
+        const side = title.parentNode.parentNode.className.match( /inner/ ) ? "back" : "front";
+        const otherSide = side === "front" ?
+          title.parentNode.parentNode.getElementsByClassName( "back" )[0].getElementsByClassName( "title" )[0] :
+          title.parentNode.parentNode.parentNode.getElementsByClassName( "front" )[0].getElementsByClassName( "title" )[0];
+
+        otherSide.value = title.value;
 
         await axios.post( "/api/update", { updatedTitle: title.value, title: originalTitle } );
 
@@ -191,7 +189,7 @@ const setListener = {
   },
   bullet( bullet ) {
     async function removeItem() {
-      const item = bullet.parentNode.children[1].value;
+      const item = bullet.parentNode.getElementsByClassName( "item" )[0].value;
       /*
        * li
        *> span.bullet
@@ -205,11 +203,10 @@ const setListener = {
        *>     span.bullet
        */
       const title = side === "back" ?
-        bullet.parentNode.parentNode.parentNode.children[1].value :
-        bullet.parentNode.parentNode.parentNode.children[0].value;
+        bullet.parentNode.parentNode.parentNode.getElementsByClassName( "title" )[0].value :
+        bullet.parentNode.parentNode.parentNode.getElementsByClassName( "title" )[0].value;
       /*
        * div.inner
-       *  (p.future)
        *< input.title
        *  ul
        *    li
@@ -297,6 +294,24 @@ const setListener = {
       switchEl.removeEventListener( "click", switchHandler );
     } );
   },
+  remove( remove ) {
+    remove.addEventListener( "click", async () => {
+      if ( window.confirm( "Do you want to remove the card?" ) ) {
+        const card = remove.parentNode.parentNode.parentNode.parentNode;
+        /*
+         *<div.card
+         *    ...
+         *>        div.remove
+         */
+        const title = card.getElementsByClassName( "title" )[0].value;
+
+        card.remove();
+
+        const response = await axios.post( "/api/remove-card", { title } );
+        checkResponse( response.data, "app", true );
+      }
+    } );
+  },
 };
 
 function flipCard( card ) {
@@ -329,6 +344,7 @@ function flipCard( card ) {
   const titles = $( ".title" );
   const bullets = $( ".bullet" );
   const switchElems = $( ".switch" );
+  const removeElems = $( ".remove" );
   const cards = $( ".card" );
 
   for ( const item of items ) {
@@ -343,6 +359,9 @@ function flipCard( card ) {
   for ( const switchEl of switchElems ) {
     setListener.itemSwitch( switchEl );
   }
+  for ( const remove of removeElems ) {
+    setListener.remove( remove );
+  }
   for ( const card of cards ) {
     const classes = card.className;
 
@@ -352,5 +371,5 @@ function flipCard( card ) {
     document.getElementById( "inner" ).style.gridTemplateRows = `repeat( ${Math.ceil( ( window.innerHeight - 200 ) / 22 )}, 22px )`; // Fixes bug with implicit grid: the grid would grow with one container
   }
 
-  createNew.addCard(); 
+  createNew.addCard();
 } )();

@@ -180,3 +180,16 @@ exports.appendItemToOtherSide = async ( req, res, next ) => {
 
   return res.json( { success: true } );
 };
+
+exports.removeCard = async ( req, res, next ) => {
+  /*
+   * Out: remove card from db
+   */
+  const username = req.body.username;
+  const title = req.body.title;
+  const db = req.db.collection( "cards" );
+
+  await db.remove( { username, title } );
+
+  return res.json( { success: true } );
+};

@@ -11,7 +11,10 @@ mixin frontCard( card = {} )
 
 mixin backCard( card = {} )
   p.future Future
-  input.title( type="text" value=card.title placeholder="Add title" )
+  .titleContainer
+    .removeWrapper
+      .remove &#9679
+    input.title( type="text" value=card.title placeholder="Add title" )
   ul
     each item in card.back
       li

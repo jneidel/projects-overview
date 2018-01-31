@@ -46,7 +46,7 @@
 .future {
   position: absolute;
   top: -20px;
-  left: 2px;
+  left: 6px;
   font-size: $fontSize-small;
   color: rgba( $white, 0.85 );
 }
@@ -61,10 +61,42 @@ input {
   font-size: $fontSize-standard;
   caret-color: $color-cursor;
 }
-input.title {
+.title {
   width: 250px;
   font-family: $font-headline;
   font-size: $fontSize-headline;
+  user-select: none;
+  margin-left: 4px;
+}
+
+// Remove card bullet
+.titleContainer {
+  display: flex;
+  margin-left: -10px;
+  
+  .title {
+    margin-left: 0;
+  }
+
+  &:hover .remove {
+    transform: translateX( 0% );
+  }
+}
+.removeWrapper {
+  display: block;
+  overflow: hidden;
+}
+.remove {
+  position: relative;
+  top: 3px;
+  transform: translateX( 100% );
+  user-select: none;
+  padding-right: 4px;
+
+  transition: transform 0.2s ease;
+  &:hover {
+    color: $black;
+  }
 }
 
 // Add card buttton
