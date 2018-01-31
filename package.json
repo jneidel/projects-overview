@@ -13,7 +13,7 @@
     "webpack": "webpack -w",
     "test": "mocha ./tests/*.test.js",
     "testing": "nodemon --exec 'mocha ./tests/*.test.js' --ignore public/",
-    "prod": "webpack; node app.js"
+    "prod": "node app.js"
   },
   "repository": {
     "type": "git",
