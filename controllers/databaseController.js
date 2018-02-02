@@ -41,11 +41,17 @@ exports.generateCardId = async ( req, res, next ) => {
   cursor.sort( { _id: -1 } );
   cursor.limit( 1 );
 
-  cursor.forEach( doc => {
+  cursor.forEach( ( doc ) => {
     req.cardId = doc._id + 1;
 
     return next();
-  });
+  } );
+
+  const arr = await cursor.toArray();
+  if ( arr === [] ) {
+    req.cardId = 1;
+    return next();
+  }
 };
 
 exports.addNewCard = async ( req, res, next ) => {
