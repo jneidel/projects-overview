@@ -19,7 +19,15 @@ const babel = {
   test: /\.js$/,
   use : [ {
     loader: "babel-loader",
-    options: { presets: [ "babel-preset-env" ] },
+    options: {
+      presets: [ "babel-preset-env" ],
+      plugins: [ [ "babel-plugin-transform-runtime", {
+        "helpers": false,
+        "polyfill": true,
+        "regenerator": true,
+        "moduleName": "babel-runtime"
+      } ] ],
+    },
   } ],
 };
 
@@ -44,7 +52,7 @@ function bundleCss( out ) {
 const config = { // common config
   module: {
     loaders: prod ?
-      [ babel, scss ] :
+      [ /*babel,*/ scss ] :
       [ scss ]
   },
 }
