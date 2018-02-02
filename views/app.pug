@@ -3,7 +3,7 @@ extends layout
 include mixins/_cards
 
 block styles
-  link( rel="stylesheet", href="/styles/app.bundle.css" )
+  link( rel="stylesheet", href="styles/app.bundle.css" )
 
 block content
   each card in cards
@@ -14,4 +14,4 @@ block content
         +backCard( card )
 
 block scripts
-  script( src="/scripts/app.bundle.js" )
+  script( src="scripts/app.bundle.js" )

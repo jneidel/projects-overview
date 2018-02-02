@@ -93,7 +93,7 @@ const createNew = {
     setHeight( card, "front" );
     setListener.remove( card.getElementsByClassName( "remove" )[0] );
 
-    const response = await axios.post( "/api/add-new-card" );
+    const response = await axios.post( "api/add-new-card" );
     checkResponse( response.data, "app", true );
   },
   addCard() {
@@ -102,7 +102,7 @@ const createNew = {
     const addCard = addCardContainer.appendChild( document.createElement( "img" ) );
     addCardContainer.classList.add( "addCardContainer" );
     addCard.classList.add( "addCard" );
-    addCard.src = "/img/add.png";
+    addCard.src = "img/add.png";
 
     addCardContainer.addEventListener( "click", createNew.card );
   },
@@ -140,13 +140,13 @@ const setListener = {
          */
 
         if ( lastItem === item ) {
-          axios.post( "/api/add-new-item", { side, title } );
+          axios.post( "api/add-new-item", { side, title } );
 
           createNew.item( ul, side, setListener );
           setHeight( innerCard.parentNode, side );
         }
 
-        const response = await axios.post( "/api/update", {
+        const response = await axios.post( "api/update", {
           updatedItem: item.value,
           item       : originalItem,
           side,
@@ -181,7 +181,7 @@ const setListener = {
 
         otherSide.value = title.value;
 
-        await axios.post( "/api/update", { updatedTitle: title.value, title: originalTitle } );
+        await axios.post( "api/update", { updatedTitle: title.value, title: originalTitle } );
 
         originalTitle = title.value;
       }
@@ -214,7 +214,7 @@ const setListener = {
        */
       bullet.parentNode.remove();
 
-      const response = await axios.post( "/api/remove-item", { title, item, side } );
+      const response = await axios.post( "api/remove-item", { title, item, side } );
       checkResponse( response.data, "app", true );
     }
 
@@ -281,7 +281,7 @@ const setListener = {
 
       item.parentNode.remove();
 
-      const response = await axios.post( "/api/switch-item", {
+      const response = await axios.post( "api/switch-item", {
         title: title.value, item : item.value, side, otherSide,
       } );
       checkResponse( response.data, "app", true );
@@ -307,7 +307,7 @@ const setListener = {
 
         card.remove();
 
-        const response = await axios.post( "/api/remove-card", { title } );
+        const response = await axios.post( "api/remove-card", { title } );
         checkResponse( response.data, "app", true );
       }
     } );

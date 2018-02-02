@@ -48,7 +48,7 @@ async function accountHandler( func ) {
         password: document.getElementsByName( "password" )[0].value,
       } );
 
-      const response = await axios.post( "/api/login", {
+      const response = await axios.post( "api/login", {
         username: formData.username,
         password: formData.password,
       } );
@@ -64,7 +64,7 @@ async function accountHandler( func ) {
         password_confirm: document.getElementsByName( "password_confirm" )[0].value,
       } );
 
-      const response = await axios.post( "/api/register", {
+      const response = await axios.post( "api/register", {
         username        : formData.username,
         password        : formData.password,
         password_confirm: formData.password_confirm,

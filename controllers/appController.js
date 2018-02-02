@@ -36,7 +36,7 @@ exports.register = ( req, res ) => {
 exports.logout = ( req, res ) => {
   req.flash( "success", "Logout successful" );
 
-  return res.redirect( "/login" );
+  return res.redirect( "login" );
 };
 
 exports.account = ( req, res, next ) => {

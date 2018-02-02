@@ -2,7 +2,7 @@ doctype html
 html
   head
     title= `${title} | Project Manager`
-    link( rel="shortcut icon" type="image/png" href="/img/favicon.png" )
+    link( rel="shortcut icon" type="image/png" href="img/favicon.png" )
     link( href="https://fonts.googleapis.com/css?family=Open+Sans|Raleway"  rel="stylesheet")
     block styles
 
@@ -20,17 +20,17 @@ html
           if username
             - if ( username.length > 20 ) { username = username.slice( 0, 20 ); }
             .nav-container
-              a.nav-username( href="/account" )=username
+              a.nav-username( href="account" )=username
               .header-underline
             .nav-container
-              a( href="/logout" )
-                img.logout-icon( src="/img/logout.png" )
+              a( href="logout" )
+                img.logout-icon( src="img/logout.png" )
           else
             .nav-container#nav-link-register
-              a.header-link-register( href="/register" ) Register
+              a.header-link-register( href="register" ) Register
               .header-underline
             .nav-container
-              a.header-link-login( href="/login" ) Login
+              a.header-link-login( href="login" ) Login
               .header-underline
           
     #content

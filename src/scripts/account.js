@@ -7,7 +7,7 @@ const registerListener = {
 
     password = await encryptWithPubKey( password );
 
-    const response = await axios.post( "/api/update-username", { newUsername: username, password } );
+    const response = await axios.post( "api/update-username", { newUsername: username, password } );
     checkResponse( response.data, "account" );
   },
 };
