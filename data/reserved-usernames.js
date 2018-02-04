@@ -599,5 +599,5 @@ module.exports = [
   "yourdomain",
   "yourname",
   "yoursite",
-  "yourusername"
-]
+  "yourusername",
+];

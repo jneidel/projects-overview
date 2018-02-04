@@ -19,6 +19,8 @@ router.post( "/register",
   database.connectDatabase,
   account.validateRegister,
   account.registerUser,
+  database.generateCardId,
+  database.addExampleCards,
   setupToken
 );
 router.post( "/update",

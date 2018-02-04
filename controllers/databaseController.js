@@ -199,3 +199,19 @@ exports.removeCard = async ( req, res, next ) => {
 
   return res.json( { success: true } );
 };
+
+exports.addExampleCards = async ( req, res, next ) => {
+  /*
+   * Out: add example cards to new user
+   */
+  const { generateExampleCards } = require( "../data/init-data" );
+  const username = req.body.username;
+  const cardId = req.cardId;
+  const db = req.db.collection( "cards" );
+
+  const data = generateExampleCards( username, cardId );
+
+  db.insertMany( data );
+
+  return next();
+};
