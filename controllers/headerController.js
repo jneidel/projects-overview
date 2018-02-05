@@ -27,6 +27,9 @@ exports.parseToken = ( req, res, next ) => {
 };
 
 exports.removeCookie = ( req, res, next ) => {
+  /*
+   * Out: remove token from headers
+   */
   res.clearCookie( "token" );
 
   return next();
