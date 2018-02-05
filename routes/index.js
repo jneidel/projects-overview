@@ -30,5 +30,9 @@ router.get( "/logout",
   header.removeCookie,
   app.logout
 );
+router.get( "/help",
+  verifyToken,
+  app.help
+);
 
 module.exports = router;

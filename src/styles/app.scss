@@ -1,5 +1,6 @@
 @import "mixins/_patterns.scss";
 @import "mixins/_app-grid.scss";
+@import "mixins/_card.scss";
 
 #inner {
   width: 100%;
@@ -10,94 +11,12 @@
   justify-content: center;
   perspective: 800px;
 }
-.card {
-  box-sizing: content-box;
-  display: inline-block;
-  cursor: pointer;
-  transition: transform 0.6s ease, height 0.6s ease;
-  transform-style: preserve-3d;
-  margin-bottom: $margin-betweenCards;
-  padding: 20px;
 
-  @include container;
-
-  ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 10px;
-  }
-}
+// Style cards
+@include card; // _card
 
 // Grid classes
-@include grid-row-spans;
-
-/* Card Flip */
-.front, .back {
-  -webkit-backface-visibility: hidden;
-     -moz-backface-visibility: hidden;
-          backface-visibility: hidden;
-}
-.back {
-  position: absolute;
-  top: 20px;
-  left: -10;
-  transform: rotateY( 180deg );
-}
-.future {
-  position: absolute;
-  top: -20px;
-  left: 6px;
-  font-size: $fontSize-small;
-  color: rgba( $white, 0.85 );
-}
-
-/* Item Style */
-input {
-  width: 200px;
-  color: #F5F7FA;
-  background-color: transparent;
-  border: none;
-  outline: none;
-  font-size: $fontSize-standard;
-  caret-color: $color-cursor;
-}
-.title {
-  width: 250px;
-  font-family: $font-headline;
-  font-size: $fontSize-headline;
-  user-select: none;
-  margin-left: 4px;
-}
-
-// Remove card bullet
-.titleContainer {
-  display: flex;
-  margin-left: -10px;
-  
-  .title {
-    margin-left: 0;
-  }
-
-  &:hover .remove {
-    transform: translateX( 0% );
-  }
-}
-.removeWrapper {
-  display: block;
-  overflow: hidden;
-}
-.remove {
-  position: relative;
-  top: 3px;
-  transform: translateX( 100% );
-  user-select: none;
-  padding-right: 4px;
-
-  transition: transform 0.2s ease;
-  &:hover {
-    color: $black;
-  }
-}
+@include grid-row-spans; // _app-grid
 
 // Add card buttton
 .addCardContainer {
@@ -113,7 +32,7 @@ input {
   justify-content: center;
   align-items: center;
 
-  @include container;
+  @include container; // _patterns
 
   border-radius: 50%;
   cursor: pointer;
@@ -132,28 +51,7 @@ input {
   user-select: none;
 }
 
-// Switch, Bullets
-
-.bullet {
-  font-size: 0.8rem;
-  margin-right: 6px;
-  user-select: none;
-}
-li:hover .switch {
-  visibility: visible;
-}
-.switch {
-  height: 12px;
-  width: 12px;
-  margin-left: 5px;
-  visibility: hidden;
-
-  &:hover g path {
-    fill: $black;
-  }
-}
-
-/* Flashes */
+// Flashes
 .flash {
   width: auto;
   margin-top: 20px;
