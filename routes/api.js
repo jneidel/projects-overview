@@ -46,12 +46,12 @@ router.post( "/update-username",
   account.updateUsername,
   setupToken
 );
-/* router.post( "/update-password",
+router.post( "/update-password",
   verifyTokenAPI,
   database.connectDatabase,
   encryption.decryptPasswords,
-  account.updateUsername
-); */
+  account.updatePassword
+);
 router.post( "/remove-item",
   verifyTokenAPI,
   database.connectDatabase,

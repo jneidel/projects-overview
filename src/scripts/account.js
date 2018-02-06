@@ -1,21 +1,39 @@
 /* global checkResponse axios encryptWithPubKey url $ */
 
-const registerListener = {
-  username: async ( event ) => {
+const setListener = {
+  username: async () => {
     const username = document.getElementsByName( "username" )[0].value;
     let password = document.getElementsByName( "username_confirm" )[0].value;
 
     password = await encryptWithPubKey( password );
 
-    const response = await axios.post( "api/update-username", { newUsername: username, password } );
+    const response = await axios.post( "api/update-username", {
+      newUsername: username, password,
+    } );
+    checkResponse( response.data, "account" );
+  },
+  password: async () => {
+    let password = document.getElementsByName( "password" )[0].value;
+    let passwordRepeat = document.getElementsByName( "password_repeat" )[0].value;
+    let passwordConfirm = document.getElementsByName( "password_confirm" )[0].value;
+
+    password = await encryptWithPubKey( password );
+    passwordRepeat = await encryptWithPubKey( passwordRepeat );
+    passwordConfirm = await encryptWithPubKey( passwordConfirm );
+
+    const response = await axios.post( "api/update-password", {
+      password, passwordRepeat, passwordConfirm,
+    } );
     checkResponse( response.data, "account" );
   },
 };
 
-document.getElementsByName( "username_button" )[0].addEventListener( "click", registerListener.username );
-document.getElementsByName( "username_confirm" )[0].addEventListener( "keydown", () => {
-  if ( event.which === 13 ) { registerListener.username(); }
+document.getElementsByName( "username_button" )[0].addEventListener( "click", setListener.username );
+document.getElementsByName( "username_confirm" )[0].addEventListener( "keydown", ( event ) => {
+  if ( event.which === 13 ) { setListener.username(); }
 } );
-document.getElementsByName( "username" )[0].addEventListener( "keydown", () => {
-  if ( event.which === 13 ) { registerListener.username(); }
+
+document.getElementsByName( "password_button" )[0].addEventListener( "click", setListener.password );
+document.getElementsByName( "password_confirm" )[0].addEventListener( "keydown", ( event ) => {
+  if ( event.which === 13 ) { setListener.password(); }
 } );

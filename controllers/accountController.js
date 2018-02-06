@@ -106,7 +106,8 @@ exports.updateUsername = async ( req, res, next ) => {
   const username = req.body.username;
   const newUsername = req.body.newUsername;
   const password = req.body.password;
-  const db = req.db.collection( "users" );
+  const dbUsers = req.db.collection( "users" );
+  const dbCards = req.db.collection( "cards" );
 
   const errState = [ { username: newUsername }, "/account", req, res ];
 
@@ -124,25 +125,25 @@ exports.updateUsername = async ( req, res, next ) => {
     return throwUserErrorWithState( "Username is reserved", ...errState );
   }
 
-  const usernameExits = await db.find( { newUsername } ).toArray();
+  const usernameExits = await dbUsers.find( { newUsername } ).toArray();
 
   if ( !usernameExits || usernameExits.length !== 0 ) {
     return throwUserErrorWithState( "Username is already in use", ...errState );
   }
 
-  const docs = await db.find( { username } ).toArray();
+  const docs = await dbUsers.find( { username } ).toArray();
   const passwordHash = docs[0].password;
 
   if ( !bcrypt.compareSync( password, passwordHash ) ) {
-    return throwUserErrorWithState( "Invalid password", ...errState );
+    return throwUserErrorWithState( "Invalid confirm password", ...errState );
   }
 
-  db.updateOne(
+  dbUsers.updateOne(
     { username },
     { $set: { username: newUsername } }
   );
 
-  db.updateMany(
+  dbCards.updateMany(
     { username },
     { $set: { username: newUsername } }
   );
@@ -153,4 +154,43 @@ exports.updateUsername = async ( req, res, next ) => {
   return next();
 };
 
-exports.updatePassword = async ( req, res, next ) => res.json( { success: true } );
+exports.updatePassword = async ( req, res, next ) => {
+  /*
+   * Out: update password in db
+   * Throw:
+   *  - empty password
+   *  - empty passwordRepeat
+   *  - empty passwordConfirm
+   *  - passwords dont match
+   *  - invalid passwordConfirm
+   */
+  let password = req.body.password;
+  const passwordRepeat = req.body.passwordRepeat;
+  const passwordConfirm = req.body.passwordConfirm;
+  const username = req.body.username;
+  const db = req.db.collection( "users" );
+
+  if ( password === "" || passwordRepeat === "" || passwordConfirm === "" ) {
+    return throwUserError( "Password can't be empty", req, res );
+  }
+
+  if ( password !== passwordRepeat ) {
+    return throwUserError( "Passwords must match", req, res );
+  }
+
+  const docs = await db.find( { username } ).toArray();
+  const passwordHash = docs[0].password;
+
+  if ( !bcrypt.compareSync( passwordConfirm, passwordHash ) ) {
+    return throwUserErrorWithState( "Invalid confirm password", ...errState );
+  }
+
+  password = bcrypt.hashSync( password, 8 );
+  db.updateOne(
+    { username },
+    { $set: { password } }
+  );
+
+  req.flash( "Password has been changed" );
+  return res.json( { success: true } );
+};

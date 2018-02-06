@@ -7,7 +7,7 @@ async function getFormData( form ) {
    * formData = { 
    *  username, 
    *  password,
-   *  password_confirm
+   *  passwordConfirm
    * }
    */
 
@@ -17,7 +17,7 @@ async function getFormData( form ) {
       password = await encryptWithPubKey( password );
 
       if ( isConfirmPass ) {
-        this.password_confirm = password;
+        this.passwordConfirm = password;
       } else {
         this.password = password;
       }
@@ -26,8 +26,8 @@ async function getFormData( form ) {
 
   await data.encrypt( form.password );
 
-  if ( form.password_confirm ) {
-    await data.encrypt( form.password_confirm, true );
+  if ( form.passwordConfirm ) {
+    await data.encrypt( form.passwordConfirm, true );
   }
 
   return data;
@@ -59,15 +59,15 @@ async function accountHandler( func ) {
   try {
     document.getElementById( "register" ).addEventListener( "click", async ( e ) => {
       const formData = await getFormData( {
-        username        : document.getElementsByName( "username" )[0].value,
-        password        : document.getElementsByName( "password" )[0].value,
-        password_confirm: document.getElementsByName( "password_confirm" )[0].value,
+        username       : document.getElementsByName( "username" )[0].value,
+        password       : document.getElementsByName( "password" )[0].value,
+        passwordConfirm: document.getElementsByName( "password_confirm" )[0].value,
       } );
 
       const response = await axios.post( "api/register", {
-        username        : formData.username,
-        password        : formData.password,
-        password_confirm: formData.password_confirm,
+        username       : formData.username,
+        password       : formData.password,
+        passwordConfirm: formData.passwordConfirm,
       } );
       checkResponse( response.data, "register" );
     } );
