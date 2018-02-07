@@ -20,11 +20,11 @@ NodeList.prototype.on = NodeList.prototype.addEventListener = function( name, fn
   } );
 };
 
-window.checkResponse = ( res, errorRedirect, successNoReload = false ) => {
+window.checkResponse = ( res, errorRedirect, successRedirect = null ) => {
   if ( res.error ) {
     window.location.replace( `${url}/${errorRedirect}` );
   } else if ( res.success ) {
-    if ( !successNoReload ) { window.location.replace( `${url}/app` ); }
+    if ( successRedirect ) { window.location.replace( `${url}/${successRedirect}` ); }
   } else if ( res.info ) {
     window.location.reload();
   } else if ( res.state ) {

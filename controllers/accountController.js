@@ -182,7 +182,7 @@ exports.updatePassword = async ( req, res, next ) => {
   const passwordHash = docs[0].password;
 
   if ( !bcrypt.compareSync( passwordConfirm, passwordHash ) ) {
-    return throwUserErrorWithState( "Invalid confirm password", ...errState );
+    return throwUserError( "Invalid confirm password", req, res );
   }
 
   password = bcrypt.hashSync( password, 8 );
@@ -192,5 +192,31 @@ exports.updatePassword = async ( req, res, next ) => {
   );
 
   req.flash( "Password has been changed" );
+  return res.json( { success: true } );
+};
+
+exports.removeAccount = async ( req, res, next ) => {
+  /*
+   * Out: remove account from db
+   * Throw: invalid password
+   */
+  const passwordConfirm = req.body.passwordConfirm;
+  const username = req.body.username;
+  const dbUsers = req.db.collection( "users" );
+  const dbCards = req.db.collection( "cards" );
+
+  const docs = await dbUsers.find( { username } ).toArray();
+  const passwordHash = docs[0].password;
+
+  if ( !bcrypt.compareSync( passwordConfirm, passwordHash ) ) {
+    return throwUserError( "Invalid confirm password", req, res );
+  }
+
+  dbUsers.remove( { username }, true ); // 2nd parameter is justOne
+  dbCards.remove( { username } );
+
+  res.clearCookie( "token" );
+
+  req.flash( "info", "Account has been deleted, thanks for checking out the app" );
   return res.json( { success: true } );
 };

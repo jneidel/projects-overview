@@ -1,4 +1,5 @@
 /* global checkResponse axios encryptWithPubKey url $ */
+/* eslint-disable no-alert */
 
 const setListener = {
   username: async () => {
@@ -10,7 +11,7 @@ const setListener = {
     const response = await axios.post( "api/update-username", {
       newUsername: username, password,
     } );
-    checkResponse( response.data, "account" );
+    checkResponse( response.data, "account", "app" );
   },
   password: async () => {
     let password = document.getElementsByName( "password" )[0].value;
@@ -24,7 +25,17 @@ const setListener = {
     const response = await axios.post( "api/update-password", {
       password, passwordRepeat, passwordConfirm,
     } );
-    checkResponse( response.data, "account" );
+    checkResponse( response.data, "account", "app" );
+  },
+  remove: async () => {
+    if ( window.confirm( "Do you want to completely remove your account?" ) ) {
+      let passwordConfirm = document.getElementsByName( "remove_confirm" )[0].value;
+
+      passwordConfirm = await encryptWithPubKey( passwordConfirm );
+
+      const response = await axios.post( "api/remove-account", { passwordConfirm } );
+      checkResponse( response.data, "account", "login" );
+    }
   },
 };
 
@@ -32,8 +43,11 @@ document.getElementsByName( "username_button" )[0].addEventListener( "click", se
 document.getElementsByName( "username_confirm" )[0].addEventListener( "keydown", ( event ) => {
   if ( event.which === 13 ) { setListener.username(); }
 } );
-
 document.getElementsByName( "password_button" )[0].addEventListener( "click", setListener.password );
 document.getElementsByName( "password_confirm" )[0].addEventListener( "keydown", ( event ) => {
   if ( event.which === 13 ) { setListener.password(); }
+} );
+document.getElementsByName( "remove_button" )[0].addEventListener( "click", setListener.remove );
+document.getElementsByName( "remove_confirm" )[0].addEventListener( "keydown", ( event ) => {
+  if ( event.which === 13 ) { setListener.remove(); }
 } );

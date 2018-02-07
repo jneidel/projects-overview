@@ -52,7 +52,7 @@ async function accountHandler( func ) {
         username: formData.username,
         password: formData.password,
       } );
-      checkResponse( response.data, "login" );
+      checkResponse( response.data, "login", "app" );
     } );
   } catch ( e ) {}
 
@@ -69,7 +69,7 @@ async function accountHandler( func ) {
         password       : formData.password,
         passwordConfirm: formData.passwordConfirm,
       } );
-      checkResponse( response.data, "register" );
+      checkResponse( response.data, "register", "app" );
     } );
   } catch ( e ) {}
 }

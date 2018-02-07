@@ -94,7 +94,7 @@ const createNew = {
     setListener.remove( card.getElementsByClassName( "remove" )[0] );
 
     const response = await axios.post( "api/add-new-card" );
-    checkResponse( response.data, "app", true );
+    checkResponse( response.data, "app" );
   },
   addCard() {
     // Appending 'add new card' button to body, as otherwise the grid would apply.
@@ -152,7 +152,7 @@ const setListener = {
           side,
           title,
         } );
-        checkResponse( response.data, "app", true );
+        checkResponse( response.data, "app" );
 
         originalItem = item.value;
 	 		}
@@ -215,7 +215,7 @@ const setListener = {
       bullet.parentNode.remove();
 
       const response = await axios.post( "api/remove-item", { title, item, side } );
-      checkResponse( response.data, "app", true );
+      checkResponse( response.data, "app" );
     }
 
     bullet.addEventListener( "mouseenter", () => {
@@ -284,7 +284,7 @@ const setListener = {
       const response = await axios.post( "api/switch-item", {
         title: title.value, item : item.value, side, otherSide,
       } );
-      checkResponse( response.data, "app", true );
+      checkResponse( response.data, "app" );
     }
 
     switchEl.addEventListener( "mouseenter", () => {
@@ -308,7 +308,7 @@ const setListener = {
         card.remove();
 
         const response = await axios.post( "api/remove-card", { title } );
-        checkResponse( response.data, "app", true );
+        checkResponse( response.data, "app" );
       }
     } );
   },
