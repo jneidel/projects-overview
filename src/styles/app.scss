@@ -69,3 +69,11 @@
   margin-top: $margin-contentTop;
   margin-bottom: 0;
 }
+
+/* Fix card being cut of on flip */
+body {
+  grid-template-columns: 1vw auto 1vw;
+}
+#content {
+  margin: 0 5vw;
+}
