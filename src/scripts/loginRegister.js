@@ -33,44 +33,54 @@ async function getFormData( form ) {
   return data;
 }
 
-// Handle login/register
-async function accountHandler( func ) {
+const send = {
+  async login() {
+    const formData = await getFormData( {
+      username: document.getElementsByName( "username" )[0].value,
+      password: document.getElementsByName( "password" )[0].value,
+    } );
+
+    const response = await axios.post( "api/login", {
+      username: formData.username,
+      password: formData.password,
+    } );
+    checkResponse( response.data, "login", "app" );
+  },
+  async register() {
+    const formData = await getFormData( {
+      username       : document.getElementsByName( "username" )[0].value,
+      password       : document.getElementsByName( "password" )[0].value,
+      passwordConfirm: document.getElementsByName( "password_confirm" )[0].value,
+    } );
+
+    const response = await axios.post( "api/register", {
+      username       : formData.username,
+      password       : formData.password,
+      passwordConfirm: formData.passwordConfirm,
+    } );
+    checkResponse( response.data, "register", "app" );
+  },
+}
+
+async function setupListeners( func ) {
   try {
-    const checkIfLoginOrRegister = document.getElementsByName( "username" )[0].value;
+    document.getElementsByName( "username" )[0].value; // check that /login or /register
+    
+    var site = document.getElementsByName( "password_confirm" )[0] ? "register" : "login";
   } catch ( e ) {
     return null;
   }
 
-  try {
-    document.getElementById( "login" ).addEventListener( "click", async ( e ) => {
-      const formData = await getFormData( {
-        username: document.getElementsByName( "username" )[0].value,
-        password: document.getElementsByName( "password" )[0].value,
-      } );
-
-      const response = await axios.post( "api/login", {
-        username: formData.username,
-        password: formData.password,
-      } );
-      checkResponse( response.data, "login", "app" );
+  if ( site === "login" ) {
+    document.getElementById( "login" ).addEventListener( "click", send.login );
+    document.getElementsByName( "password" )[0].addEventListener( "keydown", ( event ) => {
+      if ( event.which === 13 ) { send.login(); }
     } );
-  } catch ( e ) {}
-
-  try {
-    document.getElementById( "register" ).addEventListener( "click", async ( e ) => {
-      const formData = await getFormData( {
-        username       : document.getElementsByName( "username" )[0].value,
-        password       : document.getElementsByName( "password" )[0].value,
-        passwordConfirm: document.getElementsByName( "password_confirm" )[0].value,
-      } );
-
-      const response = await axios.post( "api/register", {
-        username       : formData.username,
-        password       : formData.password,
-        passwordConfirm: formData.passwordConfirm,
-      } );
-      checkResponse( response.data, "register", "app" );
+  } else {
+    document.getElementById( "register" ).addEventListener( "click", send.register );
+    document.getElementsByName( "password_confirm" )[0].addEventListener( "keydown", ( event ) => {
+      if ( event.which === 13 ) { send.register(); }
     } );
-  } catch ( e ) {}
-}
-accountHandler();
+  }
+};
+setupListeners();
