@@ -17,7 +17,7 @@ exports.validateRegister = async ( req, res, next ) => {
    */
   const username = req.body.username;
   const password = req.body.password;
-  const db = req.db.collection( "users" );
+  const db = req.db.users;
 
   try {
     if ( validator.isEmpty( username ) || bcrypt.compareSync( "", password ) ) {
@@ -49,7 +49,7 @@ exports.registerUser = async ( req, res, next ) => {
    */
   const username = req.body.username;
   const password = req.body.password;
-  const db = req.db.collection( "users" );
+  const db = req.db.users;
 
   const user = {
     username,
@@ -74,7 +74,7 @@ exports.login = async ( req, res, next ) => {
    */
   const username = req.body.username;
   const password = req.body.password;
-  const db = req.db.collection( "users" );
+  const db = req.db.users;
 
   const data = await db.find( { username } ).toArray();
 
@@ -106,8 +106,8 @@ exports.updateUsername = async ( req, res, next ) => {
   const username = req.body.username;
   const newUsername = req.body.newUsername;
   const password = req.body.password;
-  const dbUsers = req.db.collection( "users" );
-  const dbCards = req.db.collection( "cards" );
+  const dbUsers = req.db.users;
+  const dbCards = req.db.cards;
 
   const errState = [ { username: newUsername }, "/account", req, res ];
 
@@ -168,7 +168,7 @@ exports.updatePassword = async ( req, res, next ) => {
   const passwordRepeat = req.body.passwordRepeat;
   const passwordConfirm = req.body.passwordConfirm;
   const username = req.body.username;
-  const db = req.db.collection( "users" );
+  const db = req.db.users;
 
   if ( password === "" || passwordRepeat === "" || passwordConfirm === "" ) {
     return throwUserError( "Password can't be empty", req, res );
@@ -202,8 +202,8 @@ exports.removeAccount = async ( req, res, next ) => {
    */
   const passwordConfirm = req.body.passwordConfirm;
   const username = req.body.username;
-  const dbUsers = req.db.collection( "users" );
-  const dbCards = req.db.collection( "cards" );
+  const dbUsers = req.db.users;
+  const dbCards = req.db.cards;
 
   const docs = await dbUsers.find( { username } ).toArray();
   const passwordHash = docs[0].password;

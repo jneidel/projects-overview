@@ -13,7 +13,7 @@ exports.updateDatabase = async ( req, res, next ) => {
   const item = req.body.item;
   const updatedItem = req.body.updatedItem;
   const side = req.body.side;
-  const db = req.db.collection( "cards" );
+  const db = req.db.cards;
 
   const query = { username, title };
   const update = {};
@@ -36,7 +36,7 @@ exports.generateCardId = async ( req, res, next ) => {
   /*
    * Out: available card id
    */
-  const db = req.db.collection( "cards" );
+  const db = req.db.cards;
 
   const cursor = db.find( {}, { _id: 1 } );
   cursor.sort( { _id: -1 } );
@@ -61,7 +61,7 @@ exports.addNewCard = async ( req, res, next ) => {
    */
   const username = req.body.username;
   const cardId = req.cardId;
-  const db = req.db.collection( "cards" );
+  const db = req.db.cards;
 
   const lastPosition = await db.aggregate( [
     { $match: { username } },
@@ -94,7 +94,7 @@ exports.addNewItem = async ( req, res, next ) => {
   const username = req.body.username;
   const title = req.body.title;
   const side = req.body.side;
-  const db = req.db.collection( "cards" );
+  const db = req.db.cards;
 
   const query = { title, username };
   const insert = { $push: {} };
@@ -113,8 +113,13 @@ exports.connectDatabase = async ( req, res, next ) => {
   const mongodb = require( "mongodb" );
   require( "dotenv" ).config( { path: "../variables.env" } );
 
-  req.db = await mongodb.MongoClient.connect( process.env.DATABASE )
+  const db = await mongodb.MongoClient.connect( process.env.DATABASE )
     .catch( () => { throwUserError( "Database connection error", req, res ); } );
+
+  req.db = {
+    users: db.collection( "users" ),
+    cards: db.collection( "cards" ),
+  };
 
   return next();
 };
@@ -124,7 +129,7 @@ exports.getCards = async ( req, res, next ) => {
    * Out: cards of username
    */
   const username = req.body.username;
-  const db = req.db.collection( "cards" );
+  const db = req.db.cards;
 
   req.cards = await db.find( { username }, { _id: 1, title: 1, front: 1, back: 1, position: 1 } )
     .sort( { position: 1 } ).toArray();
@@ -140,7 +145,7 @@ exports.removeItem = async ( req, res, next ) => {
   const username = req.body.username;
   const title = req.body.title;
   const side = req.body.side;
-  const db = req.db.collection( "cards" );
+  const db = req.db.cards;
 
   const card = await db.find( { username, title } ).toArray();
 
@@ -152,7 +157,7 @@ exports.removeItem = async ( req, res, next ) => {
   const $pull = {};
   $pull[side] = req.body.item;
 
-  await req.db.collection( "cards" ).update( { username, title }, { $pull } );
+  await db.update( { username, title }, { $pull } );
 
   if ( req.body.otherSide ) {
     return next();
@@ -167,7 +172,7 @@ exports.appendItemToOtherSide = async ( req, res, next ) => {
   const username = req.body.username;
   const title = req.body.title;
   const side = req.body.otherSide;
-  const db = req.db.collection( "cards" );
+  const db = req.db.cards;
 
   const card = await db.find( { username, title } ).toArray();
   const arr = card[0][side];
@@ -194,7 +199,7 @@ exports.removeCard = async ( req, res, next ) => {
    */
   const username = req.body.username;
   const title = req.body.title;
-  const db = req.db.collection( "cards" );
+  const db = req.db.cards;
 
   await db.remove( { username, title } );
 
@@ -208,7 +213,7 @@ exports.addExampleCards = async ( req, res, next ) => {
   const { generateExampleCards } = require( "../data/init-data" );
   const username = req.body.username;
   const cardId = req.cardId;
-  const db = req.db.collection( "cards" );
+  const db = req.db.cards;
 
   const data = generateExampleCards( username, cardId );
 
@@ -224,8 +229,8 @@ exports.clearCards = async ( req, res ) => {
    */
   const passwordConfirm = req.body.passwordConfirm;
   const username = req.body.username;
-  const dbUsers = req.db.collection( "users" );
-  const dbCards = req.db.collection( "cards" );
+  const dbUsers = req.db.users;
+  const dbCards = req.db.cards;
 
   const docs = await dbUsers.find( { username } ).toArray();
   const passwordHash = docs[0].password;
