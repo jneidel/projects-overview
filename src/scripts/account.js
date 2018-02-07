@@ -37,6 +37,16 @@ const setListener = {
       checkResponse( response.data, "account", "login" );
     }
   },
+  clear: async () => {
+    if ( window.confirm( "Do you want to remove all of your cards?") ) {
+      let passwordConfirm = document.getElementsByName( "clear_confirm" )[0].value;
+
+      passwordConfirm = await encryptWithPubKey( passwordConfirm );
+
+      const response = await axios.post( "api/clear-cards", { passwordConfirm } );
+      checkResponse( response.data, "account", "app" );
+    }
+  },
 };
 
 document.getElementsByName( "username_button" )[0].addEventListener( "click", setListener.username );
@@ -50,4 +60,8 @@ document.getElementsByName( "password_confirm" )[0].addEventListener( "keydown",
 document.getElementsByName( "remove_button" )[0].addEventListener( "click", setListener.remove );
 document.getElementsByName( "remove_confirm" )[0].addEventListener( "keydown", ( event ) => {
   if ( event.which === 13 ) { setListener.remove(); }
+} );
+document.getElementsByName( "clear_button" )[0].addEventListener( "click", setListener.clear );
+document.getElementsByName( "clear_confirm" )[0].addEventListener( "keydown", ( event ) => {
+  if ( event.which === 13 ) { setListener.clear(); }
 } );

@@ -1,3 +1,4 @@
+const bcrypt = require( "bcrypt" );
 const { throwUserError } = require( "../handlers/errorHandlers" );
 
 /* eslint-disable global-require */
@@ -214,4 +215,28 @@ exports.addExampleCards = async ( req, res, next ) => {
   db.insertMany( data );
 
   return next();
+};
+
+exports.clearCards = async ( req, res ) => {
+  /*
+   * Out: remove cards from db
+   * Throw: invalid password
+   */
+  const passwordConfirm = req.body.passwordConfirm;
+  const username = req.body.username;
+  const dbUsers = req.db.collection( "users" );
+  const dbCards = req.db.collection( "cards" );
+
+  const docs = await dbUsers.find( { username } ).toArray();
+  const passwordHash = docs[0].password;
+
+  if ( !bcrypt.compareSync( passwordConfirm, passwordHash ) ) {
+    return throwUserError( "Invalid confirm password", req, res );
+  }
+
+  dbCards.remove( { username } );
+
+  req.flash( "success", "All cards have been removed from your account" );
+  console.log("Css")
+  return res.json( { success: true } );
 };

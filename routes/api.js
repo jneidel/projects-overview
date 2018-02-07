@@ -74,6 +74,12 @@ router.post( "/remove-account",
   database.connectDatabase,
   account.removeAccount
 );
+router.post( "/clear-cards",
+  verifyTokenAPI,
+  encryption.decryptPasswords,
+  database.connectDatabase,
+  database.clearCards
+);
 
 router.get( "/", ( req, res ) => {
   req.flash( "error", "Access to the API denied." );
