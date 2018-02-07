@@ -212,7 +212,14 @@ const setListener = {
        *    li
        *>     span.bullet
        */
+      const card = bullet.parentNode.parentNode.parentNode.parentNode;
+      /*
+       *<div.card
+       *  ...
+       *>   span.bullet 
+       */
       bullet.parentNode.remove();
+      setHeight( card, side );
 
       const response = await axios.post( "api/remove-item", { title, item, side } );
       checkResponse( response.data, "app" );
