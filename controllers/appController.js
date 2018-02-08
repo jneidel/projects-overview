@@ -59,3 +59,19 @@ exports.account = ( req, res, next ) => {
 exports.welcome = ( req, res ) => res.render( "welcome", {
   title: "Project Manager",
 } );
+
+exports.help = ( req, res ) => {
+  const username = req.body.username;
+  const homepage = req.homepage;
+
+  return res.render( "help", {
+    title: "Help",
+    username,
+    homepage,
+    card : {
+      title: "Books",
+      front: [ "Seveneves", "Four Hour Workweek", "YDKJS", "" ],
+      back : [ "Autobiography of Malcolm X", "Zero to One", "Total Recall", "Freakonomics", "Awake the Giant Within", "The Dip", "The C Programming Language", "If Hemingway Wrote JS", "Automating the Boring Stuff with Python", "" ],
+    },
+  } );
+};

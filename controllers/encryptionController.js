@@ -12,8 +12,12 @@ exports.decryptPasswords = async ( req, res, next ) => {
   /*
    * Out: decrypted password(s)
    */
-  const password = req.body.password;
-  const passwordConfirm = req.body.password_confirm;
+
+  const passwords = [
+    { name: "password", val: req.body.password },
+    { name: "passwordConfirm", val: req.body.passwordConfirm },
+    { name: "passwordRepeat", val: req.body.passwordRepeat },
+  ];
 
   const privateKeyFile = await fs.readFile( "./private-key.pem" );
   const privateKey = new rsa();
@@ -25,11 +29,11 @@ exports.decryptPasswords = async ( req, res, next ) => {
     return pass;
   }
 
-  req.body.password = decrypt( password );
-
-  if ( passwordConfirm ) {
-    req.body.password_confirm = decrypt( passwordConfirm );
-  }
+  passwords.forEach( ( pass ) => {
+    if ( pass.val ) {
+      req.body[pass.name] = decrypt( pass.val );
+    }
+  } );
 
   return next();
 };
@@ -40,14 +44,14 @@ exports.hashPassword = ( req, res, next ) => {
    * Throw: passwords not matching
    */
   const password = req.body.password;
-  const passwordConfirm = req.body.password_confirm;
+  const passwordConfirm = req.body.passwordConfirm;
 
   if ( passwordConfirm !== password ) {
     return throwUserError( "Passwords do not match", req, res );
   }
 
   req.body.password = bcrypt.hashSync( password, 8 );
-  req.body.password_confirm = null;
+  req.body.passwordConfirm = null;
 
   return next();
 };

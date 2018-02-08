@@ -1,5 +1,129 @@
-/* globals axios $ checkResponse */
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__( 1 );
+__webpack_require__( 2 );
+
+__webpack_require__( 3 );
+__webpack_require__( 4 );
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports) {
+
+/* 
+ * Setting global variables to be shared across scripts.
+ * 
+ * Axios and encryptWithPubKey have been excluded because
+ * of their size and will only be pulled in if needed.
+ */ 
+
+/* eslint-disable */
+window.url = "http://localhost:8080";
+
+// bling.js
+window.$ = document.querySelectorAll.bind( document );
+Node.prototype.on = window.on = function( name, fn ) {
+  this.addEventListener( name, fn );
+};
+NodeList.prototype.__proto__ = Array.prototype;
+NodeList.prototype.on = NodeList.prototype.addEventListener = function( name, fn ) {
+  this.forEach( ( elem, i ) => {
+    elem.on( name, fn );
+  } );
+};
+
+window.checkResponse = ( res, errorRedirect, successRedirect = null ) => {
+  if ( res.error ) {
+    window.location.replace( `${url}/${errorRedirect}` );
+  } else if ( res.success ) {
+    if ( successRedirect ) { window.location.replace( `${url}/${successRedirect}` ); }
+  } else if ( res.info ) {
+    window.location.reload();
+  } else if ( res.state ) {
+    window.location.replace( url + res.state );
+  }
+};
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
+/* globals $ */
 /* eslint-disable no-alert, no-use-before-define */
+
+/*
+ * Copy of app.js for providing a working demo of a card at /help.
+ * Only axios requests and the addNewCard button have been removed.
+ */
 
 /* Visual DOM Selection Tree - always applies to the one above
  *>div.item      // > signifies entry point item
@@ -92,19 +216,6 @@ const createNew = {
     flipCard( card );
     setHeight( card, "front" );
     setListener.remove( card.getElementsByClassName( "remove" )[0] );
-
-    const response = await axios.post( "api/add-new-card" );
-    checkResponse( response.data, "app" );
-  },
-  addCard() {
-    // Appending 'add new card' button to body, as otherwise the grid would apply.
-    const addCardContainer = document.body.appendChild( document.createElement( "div" ) );
-    const addCard = addCardContainer.appendChild( document.createElement( "img" ) );
-    addCardContainer.classList.add( "addCardContainer" );
-    addCard.classList.add( "addCard" );
-    addCard.src = "img/add.png";
-
-    addCardContainer.addEventListener( "click", createNew.card );
   },
 };
 
@@ -140,19 +251,9 @@ const setListener = {
          */
 
         if ( lastItem === item ) {
-          axios.post( "api/add-new-item", { side, title } );
-
           createNew.item( ul, side, setListener );
           setHeight( innerCard.parentNode, side );
         }
-
-        const response = await axios.post( "api/update", {
-          updatedItem: item.value,
-          item       : originalItem,
-          side,
-          title,
-        } );
-        checkResponse( response.data, "app" );
 
         originalItem = item.value;
 	 		}
@@ -180,8 +281,6 @@ const setListener = {
           title.parentNode.parentNode.parentNode.getElementsByClassName( "front" )[0].getElementsByClassName( "title" )[0];
 
         otherSide.value = title.value;
-
-        await axios.post( "api/update", { updatedTitle: title.value, title: originalTitle } );
 
         originalTitle = title.value;
       }
@@ -220,9 +319,6 @@ const setListener = {
        */
       bullet.parentNode.remove();
       setHeight( card, side );
-
-      const response = await axios.post( "api/remove-item", { title, item, side } );
-      checkResponse( response.data, "app" );
     }
 
     bullet.addEventListener( "mouseenter", () => {
@@ -287,11 +383,6 @@ const setListener = {
       createNew.item( otherCard.getElementsByTagName( "UL" )[0], otherCard, setListener, options );
 
       item.parentNode.remove();
-
-      const response = await axios.post( "api/switch-item", {
-        title: title.value, item : item.value, side, otherSide,
-      } );
-      checkResponse( response.data, "app" );
     }
 
     switchEl.addEventListener( "mouseenter", () => {
@@ -313,9 +404,6 @@ const setListener = {
         const title = card.getElementsByClassName( "title" )[0].value;
 
         card.remove();
-
-        const response = await axios.post( "api/remove-card", { title } );
-        checkResponse( response.data, "app" );
       }
     } );
   },
@@ -374,9 +462,21 @@ function flipCard( card ) {
 
     flipCard( card );
     setHeight( card, "front" );
-
-    document.getElementById( "inner" ).style.gridTemplateRows = `repeat( ${Math.ceil( ( window.innerHeight - 200 ) / 22 )}, 22px )`; // Fixes bug with implicit grid: the grid would grow with one container
   }
-
-  createNew.addCard();
 } )();
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ })
+/******/ ]);

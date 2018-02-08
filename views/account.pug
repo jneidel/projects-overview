@@ -9,21 +9,33 @@ block content
     label( for="username" ) Username
     input( name="username" type="text" value=`${ newUsername || username }` )
   .input-group
-    label( for="confirmation_username" ) Confirm changes
-    input( name="confirmation_username" type="password" )
-  button( name="button_username" ) Submit
+    label( for="username_confirm" ) Confirm changes
+    input( name="username_confirm" type="password" )
+  button( name="username_button" ) Submit
   hr
   h2 Change password
   .input-group
     label( for="password" ) Password
     input( name="password" type="password" )
   .input-group
-    label( for="password_confirm" ) Repeat password
-    input( name="password_confirm" type="password" )
+    label( for="password_repeat" ) Repeat password
+    input( name="password_repeat" type="password" )
   .input-group
-    label( for="previous_password" ) Confirm changes
-    input( name="previous_password" type="password" )
-  button( name="button_password" ) Submit
+    label( for="password_confirm" ) Confirm changes
+    input( name="password_confirm" type="password" )
+  button( name="password_button" ) Submit
+  hr
+  h2 Clear cards
+  .input-group
+    label( for="clear_confirm" ) Confirm removal
+    input( name="clear_confirm" type="password" )
+  button( name="clear_button" ) Clear
+  hr
+  h2 Remove account
+  .input-group
+    label( for="remove_confirm" ) Confirm removal
+    input( name="remove_confirm" type="password" )
+  button( name="remove_button" ) Remove
 
 block scripts
   script( src="scripts/account.bundle.js" )

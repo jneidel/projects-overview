@@ -61,7 +61,7 @@ const config = { // common config
 const path = pathModule.resolve( __dirname, "public/scripts" );
 const res = [];
 
-[ "app", "account", "loginRegister", "welcome" ].forEach( ( name ) => {
+[ "app", "account", "loginRegister", "welcome", "help" ].forEach( ( name ) => {
   res.push( Object.assign( {}, config, { // Combine config and new obj
     name: `/${name}`,
     entry: `./src/bundles/${name}.bundle.js`,

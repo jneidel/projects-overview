@@ -1,0 +1,75 @@
+@import "mixins/_patterns.scss";
+@import "mixins/_card.scss";
+
+#content {
+  display: flex;
+  flex-direction: column;
+}
+
+#inner {
+  display: flex;
+  justify-content: center;
+
+  perspective: 800px;
+}
+
+// Card styling
+@include card; // _card
+
+.card {
+  margin: 20px 0;
+}
+
+// Text styling
+.description {
+  margin: 20px;
+  width: 600px;
+
+  h2 {
+    @include h2; // _patterns
+  }
+
+  p span {
+    text-decoration: underline $white;
+  }
+}
+
+@include kbd; // _patterns
+
+// Inline demos
+.addCardContainer {
+  $dimensions: 28px;
+  
+  width: $dimensions;
+  height: $dimensions;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  @include container; // _patterns
+
+  border-radius: 50%;
+  cursor: pointer;
+  margin: 0;
+
+  &:hover .addCard {
+    transform: rotateZ( 90deg );
+  }
+}
+.addCard {
+  $dimensions: 12px;
+
+  height: $dimensions;
+  width: $dimensions;
+  transition: transform 0.3s ease-out;
+  transform-origin: 50% 50% 0;
+}
+
+.switch-inline {
+  height: 14px;
+  width: 14px;
+
+  &:hover g path {
+    fill: $black;
+  }
+}

@@ -9,7 +9,7 @@ exports.verifyToken = async ( req, res, next ) => {
     await encryption.verifyToken( req, res, next );
   } catch ( e ) { // no cookie available
     req.body.username = undefined;
-    next();
+    return next();
   }
 };
 
@@ -19,7 +19,18 @@ exports.verifyTokenAPI = async ( req, res, next ) => {
     await encryption.decryptToken( req, res, () => {} );
     await encryption.verifyToken( req, res, next );
   } catch ( e ) {
-    throwUserError( "Error verifiying the token", req, res );
+    return throwUserError( "Error verifiying the token", req, res );
+  }
+};
+
+exports.verifyTokenThrow = async ( req, res, next ) => {
+  try {
+    header.parseToken( req, res, () => {} );
+    await encryption.decryptToken( req, res, () => {} );
+    await encryption.verifyToken( req, res, next );
+  } catch ( e ) { // not logged int
+    req.flash( "error", "Authentication is required to visit that url." );
+    return res.redirect( "login" );
   }
 };
 

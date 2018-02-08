@@ -1,5 +1,6 @@
 @import "mixins/_forms.scss";
 @import "mixins/_buttons.scss";
+@import "mixins/_patterns.scss";
 
 $form-margin: 20px;
 $form-labelFont: 16px;
@@ -14,11 +15,10 @@ body {
 }
 
 h2 {
+  @include h2; // _patterns
+
   position: relative;
   left: -250px;
-  font-size: $fontSize-headline;
-  font-family: $font-headline;
-  margin: 0;
   margin-bottom: -30px;
 
   transition: all 0.2s ease;
@@ -27,22 +27,16 @@ h2 {
     margin-bottom: 15px;
   }
 }
-hr {
-  width: 60vw;
-  height: 1px; 
-  border: 0;
-  margin: 30px 0;
-  $empty: rgba(0, 0, 0, 0);
-  background-image: linear-gradient(to right, $empty, $white, $empty);
-}
+
+@include hr; // _patterns
 
 input {
-  @include form-input( 200px, 10px, $form-margin, $form-labelFont );
+  @include form-input( 200px, 10px, $form-margin, $form-labelFont ); // _forms
 }
 label {
   font-size: $form-labelFont;
 }
 button {
-  @include btn-submit( 200px, 10px );
+  @include btn-submit( 200px, 10px ); // _buttons
   margin-top: $form-margin;
 }

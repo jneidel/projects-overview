@@ -1,5 +1,10 @@
-/* globals axios $ checkResponse */
+/* globals $ */
 /* eslint-disable no-alert, no-use-before-define */
+
+/*
+ * Copy of app.js for providing a working demo of a card at /help.
+ * Only axios requests and the addNewCard button have been removed.
+ */
 
 /* Visual DOM Selection Tree - always applies to the one above
  *>div.item      // > signifies entry point item
@@ -92,19 +97,6 @@ const createNew = {
     flipCard( card );
     setHeight( card, "front" );
     setListener.remove( card.getElementsByClassName( "remove" )[0] );
-
-    const response = await axios.post( "api/add-new-card" );
-    checkResponse( response.data, "app" );
-  },
-  addCard() {
-    // Appending 'add new card' button to body, as otherwise the grid would apply.
-    const addCardContainer = document.body.appendChild( document.createElement( "div" ) );
-    const addCard = addCardContainer.appendChild( document.createElement( "img" ) );
-    addCardContainer.classList.add( "addCardContainer" );
-    addCard.classList.add( "addCard" );
-    addCard.src = "img/add.png";
-
-    addCardContainer.addEventListener( "click", createNew.card );
   },
 };
 
@@ -140,19 +132,9 @@ const setListener = {
          */
 
         if ( lastItem === item ) {
-          axios.post( "api/add-new-item", { side, title } );
-
           createNew.item( ul, side, setListener );
           setHeight( innerCard.parentNode, side );
         }
-
-        const response = await axios.post( "api/update", {
-          updatedItem: item.value,
-          item       : originalItem,
-          side,
-          title,
-        } );
-        checkResponse( response.data, "app" );
 
         originalItem = item.value;
 	 		}
@@ -180,8 +162,6 @@ const setListener = {
           title.parentNode.parentNode.parentNode.getElementsByClassName( "front" )[0].getElementsByClassName( "title" )[0];
 
         otherSide.value = title.value;
-
-        await axios.post( "api/update", { updatedTitle: title.value, title: originalTitle } );
 
         originalTitle = title.value;
       }
@@ -220,9 +200,6 @@ const setListener = {
        */
       bullet.parentNode.remove();
       setHeight( card, side );
-
-      const response = await axios.post( "api/remove-item", { title, item, side } );
-      checkResponse( response.data, "app" );
     }
 
     bullet.addEventListener( "mouseenter", () => {
@@ -287,11 +264,6 @@ const setListener = {
       createNew.item( otherCard.getElementsByTagName( "UL" )[0], otherCard, setListener, options );
 
       item.parentNode.remove();
-
-      const response = await axios.post( "api/switch-item", {
-        title: title.value, item : item.value, side, otherSide,
-      } );
-      checkResponse( response.data, "app" );
     }
 
     switchEl.addEventListener( "mouseenter", () => {
@@ -313,9 +285,6 @@ const setListener = {
         const title = card.getElementsByClassName( "title" )[0].value;
 
         card.remove();
-
-        const response = await axios.post( "api/remove-card", { title } );
-        checkResponse( response.data, "app" );
       }
     } );
   },
@@ -374,9 +343,5 @@ function flipCard( card ) {
 
     flipCard( card );
     setHeight( card, "front" );
-
-    document.getElementById( "inner" ).style.gridTemplateRows = `repeat( ${Math.ceil( ( window.innerHeight - 200 ) / 22 )}, 22px )`; // Fixes bug with implicit grid: the grid would grow with one container
   }
-
-  createNew.addCard();
 } )();

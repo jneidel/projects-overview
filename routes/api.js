@@ -19,6 +19,8 @@ router.post( "/register",
   database.connectDatabase,
   account.validateRegister,
   account.registerUser,
+  database.generateCardId,
+  database.addExampleCards,
   setupToken
 );
 router.post( "/update",
@@ -44,12 +46,12 @@ router.post( "/update-username",
   account.updateUsername,
   setupToken
 );
-/* router.post( "/update-password",
+router.post( "/update-password",
   verifyTokenAPI,
   database.connectDatabase,
   encryption.decryptPasswords,
-  account.updateUsername
-); */
+  account.updatePassword
+);
 router.post( "/remove-item",
   verifyTokenAPI,
   database.connectDatabase,
@@ -65,6 +67,18 @@ router.post( "/remove-card",
   verifyTokenAPI,
   database.connectDatabase,
   database.removeCard
+);
+router.post( "/remove-account",
+  verifyTokenAPI,
+  encryption.decryptPasswords,
+  database.connectDatabase,
+  account.removeAccount
+);
+router.post( "/clear-cards",
+  verifyTokenAPI,
+  encryption.decryptPasswords,
+  database.connectDatabase,
+  database.clearCards
 );
 
 router.get( "/", ( req, res ) => {

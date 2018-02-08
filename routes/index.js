@@ -3,10 +3,10 @@ const router = express.Router();
 const app = require( "../controllers/appController" );
 const header = require( "../controllers/headerController" );
 const database = require( "../controllers/databaseController" );
-const { verifyToken } = require( "../handlers/tokenHandler" );
+const { verifyToken, verifyTokenThrow } = require( "../handlers/tokenHandler" );
 
 router.get( "/app",
-  verifyToken,
+  verifyTokenThrow,
   database.connectDatabase,
   database.getCards,
   app.app
@@ -20,7 +20,7 @@ router.get( "/register",
   app.register
 );
 router.get( "/account",
-  verifyToken,
+  verifyTokenThrow,
   app.account
 );
 router.get( "/",
@@ -29,6 +29,10 @@ router.get( "/",
 router.get( "/logout",
   header.removeCookie,
   app.logout
+);
+router.get( "/help",
+  verifyToken,
+  app.help
 );
 
 module.exports = router;
