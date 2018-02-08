@@ -27,6 +27,7 @@ body {
 
 /* Get started button */
 .button--get-started {
+  width: 100px;
   color: #333;
   background: #F5F7FA;
   box-shadow: 0 4px 10px 1px rgba(51, 51, 51, 0.2);
@@ -35,7 +36,8 @@ body {
   transition: all .3s;
   cursor: pointer;
   text-decoration: none;
-  padding: 18px 26px; }
+  padding: 18px 26px;
+  text-align: center; }
 
 .button--get-started:hover {
   box-shadow: 0 14px 25px 1px rgba(51, 51, 51, 0.3);

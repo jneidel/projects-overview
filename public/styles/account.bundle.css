@@ -168,11 +168,11 @@ body {
   align-items: center; }
 
 h2 {
-  position: relative;
-  left: -250px;
   font-size: 1.55rem;
   font-family: "Raleway", "Open Sans", Arial;
   margin: 0;
+  position: relative;
+  left: -250px;
   margin-bottom: -30px;
   transition: all 0.2s ease; }
   @media all and (max-width: 750px) {

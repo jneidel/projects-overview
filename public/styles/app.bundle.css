@@ -184,6 +184,78 @@ select:-webkit-autofill:focus {
     padding: 0;
     margin: 10px; }
 
+.front, .back {
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  backface-visibility: hidden; }
+
+.back {
+  position: absolute;
+  top: 20px;
+  left: -10;
+  transform: rotateY(180deg); }
+
+.future {
+  position: absolute;
+  top: -20px;
+  left: 6px;
+  font-size: 0.65rem;
+  color: rgba(245, 247, 250, 0.85); }
+
+input {
+  width: 200px;
+  color: #F5F7FA;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  caret-color: #333; }
+
+.title {
+  width: 250px;
+  font-family: "Raleway", "Open Sans", Arial;
+  font-size: 1.55rem;
+  user-select: none;
+  margin-left: 4px; }
+
+.titleContainer {
+  display: flex;
+  margin-left: -10px; }
+  .titleContainer .title {
+    margin-left: 0; }
+  .titleContainer:hover .remove {
+    transform: translateX(0%); }
+
+.removeWrapper {
+  display: block;
+  overflow: hidden; }
+
+.remove {
+  position: relative;
+  top: 3px;
+  transform: translateX(100%);
+  user-select: none;
+  padding-right: 4px;
+  transition: transform 0.2s ease; }
+  .remove:hover {
+    color: #333; }
+
+.bullet {
+  font-size: 0.8rem;
+  margin-right: 6px;
+  user-select: none; }
+
+li:hover .switch {
+  visibility: visible; }
+
+.switch {
+  height: 12px;
+  width: 12px;
+  margin-left: 5px;
+  visibility: hidden; }
+  .switch:hover g path {
+    fill: #333; }
+
 .-span1 {
   grid-row: span 7; }
 
@@ -484,64 +556,6 @@ select:-webkit-autofill:focus {
 .-span100 {
   grid-row: span 106; }
 
-/* Card Flip */
-.front, .back {
-  -webkit-backface-visibility: hidden;
-  -moz-backface-visibility: hidden;
-  backface-visibility: hidden; }
-
-.back {
-  position: absolute;
-  top: 20px;
-  left: -10;
-  transform: rotateY(180deg); }
-
-.future {
-  position: absolute;
-  top: -20px;
-  left: 6px;
-  font-size: 0.65rem;
-  color: rgba(245, 247, 250, 0.85); }
-
-/* Item Style */
-input {
-  width: 200px;
-  color: #F5F7FA;
-  background-color: transparent;
-  border: none;
-  outline: none;
-  font-size: 16px;
-  caret-color: #333; }
-
-.title {
-  width: 250px;
-  font-family: "Raleway", "Open Sans", Arial;
-  font-size: 1.55rem;
-  user-select: none;
-  margin-left: 4px; }
-
-.titleContainer {
-  display: flex;
-  margin-left: -10px; }
-  .titleContainer .title {
-    margin-left: 0; }
-  .titleContainer:hover .remove {
-    transform: translateX(0%); }
-
-.removeWrapper {
-  display: block;
-  overflow: hidden; }
-
-.remove {
-  position: relative;
-  top: 3px;
-  transform: translateX(100%);
-  user-select: none;
-  padding-right: 4px;
-  transition: transform 0.2s ease; }
-  .remove:hover {
-    color: #333; }
-
 .addCardContainer {
   position: fixed;
   right: 30px;
@@ -568,23 +582,6 @@ input {
   transform-origin: 50% 50% 0;
   user-select: none; }
 
-.bullet {
-  font-size: 0.8rem;
-  margin-right: 6px;
-  user-select: none; }
-
-li:hover .switch {
-  visibility: visible; }
-
-.switch {
-  height: 12px;
-  width: 12px;
-  margin-left: 5px;
-  visibility: hidden; }
-  .switch:hover g path {
-    fill: #333; }
-
-/* Flashes */
 .flash {
   width: auto;
   margin-top: 20px;
@@ -600,3 +597,10 @@ li:hover .switch {
 .flash:nth-of-type(1) {
   margin-top: 40px;
   margin-bottom: 0; }
+
+/* Fix card being cut of on flip */
+body {
+  grid-template-columns: 1vw auto 1vw; }
+
+#content {
+  margin: 0 5vw; }

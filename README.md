@@ -1,4 +1,4 @@
-# v0.1
+# v0.2
 
 Pre-release version and as such still missing features.
 
@@ -7,9 +7,9 @@ Pre-release version and as such still missing features.
 **Download the source code:**
 
 ```bash
-wget https://github.com/jneidel/project-manager/archive/v0.1.tar.gz
+wget https://github.com/jneidel/project-manager/archive/v0.2.tar.gz
 # or
-curl https://github.com/jneidel/project-manager/archive/v0.1.tar.gz -0
+curl https://github.com/jneidel/project-manager/archive/v0.2.tar.gz -0
 ```
 
 Unpack with `tar -xzf v0.1.tar.gz`.
