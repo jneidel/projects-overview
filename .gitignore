@@ -1,7 +1,14 @@
 node_modules/
 package-lock.json
+
 variables.env
 private-key.pem
-public/scripts
-public/styles
+
 todo.md
+
+public/scripts
+public/styles/account.bundle.css
+public/styles/app.bundle.css
+public/styles/help.bundle.css
+public/styles/loginRegister.bundle.css
+public/styles/welcome.bundle.css
