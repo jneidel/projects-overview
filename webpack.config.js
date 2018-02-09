@@ -7,7 +7,7 @@ const ExtractTextPlugin = require( "extract-text-webpack-plugin" );
 const browserSyncPlugin = require( "browser-sync-webpack-plugin" );
 
 require( "dotenv" ).config( { path: "variables.env" } );
-const prod = process.env.PROD || false;
+const prod = false;
 
 /* loaders */
 const scss = {
@@ -26,7 +26,7 @@ const babel = {
         "polyfill": true,
         "regenerator": true,
         "moduleName": "babel-runtime"
-      } ] ],
+      } ] ],
     },
   } ],
 };
@@ -47,6 +47,12 @@ const browserSync = new browserSyncPlugin( {
 function bundleCss( out ) {
   return new ExtractTextPlugin( `../styles/${out}.bundle.css` );
 };
+
+const env = new webpack.DefinePlugin( { // Makes .env vars available in client side scripts
+  env: {
+    URL: JSON.stringify( process.env.URL ),
+  },
+} );
 
 /* Set module */
 const config = { // common config
@@ -69,8 +75,8 @@ const res = [];
       path, filename: `${name}.bundle.js`,
     },
     plugins: prod ?
-      [ minify, uglify, bundleCss( name ) ] :
-      [ bundleCss( name ), browserSync ]
+      [ env, minify, uglify, bundleCss( name ) ] :
+      [ env, bundleCss( name ), browserSync ]
   } ) );
 } );
 
