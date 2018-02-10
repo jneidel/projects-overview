@@ -34,6 +34,8 @@ app.use( ( req, res, next ) => {
 app.use( "/", require( "./routes/index" ) );
 app.use( "/api", require( "./routes/api" ) );
 
+process.on( "unhandledRejection", ( err ) => { throw err; } );
+
 app.use( errorHandlers.notFound );
 app.use( errorHandlers.flashValidationErrors );
 app.use( errorHandlers.displayErrorMsg );
