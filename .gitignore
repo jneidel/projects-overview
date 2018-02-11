@@ -3,6 +3,7 @@ package-lock.json
 
 variables.env
 private-key.pem
+old-private-key.pem
 
 todo.md
 
