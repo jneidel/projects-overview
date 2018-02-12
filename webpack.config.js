@@ -7,7 +7,8 @@ const ExtractTextPlugin = require( "extract-text-webpack-plugin" );
 const browserSyncPlugin = require( "browser-sync-webpack-plugin" );
 
 require( "dotenv" ).config( { path: "variables.env" } );
-const prod = false;
+
+const prod = process.env.NODE_ENV === "prod" ? true : false;
 
 /* loaders */
 const scss = {

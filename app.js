@@ -7,8 +7,11 @@ const app = express();
 require( "dotenv" ).config( { path: "variables.env" } );
 
 const port = process.env.PORT;
+const nodeEnv = process.env.NODE_ENV;
 
-app.use( require( "morgan" )( "dev" ) );
+if ( nodeEnv === "dev" ) {
+  app.use( require( "morgan" )( "dev" ) );
+}
 
 app.set( "view engine", "pug" );
 app.set( "views", `${__dirname}/views` );
