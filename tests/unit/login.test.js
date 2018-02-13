@@ -1,33 +1,16 @@
 const expect = require( "expect" );
 const sinon = require( "sinon" );
 const mockery = require( "mockery" );
-const { createMongo, createRsa, createBcrypt, createJwt, createFs, passwords } = require( "./dependencyMocks" );
+
+const { passwords } = require( "./data" );
+const { createMongo, createBcrypt } = require( "./dependencyFactories" );
+const { generateArgs, expectResJson, generateStubs } = require( "./utils" );
+
 process.env.SECRET = "test-cookie-secret";
 mockery.enable( { warnOnUnregistered: false } );
 
 /* global describe it xit */
 /* eslint-disable global-require */
-
-function createArgs() {
-  /* Creates unique, fully isolated, instance of args 
-   * Out: setup req, res
-   */
-  const sb = sinon.createSandbox(); // Unique instance
-
-  const req = {
-    sandbox: sb,
-    flash  : sb.spy(),
-    body   : {},
-  };
-  const res = {
-    sandbox    : sb,
-    json       : sb.spy(),
-    cookie     : sb.spy(),
-    clearCookie: sb.spy(),
-  };
-
-  return { req, res };
-}
 
 async function runUnit( req, res, { ...mocks } ) {
   if ( mocks.mongo ) { mockery.registerMock( "mongodb", mocks.mongo ); }
@@ -61,7 +44,7 @@ describe( "/api/login", () => {
     const password = data.encryptedPass;
     const hashedPass = data.hashedPass;
 
-    const { req, res } = createArgs();
+    const { req, res } = generateArgs();
     req.body.username = username;
     req.body.password = password;
 
@@ -71,15 +54,14 @@ describe( "/api/login", () => {
     const bcrypt = createBcrypt();
     bcrypt.compareSync.returns( true );
 
-    const mocks = {
-      mongo, bcrypt, rsa: createRsa(), jwt: createJwt(), fs : createFs(),
-    };
+    const stubs = generateStubs( { mongo, bcrypt }, [ "rsa", "jwt", "fs" ] );
 
-    await runUnit( req, res, mocks );
+    await runUnit( req, res, stubs );
 
-    expect( req.body.username ).toBe( username );
+    /* state assert */
     expect( req.token ).toBeTruthy( "expect token" );
     expect( res.cookie.callCount ).toBe( 1, "expect cookie" );
-    expect( res.json.calledWith( { success: true } ) ).toBeTruthy( "expect success res.json" );
+    /* value assert */
+    expectResJson.success( res );
   } );
 } );
