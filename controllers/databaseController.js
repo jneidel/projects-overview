@@ -242,6 +242,5 @@ exports.clearCards = async ( req, res ) => {
   dbCards.remove( { username } );
 
   req.flash( "success", "All cards have been removed from your account" );
-  console.log("Css")
   return res.json( { success: true } );
 };
