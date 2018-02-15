@@ -38,7 +38,7 @@ const setListener = {
     }
   },
   clear: async () => {
-    if ( window.confirm( "Do you want to remove all of your cards?") ) {
+    if ( window.confirm( "Do you want to remove all of your cards?" ) ) {
       let passwordConfirm = document.getElementsByName( "clear_confirm" )[0].value;
 
       passwordConfirm = await encryptWithPubKey( passwordConfirm );
@@ -64,4 +64,19 @@ document.getElementsByName( "remove_confirm" )[0].addEventListener( "keydown", (
 document.getElementsByName( "clear_button" )[0].addEventListener( "click", setListener.clear );
 document.getElementsByName( "clear_confirm" )[0].addEventListener( "keydown", ( event ) => {
   if ( event.which === 13 ) { setListener.clear(); }
+} );
+
+$( ".toogle" ).forEach( ( el ) => {
+  el.addEventListener( "click", () => {
+    const groupWrapper = el.parentNode.parentNode;
+    const inputWrapper = groupWrapper.querySelector( ".input-wrapper" ).style;
+
+    const isHidden = ~Array.from( groupWrapper.classList ).indexOf( "hidden" );
+
+    if ( isHidden ) {
+      groupWrapper.classList.remove( "hidden" );
+    } else {
+      groupWrapper.classList.add( "hidden" );
+    }
+  } );
 } );
