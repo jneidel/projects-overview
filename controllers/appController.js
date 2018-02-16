@@ -56,9 +56,16 @@ exports.account = ( req, res, next ) => {
   return res.render( "account", data );
 };
 
-exports.welcome = ( req, res ) => res.render( "welcome", {
-  title: "Project Manager",
-} );
+exports.welcome = ( req, res ) => {
+  const username = req.body.username;
+  const homepage = req.homepage;
+
+  return res.render( "welcome", {
+    title: "Project Manager",
+    username,
+    homepage,
+  } );
+};
 
 exports.help = ( req, res ) => {
   const username = req.body.username;

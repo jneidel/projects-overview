@@ -1,25 +1,23 @@
-@import "_variables.scss";
+@import "mixins/_header.scss";
 
 html {
   font-size: $fontSize-standard;
 }
-
 body {
-	margin: 0;
-	font-family: "Lato", Arial;
+  margin: 0;
+  font-family: $font-text;
+  color: $white;
 }
 
-/* Hero */
+// Hero
 $hero-width: 100vw;
-$hero-height: 500px;
+$hero-height: 400px;
 
 #hero {
-	display: flex;
-	justify-content: center;
-  align-items: center;
-	width: $hero-width;
-	height: $hero-height;
-	color: $white;
+  display: flex;
+  flex-direction: column;
+  width: $hero-width;
+  height: $hero-height;
 
   &::before {
     position: absolute;
@@ -35,8 +33,37 @@ $hero-height: 500px;
   }
 }
 
-/* Get started button */
+// Header
+#header {
+  display: flex;
+  justify-content: space-between;
+
+  a {
+    @include header-links;
+  }
+}
+
+@include header-positions;
+@include header-underlines;
+@include header-logo;
+@include header-logout;
+
+// Hero content
+.intro {
+  grid-area: intro;
+  justify-self: center;
+  align-self: center;
+  border-left: 1px $black solid;
+  padding-left: 5px;
+  margin: 40px 0 25px 70px;
+
+  font-size: 1.1rem;
+}
+
 .button--get-started {
+  grid-area: button;
+  justify-self: center;
+  align-self: center;
   width: 100px;
 	color: $black;
 	background: $white;

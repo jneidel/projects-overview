@@ -1,3 +1,5 @@
+include mixins/_header
+
 head
   title= `${title} | Project Manager`
   link( rel="stylesheet", href="styles/welcome.bundle.css" )
@@ -6,6 +8,8 @@ head
 
 body
   #hero
+    +header 
+    p.intro Webapp to manage current and future projects,<br>minimizing the number of overall projects.<br>Less concurrently active projects lead to faster completion,<br>as ones energy is naturally more focused.
     a( href="register" ).button--get-started Get started
 
 block scripts

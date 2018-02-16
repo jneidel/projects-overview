@@ -1,3 +1,5 @@
+include mixins/_header
+
 doctype html
 html
   head
@@ -7,31 +9,7 @@ html
     block styles
 
   body
-    #header
-      block header
-        - if ( !homepage ) { homepage = "/" }
-        #nav-left
-          a.header-link-home( href=homepage )
-            p.headerShort P
-            .headerLongWrapper
-                p.headerLong PROJECT<br>MANAGER
-          .header-underline
-        #nav-right
-          if username
-            - if ( username.length > 20 ) { username = username.slice( 0, 20 ); }
-            .nav-container
-              a.nav-username( href="account" )=username
-              .header-underline
-            .nav-container
-              a( href="logout" )
-                img.logout-icon( src="img/logout.png" )
-          else
-            .nav-container#nav-link-register
-              a.header-link-register( href="register" ) Register
-              .header-underline
-            .nav-container
-              a.header-link-login( href="login" ) Login
-              .header-underline
+    +header
           
     #content
       block flashes
