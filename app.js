@@ -41,8 +41,12 @@ process.on( "unhandledRejection", ( err ) => { throw err; } );
 
 app.use( errorHandlers.notFound );
 app.use( errorHandlers.flashValidationErrors );
-app.use( errorHandlers.displayErrorMsg );
-app.use( errorHandlers.developmentErrors );
+
+if ( nodeEnv === "dev" ) {
+  app.use( errorHandlers.developmentErrors );
+} else {
+  app.use( errorHandlers.productionErrors );
+}
 
 app.listen( port, () => {
   console.log( `Server running on port ${port}.` ); // eslint-disable-line no-console
