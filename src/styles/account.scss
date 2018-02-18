@@ -8,6 +8,9 @@ $form-labelFont: 16px;
 body {
   grid-template-columns: 20px auto 20px;
 }
+#content {
+  justify-content: flex-start;
+}
 #inner {
   display: flex;
   flex-direction: column;
@@ -91,7 +94,7 @@ input {
 label {
   font-size: $form-labelFont;
 }
-button {
+.btn-submit {
   @include btn-submit( 200px, 10px ); // _buttons
   margin-top: $form-margin;
 }

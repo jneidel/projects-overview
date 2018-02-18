@@ -1,4 +1,5 @@
-import rsa from "node-rsa";
+const rsa = require( "node-rsa" );
+const axios = require( "axios" );
 
 /* global axios */
 

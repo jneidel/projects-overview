@@ -1,4 +1,3 @@
-require( "../scripts/globalVariables/axios" );
 require( "../scripts/globalVariables/globals" );
 require( "../scripts/globalVariables/encryptWithPubKey" );
 require( "../scripts/account" );

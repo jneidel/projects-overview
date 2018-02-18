@@ -1,5 +1,7 @@
-/* global encryptWithPubKey, url, axios, checkResponse */
+/* global encryptWithPubKey, checkResponse */
 /* eslint-disable no-empty */
+
+const axios = require( "axios" );
 
 async function getFormData( form ) {
   /* return data from form with encrypted passwords
@@ -60,12 +62,10 @@ const send = {
     } );
     checkResponse( response.data, "register", "app" );
   },
-}
+};
 
 async function setupListeners( func ) {
-  try {
-    document.getElementsByName( "username" )[0].value; // check that /login or /register
-    
+  try { // check that /login or /register
     var site = document.getElementsByName( "password_confirm" )[0] ? "register" : "login";
   } catch ( e ) {
     return null;
@@ -82,5 +82,5 @@ async function setupListeners( func ) {
       if ( event.which === 13 ) { send.register(); }
     } );
   }
-};
+}
 setupListeners();
