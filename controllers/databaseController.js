@@ -38,21 +38,15 @@ exports.generateCardId = async ( req, res, next ) => {
    */
   const db = req.db.cards;
 
-  const cursor = db.find( {}, { _id: 1 } );
-  cursor.sort( { _id: -1 } );
-  cursor.limit( 1 );
+  const ids = await db.aggregate( [
+    { $match: {} },
+    { $project: { _id: 1 } },
+    { $sort: { _id: -1 } },
+    { $limit: 1 },
+  ] ).toArray();
 
-  cursor.forEach( ( doc ) => {
-    req.cardId = doc._id + 1;
-
-    return next();
-  } );
-
-  const arr = await cursor.toArray();
-  if ( !arr.length ) {
-    req.cardId = 1;
-    return next();
-  }
+  req.cardId = ids.length ? ids[0]._id + 1 : 1;
+  return next();
 };
 
 exports.addNewCard = async ( req, res, next ) => {
