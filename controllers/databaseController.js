@@ -134,17 +134,31 @@ exports.getCards = async ( req, res, next ) => {
 exports.removeItem = async ( req, res, next ) => {
   /*
    * Out: remove item from card
-   * Throw: item to remove is last item in array
+   * Throw:
+   *  - item to remove is last item in array
+   *  - item to remove is only item in array
    */
   const username = req.body.username;
   const title = req.body.title;
   const side = req.body.side;
   const db = req.db.cards;
 
-  const card = await db.find( { username, title } ).toArray();
+  const response = await db.find( { username, title } ).toArray();
+  const cards = response[0][side];
 
-  if ( card[0][side].length <= 1 ) {
+  if ( cards.length <= 1 ) { // last item in array
     req.flash( "info", "The last item of a card shall not be removed" );
+    return res.json( { info: true } );
+  }
+
+  const variations = cards.reduce( ( acc, cur ) => {
+    if ( !~acc.indexOf( cur ) ) {
+      acc.push( cur );
+    }
+    return acc;
+  }, [] );
+  if ( variations.length <= 1 ) { // only single item in array
+    req.flash( "info", "The removal would have resulted in an empty card, which is inhibited" );
     return res.json( { info: true } );
   }
 
