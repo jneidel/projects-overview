@@ -47,6 +47,7 @@ describe( "/api/login", () => {
     const { req, res } = generateArgs();
     req.body.username = username;
     req.body.password = password;
+    req.headers["user-agent"] = "Chrome";
 
     const mongo = createMongo();
     mongo.toArray.returns( [ { username, password: hashedPass } ] );

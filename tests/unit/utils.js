@@ -13,6 +13,7 @@ exports.generateArgs = () => {
     sandbox: sb,
     flash  : sb.spy(),
     body   : {},
+    headers: {},
   };
   const res = {
     sandbox    : sb,
