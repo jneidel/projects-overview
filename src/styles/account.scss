@@ -15,7 +15,6 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 300px;
 }
 
 // title
@@ -99,4 +98,10 @@ label {
   margin-top: $form-margin;
 }
 
-@include hr; // _patterns
+hr {
+  @include hr( 60vw ); // _patterns
+
+  .footer-hr {
+    margin: 0;
+  }
+}

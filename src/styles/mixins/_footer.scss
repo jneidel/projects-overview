@@ -1,0 +1,13 @@
+@import "../_variables.scss";
+
+@mixin linkUnderline {
+  border-bottom: 1px $white solid;
+
+  color: $white;
+  text-decoration: none;
+
+  &:hover {
+    color: $black;
+    border-bottom-color: transparent;
+  }
+}

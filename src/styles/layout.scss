@@ -1,5 +1,6 @@
 @import "mixins/_patterns.scss";
 @import "mixins/_header.scss";
+@import "mixins/_footer.scss";
 
 html {
   font-size: $fontSize-standard;
@@ -8,10 +9,11 @@ html {
 body {
   display: grid;
   grid-template-columns: 6vw auto 6vw;
-  grid-template-rows: $height-header auto;
+  grid-template-rows: $height-header 1fr $height-footer;
   grid-template-areas: 
     "header header header"
-    ". main .";
+    ". main ."
+    ". footer .";
   background-image: linear-gradient( 26deg, $blue, $green );
   background-size: cover;
   background-repeat: no-repeat;
@@ -53,6 +55,36 @@ body {
 @include header-underlines;
 @include header-logo;
 @include header-logout;
+
+// Footer
+#footer {
+  grid-area: footer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .links {
+    height: $height-footer - 1px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & > * {
+      margin: 0;
+      border-bottom: 1px transparent solid; // Align non underlined with underlined items
+      margin: 0 5px;
+    }
+  }
+  .footer-link { // Class to overwrite default above
+    @include linkUnderline;
+  }
+}
+
+.footer-hr {
+  @include hr( 80vw ); // _patterns
+  margin: 0;
+}
 
 // Flashes
 .flash {
