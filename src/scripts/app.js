@@ -1,4 +1,4 @@
-/* globals axios $ checkResponse */
+/* globals $ checkResponse */
 /* eslint-disable no-alert, no-use-before-define */
 
 /* Visual DOM Selection Tree - always applies to the one above
@@ -6,6 +6,9 @@
  *  span.class
  *<   p.2ndChild // < signifies out point item
  */
+
+const axios = require( "axios" );
+const sweetalert = require( "sweetalert" );
 
 function setHeight( card, side ) {
   const inner = card.getElementsByClassName( side )[0];
@@ -303,20 +306,28 @@ const setListener = {
   },
   remove( remove ) {
     remove.addEventListener( "click", async () => {
-      if ( window.confirm( "Do you want to remove the card?" ) ) {
-        const card = remove.parentNode.parentNode.parentNode.parentNode;
-        /*
-         *<div.card
-         *    ...
-         *>        div.remove
-         */
-        const title = card.getElementsByClassName( "title" )[0].value;
+      sweetalert( {
+        title     : "Remove Card",
+        text      : "Do you really want to remove this card?",
+        icon      : "warning",
+        buttons   : [ "Cancel", "Remove" ],
+        dangerMode: true,
+      } ).then( async ( willDelete ) => {
+        if ( willDelete ) {
+          const card = remove.parentNode.parentNode.parentNode.parentNode;
+          /*
+          *<div.card
+          *    ...
+          *>        div.remove
+          */
+          const title = card.getElementsByClassName( "title" )[0].value;
 
-        card.remove();
+          card.remove();
 
-        const response = await axios.post( "api/remove-card", { title } );
-        checkResponse( response.data, "app" );
-      }
+          const response = await axios.post( "api/remove-card", { title } );
+          checkResponse( response.data, "app" );
+        }
+      } );
     } );
   },
 };

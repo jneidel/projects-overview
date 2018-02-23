@@ -8,35 +8,100 @@ $form-labelFont: 16px;
 body {
   grid-template-columns: 20px auto 20px;
 }
+#content {
+  justify-content: flex-start;
+}
 #inner {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-h2 {
-  @include h2; // _patterns
+// title
+.title-wrapper {
+  display: flex;
+  align-items: baseline;
 
   position: relative;
-  left: -250px;
+  left: -260px;
   margin-bottom: -30px;
 
   transition: all 0.2s ease;
-  @media all and ( max-width: 750px ) {
+  @media ( max-width: 820px ) {
     left: 0;
     margin-bottom: 15px;
+    text-align: center;
+  }
+
+  h2 {
+    @include h2; // _patterns
   }
 }
 
-@include hr; // _patterns
+// Toogled state
+.toogle {
+    $dimensions: 20px;
+    width: $dimensions;
+    height: $dimensions;
+    cursor: pointer; 
+    margin-left: 5px;
 
+    position: relative;
+    bottom: -3px;
+
+    path {
+      fill: $white;
+    }
+
+    transition: transform 0.3s ease;
+    transform-origin: 50% 50% 0;
+    transform: rotateZ( 90deg );
+    &:hover {
+      transform: rotateZ( 0deg ); 
+      path {
+        fill: $black;
+      }
+    }
+  } 
+.input-wrapper {
+  overflow: hidden; // Removes the need to set display:none
+}
+
+// Untoggled state
+.hidden {
+  .input-wrapper {
+    height: 0;
+  }
+
+  margin-bottom: 20px; // Fixes hr margins
+  @media ( max-width: 820px ) {
+    margin-bottom: -20px;
+  }
+
+  .toogle {
+    transform: rotateZ( 0deg );
+    &:hover {
+      transform: rotateZ( 90deg );
+    }
+  }
+}
+
+// Input
 input {
   @include form-input( 200px, 10px, $form-margin, $form-labelFont ); // _forms
 }
 label {
   font-size: $form-labelFont;
 }
-button {
+.btn-submit {
   @include btn-submit( 200px, 10px ); // _buttons
   margin-top: $form-margin;
+}
+
+hr {
+  @include hr( 60vw ); // _patterns
+
+  .footer-hr {
+    margin: 0;
+  }
 }

@@ -88,6 +88,10 @@ exports.login = async ( req, res, next ) => {
     return throwUserError( "Invalid password", req, res );
   }
 
+  if ( req.headers["user-agent"].match( /chrome/ ) === null ) {
+    req.flash( "info", "Using a browser other than chrome, you might experience visual bugs" );
+  }
+
   req.flash( "success", "Login successful" );
   return next();
 };

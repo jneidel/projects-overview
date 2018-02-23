@@ -4,9 +4,9 @@
  * Axios and encryptWithPubKey have been excluded because
  * of their size and will only be pulled in if needed.
  */ 
-
 /* eslint-disable */
-window.url = "http://localhost:8080";
+
+window.url = env.URL; // URL from var.env processed through webpack
 
 // bling.js
 window.$ = document.querySelectorAll.bind( document );

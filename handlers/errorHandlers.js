@@ -1,8 +1,7 @@
-exports.catchErrors = fn => function( req, res, next ) {
+exports.catchErrors = fn => ( req, res, next ) => {
   try {
     fn( req, res, next );
   } catch ( err ) {
-    console.log( err );
     return next( err );
   }
 };
@@ -20,17 +19,13 @@ exports.flashValidationErrors = ( err, req, res, next ) => {
   res.redirect( "back" );
 };
 
-exports.displayErrorMsg = ( err, req, res, next ) => {
-  req.flash( "error", err );
-  res.json( { error: true } );
-};
-
 exports.developmentErrors = ( err, req, res, next ) => {
   err.stack = err.stack || "";
   const errorDetails = {
     message         : err.message,
     status          : err.status,
     stackHighlighted: err.stack.replace( /[a-z_-\d]+.js:\d+:\d+/gi, "<mark>$&</mark>" ),
+    title           : "Error",
   };
   res.status( err.status || 500 );
   res.format( {
@@ -44,6 +39,7 @@ exports.developmentErrors = ( err, req, res, next ) => {
 exports.productionErrors = ( err, req, res, next ) => {
   res.status( err.status || 500 );
   res.render( "error", {
+    title  : "Error",
     message: err.message,
     error  : {},
   } );
@@ -59,12 +55,13 @@ exports.throwUserErrorWithState = ( msg, state, redirectUrl, req, res ) => {
 
   function serialize( obj ) {
     const str = [];
-    for( let p in obj )
-      if ( obj.hasOwnProperty( p)) {
-        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+    for ( const p in obj ) {
+      if ( obj.hasOwnProperty( p ) ) {
+        str.push( `${encodeURIComponent( p )}=${encodeURIComponent( obj[p] )}` );
       }
-    return str.join("&");
+    }
+    return str.join( "&" );
   }
 
-  res.json( { state: redirectUrl + "?" + serialize( state ) } );
-}
+  res.json( { state: `${redirectUrl}?${serialize( state )}` } );
+};

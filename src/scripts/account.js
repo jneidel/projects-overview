@@ -1,5 +1,8 @@
-/* global checkResponse axios encryptWithPubKey url $ */
+/* global checkResponse encryptWithPubKey $ */
 /* eslint-disable no-alert */
+
+const axios = require( "axios" );
+const sweetalert = require( "sweetalert" );
 
 const setListener = {
   username: async () => {
@@ -27,25 +30,41 @@ const setListener = {
     } );
     checkResponse( response.data, "account", "app" );
   },
-  remove: async () => {
-    if ( window.confirm( "Do you want to completely remove your account?" ) ) {
-      let passwordConfirm = document.getElementsByName( "remove_confirm" )[0].value;
+  remove: () => {
+    sweetalert( {
+      title     : "Remove Account",
+      text      : "Do you really want to remove your account?",
+      icon      : "warning",
+      buttons   : [ "Cancel", "Remove" ],
+      dangerMode: true,
+    } ).then( async ( willDelete ) => {
+      if ( willDelete ) {
+        let passwordConfirm = document.getElementsByName( "remove_confirm" )[0].value;
 
-      passwordConfirm = await encryptWithPubKey( passwordConfirm );
+        passwordConfirm = await encryptWithPubKey( passwordConfirm );
 
-      const response = await axios.post( "api/remove-account", { passwordConfirm } );
-      checkResponse( response.data, "account", "login" );
-    }
+        const response = await axios.post( "api/remove-account", { passwordConfirm } );
+        checkResponse( response.data, "account", "login" );
+      }
+    } );
   },
-  clear: async () => {
-    if ( window.confirm( "Do you want to remove all of your cards?") ) {
-      let passwordConfirm = document.getElementsByName( "clear_confirm" )[0].value;
+  clear: () => {
+    sweetalert( {
+      title     : "Clear",
+      text      : "Do you really want to remove all cards in your account?",
+      icon      : "warning",
+      buttons   : [ "Cancel", "Clear" ],
+      dangerMode: true,
+    } ).then( async ( willDelete ) => {
+      if ( willDelete ) {
+        let passwordConfirm = document.getElementsByName( "clear_confirm" )[0].value;
 
-      passwordConfirm = await encryptWithPubKey( passwordConfirm );
+        passwordConfirm = await encryptWithPubKey( passwordConfirm );
 
-      const response = await axios.post( "api/clear-cards", { passwordConfirm } );
-      checkResponse( response.data, "account", "app" );
-    }
+        const response = await axios.post( "api/clear-cards", { passwordConfirm } );
+        checkResponse( response.data, "account", "app" );
+      }
+    } );
   },
 };
 
@@ -64,4 +83,19 @@ document.getElementsByName( "remove_confirm" )[0].addEventListener( "keydown", (
 document.getElementsByName( "clear_button" )[0].addEventListener( "click", setListener.clear );
 document.getElementsByName( "clear_confirm" )[0].addEventListener( "keydown", ( event ) => {
   if ( event.which === 13 ) { setListener.clear(); }
+} );
+
+$( ".toogle" ).forEach( ( el ) => {
+  el.addEventListener( "click", () => {
+    const groupWrapper = el.parentNode.parentNode;
+    const inputWrapper = groupWrapper.querySelector( ".input-wrapper" ).style;
+
+    const isHidden = ~Array.from( groupWrapper.classList ).indexOf( "hidden" );
+
+    if ( isHidden ) {
+      groupWrapper.classList.remove( "hidden" );
+    } else {
+      groupWrapper.classList.add( "hidden" );
+    }
+  } );
 } );

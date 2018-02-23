@@ -7,8 +7,11 @@ const app = express();
 require( "dotenv" ).config( { path: "variables.env" } );
 
 const port = process.env.PORT;
+const nodeEnv = process.env.NODE_ENV;
 
-app.use( require( "morgan" )( "dev" ) );
+if ( nodeEnv === "dev" ) {
+  app.use( require( "morgan" )( "dev" ) );
+}
 
 app.set( "view engine", "pug" );
 app.set( "views", `${__dirname}/views` );
@@ -34,10 +37,16 @@ app.use( ( req, res, next ) => {
 app.use( "/", require( "./routes/index" ) );
 app.use( "/api", require( "./routes/api" ) );
 
+process.on( "unhandledRejection", ( err ) => { throw err; } );
+
 app.use( errorHandlers.notFound );
 app.use( errorHandlers.flashValidationErrors );
-app.use( errorHandlers.displayErrorMsg );
-app.use( errorHandlers.developmentErrors );
+
+if ( nodeEnv === "dev" ) {
+  app.use( errorHandlers.developmentErrors );
+} else {
+  app.use( errorHandlers.productionErrors );
+}
 
 app.listen( port, () => {
   console.log( `Server running on port ${port}.` ); // eslint-disable-line no-console

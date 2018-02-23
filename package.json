@@ -7,13 +7,12 @@
     "node": "9.2.0"
   },
   "scripts": {
-    "start": "concurrently \"npm run watch\" \"npm run build\" --names \"💻,📦\" --prefix name",
+    "start": "concurrently \"npm run watch\" \"npm run build\" \"npm run unit\" --names \"💻 ,📦 ,☕️ \" --prefix name",
     "watch": "nodemon app.js --ignore public/scripts/ --ignore tests/",
-    "build": "npm run webpack",
-    "webpack": "webpack -w",
-    "test": "mocha ./tests/*.test.js",
-    "testing": "nodemon --exec 'mocha ./tests/*.test.js' --ignore public/",
-    "prod": "node app.js"
+    "build": "webpack -w",
+    "test": "mocha ./tests/*/*.test.js",
+    "unit": "nodemon --exec 'mocha ./tests/unit/*.test.js' --ignore public/",
+    "prod": "node -r dotenv/config app.js dotenv_config_path=variables.env"
   },
   "repository": {
     "type": "git",
@@ -29,7 +28,7 @@
     "btoa": "^1.1.2",
     "connect-flash": "^0.1.1",
     "cookie": "^0.3.1",
-    "dotenv": "^4.0.0",
+    "dotenv": "^5.0.0",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
     "jsonwebtoken": "^8.1.1",
@@ -38,27 +37,28 @@
     "mz": "^2.7.0",
     "node-rsa": "^0.4.2",
     "pug": "^2.0.0-rc.4",
-    "validator": "^9.3.0"
+    "sweetalert": "^2.1.0",
+    "validator": "^9.4.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
-    "babel-minify-webpack-plugin": "^0.2.0",
+    "babel-minify-webpack-plugin": "^0.3.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
     "babel-runtime": "^6.26.0",
     "browser-sync": "^2.23.6",
-    "browser-sync-webpack-plugin": "^1.2.0",
+    "browser-sync-webpack-plugin": "^2.0.1",
     "concurrently": "^3.5.1",
     "expect": "^1.20.2",
     "extract-text-webpack-plugin": "^3.0.2",
     "mocha": "^5.0.0",
     "mockery": "^2.1.0",
     "node-sass": "^4.7.2",
-    "nodemon": "^1.14.11",
+    "nodemon": "^1.14.12",
     "raw-loader": "^0.5.1",
     "sass-loader": "^6.0.6",
-    "sinon": "^4.1.6",
+    "sinon": "^4.2.2",
     "webpack": "^3.10.0"
   }
 }

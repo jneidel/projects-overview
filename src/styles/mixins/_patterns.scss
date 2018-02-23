@@ -10,15 +10,13 @@
   }
 }
 
-@mixin hr {
-  hr {
-    width: 60vw;
-    height: 1px; 
-    border: 0;
-    margin: 30px 0;
-    $empty: rgba(0, 0, 0, 0);
-    background-image: linear-gradient(to right, $empty, $white, $empty);
-  }
+@mixin hr( $width ) {
+  width: $width;
+  height: 1px; 
+  border: 0;
+  margin: 30px 0;
+  $empty: rgba(0, 0, 0, 0);
+  background-image: linear-gradient(to right, $empty, $white, $empty);
 }
 
 @mixin h2 {

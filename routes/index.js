@@ -24,6 +24,7 @@ router.get( "/account",
   app.account
 );
 router.get( "/",
+  verifyToken,
   app.welcome
 );
 router.get( "/logout",

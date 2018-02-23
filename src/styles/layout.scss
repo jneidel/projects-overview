@@ -1,4 +1,6 @@
-@import "_variables.scss";
+@import "mixins/_patterns.scss";
+@import "mixins/_header.scss";
+@import "mixins/_footer.scss";
 
 html {
   font-size: $fontSize-standard;
@@ -7,10 +9,11 @@ html {
 body {
   display: grid;
   grid-template-columns: 6vw auto 6vw;
-  grid-template-rows: $height-header auto;
+  grid-template-rows: $height-header 1fr $height-footer;
   grid-template-areas: 
     "header header header"
-    ". main .";
+    ". main ."
+    ". footer .";
   background-image: linear-gradient( 26deg, $blue, $green );
   background-size: cover;
   background-repeat: no-repeat;
@@ -36,90 +39,54 @@ body {
   margin: $margin-contentTop 0;
 }
 
-/* Header */
+// Header
 #header {
   grid-area: header;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  box-shadow: 0 0 10px $white;
+  @include container;
 }
 #header a {
-  color: $white;
-  padding-bottom: 2px;
-  border-bottom: 2px solid transparent;
-  transition: border 0.3s ease;
-  cursor: pointer;
-  text-decoration: none;
+  @include header-links;
 }
-#nav-left {
-  padding: 12px 25px;
-}
-#nav-right {
+
+@include header-positions;
+@include header-underlines;
+@include header-logo;
+@include header-logout;
+
+// Footer
+#footer {
+  grid-area: footer;
   display: flex;
-  padding: 0 25px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .links {
+    height: $height-footer - 1px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & > * {
+      margin: 0;
+      border-bottom: 1px transparent solid; // Align non underlined with underlined items
+      margin: 0 5px;
+    }
+  }
+  .footer-link { // Class to overwrite default above
+    @include linkUnderline;
+  }
 }
-.nav-container {
-  padding-top: 20px;
-  padding-bottom: 18px;
-}
-#nav-link-register {
-	margin-right: 15px;
-}
-.nav-username {
+
+.footer-hr {
+  @include hr( 80vw ); // _patterns
   margin: 0;
 }
 
-/* Header underlines */
-.header-underline {
-  max-width: 0;
-  height: 3px;
-  background: $white;
-  transition: max-width 0.2s ease-in-out;
-
-  .header-link-home:hover + &     { max-width: 100%; }
-  .header-link-register:hover + & { max-width: 100%; }
-  .header-link-login:hover + &    { max-width: 100%; }
-  .nav-username:hover + &         { max-width: 100%; }
-}
-
-/* Header logo */
-#header-icon {
- height: 35px;
- width: auto;
- position: relative;
- top: -5px;
-}
-#header-logo {
-  height: 35px;
-  width: auto; 
-  transform: translateX( -100% );
-  transition: transform 0.2s ease-in-out;
-  padding-left: 7px;
-}
-.header-link-home {
-  display: block;
-  min-width: 152px;
-  height: 35px;
-  margin-bottom: -2px;
-
-  &:hover #header-logo {
-    transform: translateX( 0% );
-  }
-}
-#header-logo-wrapper {
-  display: inline-block;
-  overflow: hidden;
-}
-
-/* Logout icon */
-.logout-icon {
-	width: 16px;
-	height: 16px;
-	padding: 3px 0 0 8px;
-}
-
-/* Flashes */
+// Flashes
 .flash {
 	font-size: 1.25rem;
   background: rgba( $black, 0.25 );
@@ -149,7 +116,7 @@ body {
   }
 }
 
-/* Input */
+// Input
 input::-webkit-input-placeholder { color: rgba( $white, 0.7 ); }
 input::-moz-placeholder          { color: rgba( $white, 0.7 ); }
 input::-ms-input-placeholder     { color: rgba( $white, 0.7 ); }

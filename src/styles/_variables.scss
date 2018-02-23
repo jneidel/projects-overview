@@ -10,8 +10,15 @@ $red: #FC3A52;
 $color-cursor: $black;
 
 // Fonts
+@font-face {
+  font-family: Quantify;
+  font-weight: bold;
+  src: url( fonts/Quantify.ttf );
+}
+
 $font-headline: "Raleway", "Open Sans", Arial;
 $font-text: "Open Sans", Arial;
+$font-logo: Quantify, "Raleway", Arial;
 
 // Font sizes
 $fontSize-standard: 16px;
@@ -20,6 +27,7 @@ $fontSize-small: 0.65rem;
 
 // Height - Width
 $height-header: 60px;
+$height-footer: 60px;
 
 // Margins
 $margin-contentTop: 40px;
