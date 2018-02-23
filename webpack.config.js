@@ -1,35 +1,27 @@
-/* eslint-disable no-tabs */
-
 const webpack = require( "webpack" );
 const pathModule = require( "path" );
 const minifyModule = require( "babel-minify-webpack-plugin" );
-const ExtractTextPlugin = require( "extract-text-webpack-plugin" );
+const extractTextPlugin = require( "extract-text-webpack-plugin" );
 const browserSyncPlugin = require( "browser-sync-webpack-plugin" );
 
 require( "dotenv" ).config( { path: "variables.env" } );
 
-const prod = process.env.NODE_ENV === "prod" ? true : false;
+const prod = process.env.NODE_ENV === "prod";
 
 /* loaders */
 const scss = {
   test  : /\.scss$/,
-  loader: ExtractTextPlugin.extract( "raw-loader!sass-loader" ),
+  loader: extractTextPlugin.extract( "raw-loader!sass-loader" ),
 };
 
 const babel = {
   test: /\.js$/,
-  use : [ {
+  use : {
     loader : "babel-loader",
     options: {
       presets: [ "babel-preset-env" ],
-      plugins: [ [ "babel-plugin-transform-runtime", {
-        helpers    : false,
-        polyfill   : true,
-        regenerator: true,
-        moduleName : "babel-runtime",
-      } ] ],
     },
-  } ],
+  },
 };
 
 /* plugins */
@@ -46,7 +38,7 @@ const browserSync = new browserSyncPlugin( {
 }, {} );
 
 function bundleCss( out ) {
-  return new ExtractTextPlugin( `../styles/${out}.bundle.css` );
+  return new extractTextPlugin( `../styles/${out}.bundle.css` );
 }
 
 const env = new webpack.DefinePlugin( { // Makes .env vars available in client side scripts
@@ -59,7 +51,7 @@ const env = new webpack.DefinePlugin( { // Makes .env vars available in client s
 const config = { // common config
   module: {
     loaders: prod ?
-      [ /* babel, */ scss ] :
+      [ babel, scss ] :
       [ scss ],
   },
 };
