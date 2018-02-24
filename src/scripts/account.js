@@ -1,5 +1,4 @@
 /* global checkResponse encryptWithPubKey $ */
-/* eslint-disable no-alert */
 
 const axios = require( "axios" );
 const sweetalert = require( "sweetalert" );

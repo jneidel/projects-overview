@@ -1,7 +1,7 @@
 /* globals $ checkResponse */
-/* eslint-disable no-alert, no-use-before-define */
+/* eslint-disable no-use-before-define */
 
-/* Visual DOM Selection Tree - always applies to the one above
+/* Visual DOM Selection Tree - always applies to the dom selection above
  *>div.item      // > signifies entry point item
  *  span.class
  *<   p.2ndChild // < signifies out point item
@@ -167,8 +167,11 @@ const setListener = {
     title.addEventListener( "keydown", async () => {
       if ( event.which === 13 ) {
         if ( title.value.length >= 20 ) {
-          alert( `The title "${title.value}" will probably be cut off as its too long.
-							${title.value.length}` );
+          sweetalert( {
+            title: "Title Length",
+            text : `The title will probably be cut off as its too long.`,
+            icon : "warning",
+          } );
         }
 
         const cards = title.parentNode.parentNode.getElementsByClassName( "inner" );

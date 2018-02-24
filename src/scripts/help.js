@@ -1,16 +1,12 @@
 /* globals $ */
-/* eslint-disable no-alert, no-use-before-define */
+/* eslint-disable no-use-before-define */
 
 /*
  * Copy of app.js for providing a working demo of a card at /help.
  * Only axios requests and the addNewCard button have been removed.
  */
 
-/* Visual DOM Selection Tree - always applies to the one above
- *>div.item      // > signifies entry point item
- *  span.class
- *<   p.2ndChild // < signifies out point item
- */
+const sweetalert = require( "sweetalert" );
 
 function setHeight( card, side ) {
   const inner = card.getElementsByClassName( side )[0];
@@ -146,8 +142,11 @@ const setListener = {
     title.addEventListener( "keydown", async () => {
       if ( event.which === 13 ) {
         if ( title.value.length >= 20 ) {
-          alert( `The title "${title.value}" will probably be cut off as its too long.
-							${title.value.length}` );
+          sweetalert( {
+            title: "Title Length",
+            text : `The title will probably be cut off as its too long.`,
+            icon : "warning",
+          } );
         }
 
         const cards = title.parentNode.parentNode.getElementsByClassName( "inner" );
@@ -275,17 +274,25 @@ const setListener = {
   },
   remove( remove ) {
     remove.addEventListener( "click", async () => {
-      if ( window.confirm( "Do you want to remove the card?" ) ) {
-        const card = remove.parentNode.parentNode.parentNode.parentNode;
-        /*
-         *<div.card
-         *    ...
-         *>        div.remove
-         */
-        const title = card.getElementsByClassName( "title" )[0].value;
+      sweetalert( {
+        title     : "Remove Card",
+        text      : "Do you really want to remove this card?",
+        icon      : "warning",
+        buttons   : [ "Cancel", "Remove" ],
+        dangerMode: true,
+      } ).then( async ( willDelete ) => {
+        if ( willDelete ) {
+          const card = remove.parentNode.parentNode.parentNode.parentNode;
+          /*
+          *<div.card
+          *    ...
+          *>        div.remove
+          */
+          const title = card.getElementsByClassName( "title" )[0].value;
 
-        card.remove();
-      }
+          card.remove();
+        }
+      } );
     } );
   },
 };
