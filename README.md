@@ -1,10 +1,10 @@
-# project-manager
+# projects-overviewer
 
 > Overview of current and future projects
 
-[![](https://circleci.com/gh/jneidel/project-manager/tree/master.svg?style=shield&circle-token=98937429df5bf860a055272d7ded46b7c583503e)](https://circleci.com/gh/jneidel/project-manager)
-[![](https://img.shields.io/badge/version-v0.3-blue.svg)](https://github.com/jneidel/project-manager/releases)
-[![](https://img.shields.io/badge/currently-under%20development-brightgreen.svg)](https://github.com/jneidel/project-manager)
+[![](https://circleci.com/gh/jneidel/projects-overviewer/tree/master.svg?style=shield&circle-token=98937429df5bf860a055272d7ded46b7c583503e)](https://circleci.com/gh/jneidel/projects-overviewer)
+[![](https://img.shields.io/badge/version-v0.3-blue.svg)](https://github.com/jneidel/projects-overviewer/releases)
+[![](https://img.shields.io/badge/currently-under%20development-brightgreen.svg)](https://github.com/jneidel/projects-overviewer)
 
 Webapp to manage current and future projects, (hopefully) minimizing the number of overall projects. Having less concurrently active projects leads to faster completion, as ones energy is naturally more focused.
 
@@ -12,7 +12,7 @@ Webapp to manage current and future projects, (hopefully) minimizing the number 
 
 ## Features
 
-> [View app](https://pm.jneidel.com)
+> [View app](https://po.jneidel.com)
 
 - Overview of current projects
 - Category cards, with current and future projects side
@@ -21,11 +21,11 @@ Webapp to manage current and future projects, (hopefully) minimizing the number 
 
 ## Usage
 
-How to use the app is detailed at [/help](https://pm.jneidel.com/help).
+How to use the app is detailed at [/help](https://po.jneidel.com/help).
 
 ## Installation
 
-If you want to run the webapp yourself follow the [installation instructions](https://github.com/jneidel/project-manager/blob/latest/README.md) of the latest release.
+If you want to run the webapp yourself follow the [installation instructions](https://github.com/jneidel/projects-overviewer/blob/latest/README.md) of the latest release.
 
 ## About
 

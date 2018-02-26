@@ -1,10 +1,17 @@
 {
-  "name": "project-manager",
+  "name": "projects-overviewer",
+  "description": "Overview of current and future projects",
   "version": "0.3.0",
-  "description": "None",
+  "repository": "jneidel/projects-overviewer",
+  "author": {
+    "name": "Jonathan Neidel",
+    "email": "jneidel@outlook.com",
+    "url": "https://jneidel.com"
+  },
+  "license": "",
   "main": "app.js",
   "engines": {
-    "node": "9.2.0"
+    "node": "9.0.0"
   },
   "scripts": {
     "start": "concurrently \"npm run watch\" \"npm run build\" \"npm run unit\" --names \"💻 ,📦 ,☕️ \" --prefix name",
@@ -14,12 +21,6 @@
     "unit": "nodemon --exec 'mocha ./tests/unit/*.test.js' --ignore public/",
     "prod": "node -r dotenv/config app.js dotenv_config_path=variables.env"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/jneidel/project-manager.git"
-  },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "atob": "^2.0.3",
     "axios": "^0.18.0",

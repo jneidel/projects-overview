@@ -61,7 +61,7 @@ exports.welcome = ( req, res ) => {
   const homepage = req.homepage;
 
   return res.render( "welcome", {
-    title: "Project Manager",
+    title: "Projects Overviewer",
     username,
     homepage,
   } );

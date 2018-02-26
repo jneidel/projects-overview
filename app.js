@@ -20,9 +20,9 @@ app.use( express.static( `${__dirname}/public` ) );
 app.use( bodyParser.json() );
 app.use( bodyParser.urlencoded( { extended: true } ) );
 
-app.use( require( "express-session" )( {
+app.use( require( "express-session" )( { // For flashes
   secret           : process.env.SECRET,
-  key              : "project-manager",
+  key              : "projects-overviewer",
   resave           : false,
   saveUninitialized: true,
 } ) );
