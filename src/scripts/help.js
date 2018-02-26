@@ -263,6 +263,7 @@ const setListener = {
       createNew.item( otherCard.getElementsByTagName( "UL" )[0], otherCard, setListener, options );
 
       item.parentNode.remove();
+      setHeight( card, side );
     }
 
     switchEl.addEventListener( "mouseenter", () => {
