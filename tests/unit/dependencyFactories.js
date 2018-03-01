@@ -9,14 +9,16 @@ exports.createMongo = () => {
   const sb = sinon.createSandbox();
 
   const mongo = {
-    sandbox    : sb,
-    connect    : sb.stub(),
+    aggregate  : sb.stub(),
+    catch      : sb.spy(),
+    close      : sb.spy(),
     collection : sb.stub(),
+    connect    : sb.stub(),
     find       : sb.stub(),
     findOne    : sb.stub(),
+    insertOne  : sb.stub(),
+    insertMany : sb.stub(),
     toArray    : sb.stub(),
-    close      : sb.spy(),
-    catch      : sb.spy(),
     updateOne  : sb.stub(),
     MongoClient: {},
   };
@@ -25,6 +27,7 @@ exports.createMongo = () => {
   mongo.connect.resolves( mongo );
   mongo.collection.returns( mongo );
   mongo.find.returns( { toArray: mongo.toArray } );
+  mongo.aggregate.returns( { toArray: mongo.toArray } );
 
   return mongo;
 };
@@ -33,7 +36,6 @@ exports.createRsa = () => {
   const sb = sinon.createSandbox();
 
   const rsaMock = {
-    sandbox  : sb,
     importKey: sb.spy(),
     encrypt  : sb.stub(),
     decrypt  : sb.stub(),
@@ -55,11 +57,12 @@ exports.createBcrypt = () => {
   const sb = sinon.createSandbox();
 
   const bcrypt = {
-    sandbox    : sb,
     compareSync: sb.stub(),
+    hashSync   : sb.stub(),
   };
 
   bcrypt.compareSync.returns( ( clear, hashed ) => !!( clear === passwords.encryptedPass && hashed === passwords.hashedPass ) );
+  bcrypt.hashSync.returns( passwords.hashedPass );
 
   return bcrypt;
 };
@@ -68,8 +71,7 @@ exports.createJwt = () => {
   const sb = sinon.createSandbox();
 
   const jwt = {
-    sandbox: sb,
-    sign   : sb.stub(),
+    sign: sb.stub(),
   };
 
   jwt.sign.resolves( tokens.token );
@@ -81,7 +83,6 @@ exports.createFs = () => {
   const sb = sinon.createSandbox();
 
   const fs = {
-    sandbox : sb,
     readFile: sb.stub(),
   };
 
