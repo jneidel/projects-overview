@@ -9,8 +9,11 @@ head
 body
   #hero
     +header 
-    p.intro Webapp to manage current and future projects,<br>minimizing the number of overall projects.<br>Less concurrently active projects lead to faster completion,<br>as ones energy is naturally more focused.
-    a( href="register" ).button--get-started Get started
+    p.intro Webapp to manage current and future projects,<br>(hopefully) minimizing the number of overall projects.<br>Having less concurrently active projects leads to faster completion,<br>as ones energy is naturally more focused.
+    .buttons
+      a( href="register" ).button--get-started Get started
+      a( href="https://github.com/jneidel/projects-overviewer" ).button--get-started Source
+  #content
 
   block scripts
     script( src="scripts/welcome.bundle.js" )

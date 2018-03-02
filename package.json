@@ -33,6 +33,7 @@
     "express": "^4.16.2",
     "express-session": "^1.15.6",
     "jsonwebtoken": "^8.1.1",
+    "marked": "^0.3.17",
     "mongodb": "^2.2.33",
     "morgan": "^1.9.0",
     "mz": "^2.7.0",
