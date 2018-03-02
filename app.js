@@ -25,7 +25,7 @@ app.use( bodyParser.urlencoded( { extended: true } ) );
 
 app.use( sessions( { // For flashes
   secret           : process.env.SECRET,
-  key              : "projects-overviewer",
+  key              : "projects-overview",
   resave           : false,
   saveUninitialized: true,
 } ) );

@@ -1,10 +1,10 @@
-# projects-overviewer
+# projects-overview
 
 > Overview of current and future projects
 
-[![](https://circleci.com/gh/jneidel/projects-overviewer/tree/master.svg?style=shield&circle-token=98937429df5bf860a055272d7ded46b7c583503e)](https://circleci.com/gh/jneidel/projects-overviewer)
-[![](https://img.shields.io/badge/version-v0.3-blue.svg)](https://github.com/jneidel/projects-overviewer/releases)
-[![](https://img.shields.io/badge/currently-under%20development-brightgreen.svg)](https://github.com/jneidel/projects-overviewer)
+[![](https://circleci.com/gh/jneidel/projects-overview/tree/master.svg?style=shield&circle-token=98937429df5bf860a055272d7ded46b7c583503e)](https://circleci.com/gh/jneidel/projects-overview)
+[![](https://img.shields.io/badge/version-v0.3-blue.svg)](https://github.com/jneidel/projects-overview/releases)
+[![](https://img.shields.io/badge/currently-under%20development-brightgreen.svg)](https://github.com/jneidel/projects-overview)
 
 Webapp to manage current and future projects, (hopefully) minimizing the number of overall projects. Having less concurrently active projects leads to faster completion, as ones energy is naturally more focused.
 
@@ -23,9 +23,20 @@ Webapp to manage current and future projects, (hopefully) minimizing the number 
 
 How to use the app is detailed at [/help](https://po.jneidel.com/help).
 
+## FAQ
+
+**Q: What is this?**<br>
+**A:** Projects-overview is a webapp to manage all of your current and future projects, not going into the projects themselves, but giving a high level overview over your current engagements.
+
+**Q: Why would I use this?**<br>
+**A:** Projects-overview is designed to help you minimize the number of active projects, which in turn helps you to actually finish those projects, as your focus is less spread out.
+
+**Q: Why did you build this?**<br>
+**A:** I read in one of [Cal Newport](http://calnewport.com/)s books that minimize my number of active projects will increase my focus in working on them. I then built this app to keep an overview over my active projects, having the overview discouraged my impulse to just start something and held me accountable to actually finishing projects. More on the history in the about section.
+
 ## Installation
 
-If you want to run the webapp yourself follow the [installation instructions](https://github.com/jneidel/projects-overviewer/blob/latest/README.md) of the latest release.
+If you want to run the webapp yourself follow the [installation instructions](https://github.com/jneidel/projects-overview/blob/latest/README.md) of the latest release.
 
 ## About
 

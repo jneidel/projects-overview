@@ -1,4 +1,4 @@
-use projects-overviewer
+use projects-overview
 db.cards.drop();
 db.cards.insertMany([
 {

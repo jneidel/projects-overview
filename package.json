@@ -1,8 +1,8 @@
 {
-  "name": "projects-overviewer",
+  "name": "projects-overview",
   "description": "Overview of current and future projects",
   "version": "0.3.0",
-  "repository": "jneidel/projects-overviewer",
+  "repository": "jneidel/projects-overview",
   "author": {
     "name": "Jonathan Neidel",
     "email": "jneidel@outlook.com",
