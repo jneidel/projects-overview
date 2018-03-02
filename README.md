@@ -4,6 +4,7 @@
 
 [![](https://circleci.com/gh/jneidel/projects-overview/tree/master.svg?style=shield&circle-token=98937429df5bf860a055272d7ded46b7c583503e)](https://circleci.com/gh/jneidel/projects-overview)
 [![](https://img.shields.io/badge/version-v0.3-blue.svg)](https://github.com/jneidel/projects-overview/releases)
+[![](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/jneidel/projects-overview/blob/master/licence)
 [![](https://img.shields.io/badge/currently-under%20development-brightgreen.svg)](https://github.com/jneidel/projects-overview)
 
 Webapp to manage current and future projects, (hopefully) minimizing the number of overall projects. Having less concurrently active projects leads to faster completion, as ones energy is naturally more focused.
