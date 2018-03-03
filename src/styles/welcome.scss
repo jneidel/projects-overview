@@ -78,7 +78,6 @@ body {
 // Hero content
 .intro {
   grid-area: intro;
-  justify-self: center;
   align-self: center;
   border-left: 1px $black solid;
   padding-left: 8px;
@@ -94,17 +93,15 @@ body {
 
 .button--get-started {
   grid-area: button;
-  justify-self: center;
   align-self: center;
-  width: 100px;
-	color: $black;
-	background: $white;
-	box-shadow: 0 4px 10px 1px rgba( $black, 0.2 );
-	font-size: 1.125rem;
-	border-radius: 30px;
-	transition: all .3s;
-	cursor: pointer;
-	text-decoration: none;
+  color: $black;
+  background: $white;
+  box-shadow: 0 4px 10px 1px rgba( $black, 0.2 );
+  font-size: 1.125rem;
+  border-radius: 30px;
+  transition: all .3s;
+  cursor: pointer;
+  text-decoration: none;
   padding: 17px 22px;
   text-align: center;
 
@@ -113,8 +110,24 @@ body {
     transform: translateY( -2px );
   }
 
+  // Button content
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  a, img {
+    $dimensions: 24px;
+    width: $dimensions;
+    height: $dimensions;
+  }
+
+  p {
+    margin: 0;
+    padding-left: 8px;
+  }
+
   &:nth-of-type(1) {
-    margin-right: 25px;
+    margin-right: 25px; // Between buttons
   }
 }
 
@@ -129,6 +142,6 @@ body {
   }
 }
 
-::-webkit-scrollbar {
+::-webkit-scrollbar { // Width of scrollbar toogles vertical scroll
   display: none;
 }

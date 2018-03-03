@@ -1,8 +1,12 @@
 include mixins/_header
 
 mixin getStartedSourceButtons()
-  a( href="register" ).button--get-started Get started
-  a( href="https://github.com/jneidel/projects-overview" ).button--get-started Source
+  a( href="register" ).button--get-started
+    img( src="img/get-started.svg" style="transform: rotate( -90deg );")
+    p Get started
+  a( href="https://github.com/jneidel/projects-overview" ).button--get-started
+    img( src="img/github.svg" ) 
+    p Source
 
 
 head
