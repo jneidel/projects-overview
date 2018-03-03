@@ -1,19 +1,26 @@
 include mixins/_header
 
+mixin getStartedSourceButtons()
+  a( href="register" ).button--get-started Get started
+  a( href="https://github.com/jneidel/projects-overview" ).button--get-started Source
+
+
 head
   title= `${title} | Projects Overview`
   link( rel="stylesheet", href="styles/welcome.bundle.css" )
   link( rel="shortcut icon" type="image/png" href="img/favicon.png" )
-  link( href="https://fonts.googleapis.com/css?family=Open+Sans|Raleway"  rel="stylesheet")
+  link( href="https://fonts.googleapis.com/css?family=Open+Sans:400,600"  rel="stylesheet")
 
 body
   #hero
     +header 
-    p.intro Webapp to manage current and future projects,<br>(hopefully) minimizing the number of overall projects.<br>Having less concurrently active projects leads to faster completion,<br>as ones energy is naturally more focused.
+    p.intro Webapp to manage current and future projects,<br>minimizing the number of overall projects.<br>Less concurrently active projects leads to faster completion,<br>as ones energy is naturally more focused.
     .buttons
-      a( href="register" ).button--get-started Get started
-      a( href="https://github.com/jneidel/projects-overview" ).button--get-started Source
+      +getStartedSourceButtons
   #content
+  #footer
+      .banner
+        +getStartedSourceButtons
 
   block scripts
     script( src="scripts/welcome.bundle.js" )

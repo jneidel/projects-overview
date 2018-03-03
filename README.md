@@ -7,22 +7,22 @@
 [![](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/jneidel/projects-overview/blob/master/licence)
 [![](https://img.shields.io/badge/currently-under%20development-brightgreen.svg)](https://github.com/jneidel/projects-overview)
 
-Webapp to manage current and future projects, (hopefully) minimizing the number of overall projects. Having less concurrently active projects leads to faster completion, as ones energy is naturally more focused.
+Webapp to manage current and future projects, minimizing the number of overall projects. Less concurrently active projects leads to faster completion, as ones energy is naturally more focused.
 
 ![](https://i.imgur.com/Wzjp8np.png)
 
 ## Features
-
-> [View app](https://po.jneidel.com)
 
 - Overview of current projects
 - Category cards, with current and future projects side
 - Items can be easily deleted or moved over to other side
 - Complete account control (change username/password, remove data/account)
 
+> [View app](https://po.jneidel.com)
+
 ## Usage
 
-How to use the app is detailed at [/help](https://po.jneidel.com/help).
+Usage is detailed at [/help](https://po.jneidel.com/help).
 
 ## FAQ
 
@@ -48,6 +48,4 @@ As editing the source every time I updated my projects wasn't very practical, I 
 
 ![](https://i.imgur.com/52HU8Ua.png)
 
-Ordered by importance, top to bottom, left to right.
-
-[Node.js](https://nodejs.org/en/), [Express](https://expressjs.com/), [MongoDB](https://www.mongodb.com/), [Pug](https://pugjs.org/), [Webpack](https://webpack.js.org/), [Mocha](https://mochajs.org/), [Sinon](http://sinonjs.org/), [CircleCI](https://circleci.com/), [JSON Web Tokens](https://jwt.io/)
+Ordered by importance: [Node.js](https://nodejs.org/en/), [Express](https://expressjs.com/), [MongoDB](https://www.mongodb.com/), [Pug](https://pugjs.org/), [Webpack](https://webpack.js.org/), [Mocha](https://mochajs.org/), [Sinon](http://sinonjs.org/), [CircleCI](https://circleci.com/), [JSON Web Tokens](https://jwt.io/)

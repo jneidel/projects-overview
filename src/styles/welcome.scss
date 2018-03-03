@@ -10,27 +10,53 @@ body {
   max-width: 100vw;
 }
 
-// Hero
-$hero-width: 100vw;
-$hero-height: 430px;
+// Banner gradient
+@mixin gradient-banner( $height ) {
+  position: absolute;
+  width: 100vw;
+  height: $height;
+  background-image: linear-gradient( 26deg, $blue, $green 75% );
+  background-repeat: no-repeat;
+  background-position: 0 50%;
+  transform: skewY( -3.2deg );
+  z-index: -1;
+  content: "";
+}
 
 #hero {
+  $height: 430px;
+
   display: flex;
   flex-direction: column;
-  width: $hero-width;
-  height: $hero-height;
+  width: 100vw;
+  height: $height;
 
   &::before {
-    position: absolute;
     top: -6%;
-    width: $hero-width;
-    height: $hero-height;
-    background-image: linear-gradient( 26deg, $blue, $green 75% );
-    background-repeat: no-repeat;
-    background-position: 0 50%;
-    transform: skewY( -3.2deg );
-    z-index: -1;
-    content: "";
+    @include gradient-banner( $height );
+  }
+}
+
+#footer {
+  position: relative; // Banner with position absolute will be easier to position
+  overflow: hidden;
+}
+
+.banner {
+  $height: 250px;
+
+  display: flex;
+  justify-content: center;
+  width: 100vw;
+  height: $height;
+  
+  &::before {
+    bottom: -16%;
+    @include gradient-banner( $height );
+  }
+
+  a {
+    margin-top: 50px;
   }
 }
 
@@ -96,7 +122,7 @@ $hero-height: 430px;
 #content {
   color: $black;
   margin: 0 20vw;
-  margin-bottom: 50px;
+  margin-bottom: 30px;
 
   img {
     max-width: 60vw;
