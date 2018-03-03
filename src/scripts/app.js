@@ -105,7 +105,7 @@ const createNew = {
     const addCard = addCardContainer.appendChild( document.createElement( "img" ) );
     addCardContainer.classList.add( "addCardContainer" );
     addCard.classList.add( "addCard" );
-    addCard.src = "img/add.png";
+    addCard.src = "img/add.svg";
 
     addCardContainer.addEventListener( "click", createNew.card );
   },
