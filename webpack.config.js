@@ -1,45 +1,14 @@
+const path = require( "path" );
 const webpack = require( "webpack" );
-const pathModule = require( "path" );
-const minifyModule = require( "babel-minify-webpack-plugin" );
-const extractTextPlugin = require( "extract-text-webpack-plugin" );
-const browserSyncPlugin = require( "browser-sync-webpack-plugin" );
+const { babel, polyfill, uglify, genScss, browserSync } = require( "setup-webpack" );
+
+/*
+   See https://github.com/jneidel/setup-webpack for an in-depth explaination of how this works.
+*/
 
 require( "dotenv" ).config( { path: "variables.env" } );
 
 const prod = process.env.NODE_ENV === "prod";
-
-/* loaders */
-const scss = {
-  test  : /\.scss$/,
-  loader: extractTextPlugin.extract( "raw-loader!sass-loader" ),
-};
-
-const babel = {
-  test: /\.js$/,
-  use : {
-    loader : "babel-loader",
-    options: {
-      presets: [ "babel-preset-env" ],
-    },
-  },
-};
-
-/* plugins */
-const uglify = new webpack.optimize.UglifyJsPlugin( {
-  compress: { warnings: false },
-} );
-
-const minify = new minifyModule( {}, { comments: false } );
-
-const browserSync = new browserSyncPlugin( {
-  host : "localhost",
-  port : 8080,
-  proxy: "http://localhost:8000/",
-}, {} );
-
-function bundleCss( out ) {
-  return new extractTextPlugin( `../styles/${out}.bundle.css` );
-}
 
 const env = new webpack.DefinePlugin( { // Makes .env vars available in client side scripts
   env: {
@@ -47,30 +16,32 @@ const env = new webpack.DefinePlugin( { // Makes .env vars available in client s
   },
 } );
 
-/* Set module */
-const config = { // common config
-  module: {
-    loaders: prod ?
-      [ babel, scss ] :
-      [ scss ],
-  },
-};
+const sync = browserSync();
 
-/* Set entry, output, plugins */
-const path = pathModule.resolve( __dirname, "public/scripts" );
-const res = [];
+const results = [];
 
 [ "app", "account", "loginRegister", "welcome", "help" ].forEach( ( name ) => {
-  res.push( Object.assign( {}, config, { // Combine config and new obj
-    name  : `/${name}`,
-    entry : `./src/bundles/${name}.bundle.js`,
+  const scss = genScss( `../styles/${name}.bundle.css` );
+
+  const entryPath = `./src/bundles/${name}.bundle.js`;
+  const entry = prod ? polyfill( entryPath ) : entryPath;
+
+  results.push( {
+    name  : `/${name}`, // For webpack console output
+    entry,
     output: {
-      path, filename: `${name}.bundle.js`,
+      path    : path.resolve( __dirname, "public/scripts" ),
+      filename: `${name}.bundle.js`,
+    },
+    module: {
+      loaders: prod ?
+        [ babel, scss.loader ] :
+        [ scss.loader ],
     },
     plugins: prod ?
-      [ env, minify, uglify, bundleCss( name ) ] :
-      [ env, bundleCss( name ), browserSync ],
-  } ) );
+      [ env, uglify, scss.plugin ] :
+      [ env, scss.plugin, sync ],
+  } );
 } );
 
-module.exports = res;
+module.exports = results;
