@@ -2,10 +2,10 @@
 
 > Overview of current and future projects
 
-[![](https://circleci.com/gh/jneidel/projects-overview/tree/master.svg?style=shield&circle-token=98937429df5bf860a055272d7ded46b7c583503e)](https://circleci.com/gh/jneidel/projects-overview)
-[![](https://img.shields.io/badge/version-v0.3-blue.svg)](https://github.com/jneidel/projects-overview/releases)
-[![](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/jneidel/projects-overview/blob/master/licence)
-[![](https://img.shields.io/badge/currently-under%20development-brightgreen.svg)](https://github.com/jneidel/projects-overview)
+[![Build](https://circleci.com/gh/jneidel/projects-overview/tree/master.svg?style=shield&circle-token=98937429df5bf860a055272d7ded46b7c583503e)](https://circleci.com/gh/jneidel/projects-overview)
+[![Releases](https://img.shields.io/badge/version-v0.3-blue.svg)](https://github.com/jneidel/projects-overview/releases)
+[![Licence](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/jneidel/projects-overview/blob/master/licence)
+[![Development](https://img.shields.io/badge/currently-under%20development-brightgreen.svg)](https://github.com/jneidel/projects-overview)
 
 Webapp to manage current and future projects, minimizing the number of overall projects. Less concurrently active projects leads to faster completion, as ones energy is naturally more focused.
 
@@ -49,3 +49,7 @@ As editing the source every time I updated my projects wasn't very practical, I 
 ![](https://i.imgur.com/52HU8Ua.png)
 
 Ordered by importance: [Node.js](https://nodejs.org/en/), [Express](https://expressjs.com/), [MongoDB](https://www.mongodb.com/), [Pug](https://pugjs.org/), [Webpack](https://webpack.js.org/), [Mocha](https://mochajs.org/), [Sinon](http://sinonjs.org/), [CircleCI](https://circleci.com/), [JSON Web Tokens](https://jwt.io/)
+
+## Licence
+
+MIT © [Jonathan Neidel](https://jneidel.com)
