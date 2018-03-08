@@ -22,12 +22,6 @@ body {
 	font-family: $font-text;
   color: $white;
   margin: 0;
-
-  @media all and ( max-width: 580px ) {
-    grid-template-areas: 
-      "header header header"
-      "main main main";
-  }
 }
 #content {
   grid-area: main;
@@ -99,7 +93,7 @@ body {
   &:hover {
     background: rgba( $black, 0.15 );
   }
-  &:nth-of-type( 1 ) {
+  &:last-of-type {
     margin-bottom: $margin-contentTop;
   }
   &.-success {

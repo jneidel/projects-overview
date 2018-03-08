@@ -5,16 +5,15 @@ block styles
 
 block content
   h1 Register
-  label( for="username" ) Username
-  input( name="username" type="text" required )
-  // input.fields( name="email" type="email" placeholder="Email Address" required )
-  label( for="password" ) Password
-  input( name="password" type="password" required )
-  label( for="password_confirm" ) Confirm password
-  input( name="password_confirm" type="password" required )
+  label Username
+    input( name="username" type="text" required )
+  label Password
+    input( name="password" type="password" required )
+  label Confirm password
+    input( name="password_confirm" type="password" required )
   button.button#register Register
   .dots
-    img( src="img/dots.png" )
+    img( src="img/dots.svg" )
   a.button( href="login" ) Login
 
 block scripts

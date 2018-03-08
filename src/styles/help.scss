@@ -2,14 +2,11 @@
 @import "mixins/_card.scss";
 
 #content {
-  display: flex;
-  flex-direction: column;
+  justify-content: flex-start;
 }
 
 #inner {
   display: flex;
-  justify-content: center;
-
   perspective: 800px;
 }
 
@@ -17,7 +14,7 @@
 @include card; // _card
 
 .card {
-  margin: 20px 0;
+  margin: 65px 0;
 }
 
 // Text styling

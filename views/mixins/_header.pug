@@ -6,7 +6,7 @@ mixin header()
         a.header-link-home( href=homepage )
           p.headerShort P
           .headerLongWrapper
-              p.headerLong PROJECT<br>MANAGER
+              p.headerLong PROJECTS<br>OVERVIEW
         .header-underline
       #nav-right
         if username
@@ -16,7 +16,7 @@ mixin header()
             .header-underline
           .nav-container
             a( href="logout" )
-              img.logout-icon( src="img/logout.png" )
+              img.logout-icon( src="img/logout.svg" )
         else
           .nav-container#nav-link-register
             a.header-link-register( href="register" ) Register

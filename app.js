@@ -1,5 +1,8 @@
 const express = require( "express" );
 const bodyParser = require( "body-parser" );
+const morgan = require( "morgan" );
+const sessions = require( "express-session" );
+const flash = require( "connect-flash" );
 const errorHandlers = require( "./handlers/errorHandlers" );
 
 const app = express();
@@ -10,7 +13,7 @@ const port = process.env.PORT;
 const nodeEnv = process.env.NODE_ENV;
 
 if ( nodeEnv === "dev" ) {
-  app.use( require( "morgan" )( "dev" ) );
+  app.use( morgan( "dev" ) );
 }
 
 app.set( "view engine", "pug" );
@@ -20,13 +23,13 @@ app.use( express.static( `${__dirname}/public` ) );
 app.use( bodyParser.json() );
 app.use( bodyParser.urlencoded( { extended: true } ) );
 
-app.use( require( "express-session" )( {
+app.use( sessions( { // For flashes
   secret           : process.env.SECRET,
-  key              : "project-manager",
+  key              : "projects-overview",
   resave           : false,
   saveUninitialized: true,
 } ) );
-app.use( require( "connect-flash" )() );
+app.use( flash() );
 
 app.use( ( req, res, next ) => {
   res.locals.h = require( "./helpers/helpers" ); // eslint-disable-line global-require
