@@ -39,6 +39,7 @@ app.use( ( req, res, next ) => {
 
 app.use( "/", require( "./routes/index" ) );
 app.use( "/api", require( "./routes/api" ) );
+app.use( "/api/public", require( "./routes/api-public" ) );
 
 process.on( "unhandledRejection", ( err ) => { throw err; } );
 
