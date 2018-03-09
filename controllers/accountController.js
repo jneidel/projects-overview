@@ -1,5 +1,6 @@
 const validator = require( "validator" );
 const bcrypt = require( "bcrypt" );
+const uuid = require( "uuid" );
 const reservedUsernames = require( "../data/reserved-usernames" );
 const { throwUserError, throwUserErrorWithState } = require( "../handlers/errorHandlers" );
 
@@ -223,4 +224,17 @@ exports.removeAccount = async ( req, res, next ) => {
 
   req.flash( "info", "Account has been deleted, thanks for checking out the app" );
   return res.json( { success: true } );
+};
+
+exports.createApiKey = async ( req, res, next ) => {
+  /*
+   * Out: api added to db
+   */
+  const username = req.body.username;
+  const db = req.db.users;
+  const apiKey = uuid( process.env.URL, uuid.URL );
+
+  db.updateOne( { username }, { $set: { api: apiKey } } );
+
+  res.json( { apiKey } );
 };

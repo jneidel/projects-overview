@@ -65,6 +65,36 @@ const setListener = {
       }
     } );
   },
+  apiKey: async () => {
+    const response = await axios.post( "api/create-apikey" );
+    const data = checkResponse( response.data, "account" );
+    const key = data.apiKey;
+
+    let keyEl = document.getElementById( "apiKey" );
+
+    if ( !keyEl ) {
+      const genButton = document.getElementsByName( "gen-api" )[0];
+      const parent = genButton.parentElement;
+
+      const copyButton = parent.insertBefore( document.createElement( "button" ), genButton );
+      copyButton.classList.add( "btn-submit" );
+      copyButton.name = "copy-api";
+      copyButton.innerText = "Copy to clipboard";
+      setListener.apiCopy();
+
+      keyEl = parent.insertBefore( document.createElement( "p" ), copyButton );
+      keyEl.id = "apiKey";
+    }
+
+    keyEl.innerText = key;
+  },
+  apiCopy: async () => {
+    try {
+      const el = document.getElementById( "apiKey" );
+      el.select();
+      document.execCommand( "copy" );
+    } catch ( error ) {} // eslint-disable-line
+  },
 };
 
 document.getElementsByName( "username_button" )[0].addEventListener( "click", setListener.username );
@@ -83,6 +113,8 @@ document.getElementsByName( "clear_button" )[0].addEventListener( "click", setLi
 document.getElementsByName( "clear_confirm" )[0].addEventListener( "keydown", ( event ) => {
   if ( event.which === 13 ) { setListener.clear(); }
 } );
+document.getElementsByName( "gen-api" )[0].addEventListener( "click", setListener.apiKey );
+document.getElementsByName( "copy-api" )[0].addEventListener( "click", setListener.apiCopy );
 
 $( ".toogle" ).forEach( ( el ) => {
   el.addEventListener( "click", () => {

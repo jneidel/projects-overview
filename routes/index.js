@@ -4,6 +4,7 @@ const app = require( "../controllers/appController" );
 const header = require( "../controllers/headerController" );
 const database = require( "../controllers/databaseController" );
 const { verifyToken, verifyTokenThrow } = require( "../handlers/tokenHandler" );
+const checkForApiKey = require( "../handlers/apiKeyHandler" );
 
 router.get( "/app",
   verifyTokenThrow,
@@ -21,6 +22,8 @@ router.get( "/register",
 );
 router.get( "/account",
   verifyTokenThrow,
+  database.connectDatabase,
+  checkForApiKey,
   app.account
 );
 router.get( "/",

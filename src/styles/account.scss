@@ -65,6 +65,7 @@ body {
   } 
 .input-wrapper {
   overflow: hidden; // Removes the need to set display:none
+  max-width: 222px;
 }
 
 // Untoggled state
@@ -84,6 +85,17 @@ body {
       transform: rotateZ( 90deg );
     }
   }
+}
+
+#apiKey {
+  font-size: 16px;
+  text-align: center;
+
+  background: none;
+  border: none;
+  outline: none;
+  resize: none;
+  color: $white;
 }
 
 // Input

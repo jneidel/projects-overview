@@ -39,6 +39,7 @@
     "node-rsa": "^0.4.2",
     "pug": "^2.0.0-rc.4",
     "sweetalert": "^2.1.0",
+    "uuid": "^3.2.1",
     "validator": "^9.4.1"
   },
   "devDependencies": {

@@ -29,5 +29,7 @@ window.checkResponse = ( res, errorRedirect, successRedirect = null ) => {
     window.location.reload();
   } else if ( res.state ) {
     window.location.replace( url + res.state );
+  } else {
+    return res;
   }
 };

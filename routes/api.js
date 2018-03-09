@@ -80,6 +80,11 @@ router.post( "/clear-cards",
   database.connectDatabase,
   database.clearCards
 );
+router.post( "/create-apikey",
+  verifyTokenAPI,
+  database.connectDatabase,
+  account.createApiKey
+);
 
 router.get( "/", ( req, res ) => {
   req.flash( "error", "Access to the API denied." );

@@ -42,11 +42,13 @@ exports.logout = ( req, res ) => {
 exports.account = ( req, res, next ) => {
   const username = req.body.username;
   const homepage = req.homepage;
+  const apiKey = req.apiKey;
 
   const data = {
     title: "Account",
     username,
     homepage,
+    apiKey,
   };
 
   if ( req.query && req.query.username ) {
