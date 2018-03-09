@@ -40,6 +40,10 @@ Usage is detailed at [/help](https://po.jneidel.com/help).
 
 If you want to run the webapp yourself follow the [installation instructions](https://github.com/jneidel/projects-overview/blob/latest/README.md) of the latest release.
 
+## Public API
+
+To access your current projects programmatically checkout the [API docs](https://github.com/jneidel/projects-overview/tree/master/routes/api-public.md).
+
 ## About
 
 Based on the concept of minimizing the number of active projects to focus on getting those done, I built an non-interactive html site, listing my current projects, to stay mindful of how many active projects I had.

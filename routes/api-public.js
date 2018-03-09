@@ -24,7 +24,7 @@ router.post( "/",
     const user = docs[0];
 
     let data = await cards.aggregate( [
-      { $match: { username: "jneidel" } },
+      { $match: { username: user.username } },
       { $project: { _id: 0, title: 1, front: 1 } },
       { $unwind: "$front" },
       { $group: { _id: "$title", docs: { $push: "$front" } } },
