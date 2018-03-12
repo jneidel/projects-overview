@@ -390,7 +390,7 @@ function flipCard( card ) {
     flipCard( card );
     setHeight( card, "front" );
 
-    document.getElementById( "inner" ).style.gridTemplateRows = `repeat( ${Math.ceil( ( window.innerHeight - 200 ) / 22 )}, 22px )`; // Fixes bug with implicit grid: the grid would grow with one container
+    document.getElementById( "inner" ).style.gridTemplateRows = `repeat( ${Math.ceil( ( window.innerHeight - 300 ) / 22 )}, 22px )`; // Fixes bug with implicit grid: the grid would grow with one container
   }
 
   createNew.addCard();

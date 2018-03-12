@@ -55,7 +55,6 @@ exports.registerUser = async ( req, res, next ) => {
   const user = {
     username,
     password,
-    settings: {},
   };
 
   const response = await db.insertOne( user );
@@ -64,6 +63,7 @@ exports.registerUser = async ( req, res, next ) => {
   }
 
   req.flash( "success", "Registration successful" );
+  req.flash( "info", "To remove example data: Click your name (top-right) ❯ Clear Cards" );
   return next();
 };
 

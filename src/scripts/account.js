@@ -88,7 +88,7 @@ const setListener = {
 
     keyEl.innerText = key;
   },
-  apiCopy: async () => {
+  apiCopy: () => {
     try {
       const el = document.getElementById( "apiKey" );
       el.select();
@@ -114,7 +114,9 @@ document.getElementsByName( "clear_confirm" )[0].addEventListener( "keydown", ( 
   if ( event.which === 13 ) { setListener.clear(); }
 } );
 document.getElementsByName( "gen-api" )[0].addEventListener( "click", setListener.apiKey );
-document.getElementsByName( "copy-api" )[0].addEventListener( "click", setListener.apiCopy );
+try {
+  document.getElementsByName( "copy-api" )[0].addEventListener( "click", setListener.apiCopy );
+} catch ( err ) {} // eslint-disable-line
 
 $( ".toogle" ).forEach( ( el ) => {
   el.addEventListener( "click", () => {
