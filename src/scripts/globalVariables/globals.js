@@ -33,3 +33,17 @@ window.checkResponse = ( res, errorRedirect, successRedirect = null ) => {
     return res;
   }
 };
+
+window.axios = {
+  get: url =>
+    fetch( url, { method: "GET" } ),
+  post: ( url, body ) =>
+    fetch( url, {
+      method : "POST",
+      body   : JSON.stringify( body ),
+      headers: {
+        "Accept": "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+    } ),
+};

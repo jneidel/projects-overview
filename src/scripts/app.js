@@ -1,4 +1,4 @@
-/* globals $ checkResponse */
+/* globals $ checkResponse axios */
 /* eslint-disable no-use-before-define */
 
 /* Visual DOM Selection Tree - always applies to the dom selection above
@@ -7,7 +7,6 @@
  *<   p.2ndChild // < signifies out point item
  */
 
-const axios = require( "axios" );
 const sweetalert = require( "sweetalert" );
 
 function setHeight( card, side ) {
@@ -96,8 +95,9 @@ const createNew = {
     setHeight( card, "front" );
     setListener.remove( card.getElementsByClassName( "remove" )[0] );
 
-    const response = await axios.post( "api/add-new-card" );
-    checkResponse( response.data, "app" );
+    axios.post( "api/add-new-card" )
+      .then( response => response.json() )
+      .then( response => checkResponse( response, "app" ) );
   },
   addCard() {
     // Appending 'add new card' button to body, as otherwise the grid would apply.
@@ -149,13 +149,14 @@ const setListener = {
           setHeight( innerCard.parentNode, side );
         }
 
-        const response = await axios.post( "api/update", {
+        axios.post( "api/update", {
           updatedItem: item.value,
           item       : originalItem,
           side,
           title,
-        } );
-        checkResponse( response.data, "app" );
+        } )
+          .then( response => response.json() )
+          .then( response => checkResponse( response, "app" ) );
 
         originalItem = item.value;
 	 		}
@@ -187,7 +188,7 @@ const setListener = {
 
         otherSide.value = title.value;
 
-        await axios.post( "api/update", { updatedTitle: title.value, title: originalTitle } );
+        axios.post( "api/update", { updatedTitle: title.value, title: originalTitle } );
 
         originalTitle = title.value;
       }
@@ -227,8 +228,9 @@ const setListener = {
       bullet.parentNode.remove();
       setHeight( card, side );
 
-      const response = await axios.post( "api/remove-item", { title, item, side } );
-      checkResponse( response.data, "app" );
+      axios.post( "api/remove-item", { title, item, side } )
+        .then( response => response.json() )
+        .then( response => checkResponse( response, "app" ) );
     }
 
     bullet.addEventListener( "mouseenter", () => {
@@ -295,10 +297,11 @@ const setListener = {
       item.parentNode.remove();
       setHeight( card, side );
 
-      const response = await axios.post( "api/switch-item", {
+      axios.post( "api/switch-item", {
         title: title.value, item : item.value, side, otherSide,
-      } );
-      checkResponse( response.data, "app" );
+      } )
+        .then( response => response.json() )
+        .then( response => checkResponse( response, "app" ) );
     }
 
     switchEl.addEventListener( "mouseenter", () => {
@@ -328,8 +331,9 @@ const setListener = {
 
           card.remove();
 
-          const response = await axios.post( "api/remove-card", { title } );
-          checkResponse( response.data, "app" );
+          axios.post( "api/remove-card", { title } )
+            .then( response => response.json() )
+            .then( response => checkResponse( response, "app" ) );
         }
       } );
     } );

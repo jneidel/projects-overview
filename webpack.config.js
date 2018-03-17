@@ -40,7 +40,7 @@ const results = [];
     },
     plugins: prod ?
       [ env, uglify, scss.plugin ] :
-      [ env, scss.plugin, sync ],
+      [ env, scss.plugin ],
   } );
 } );
 

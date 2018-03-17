@@ -1,7 +1,5 @@
-/* global encryptWithPubKey, checkResponse */
+/* global encryptWithPubKey checkResponse axios */
 /* eslint-disable no-empty */
-
-const axios = require( "axios" );
 
 async function getFormData( form ) {
   /* return data from form with encrypted passwords
@@ -42,11 +40,12 @@ const send = {
       password: document.getElementsByName( "password" )[0].value,
     } );
 
-    const response = await axios.post( "api/login", {
+    axios.post( "api/login", {
       username: formData.username,
       password: formData.password,
-    } );
-    checkResponse( response.data, "login", "app" );
+    } )
+      .then( response => response.json() )
+      .then( response => checkResponse( response, "login", "app" ) );
   },
   async register() {
     const formData = await getFormData( {
@@ -55,16 +54,17 @@ const send = {
       passwordConfirm: document.getElementsByName( "password_confirm" )[0].value,
     } );
 
-    const response = await axios.post( "api/register", {
+    axios.post( "api/register", {
       username       : formData.username,
       password       : formData.password,
       passwordConfirm: formData.passwordConfirm,
-    } );
-    checkResponse( response.data, "register", "app" );
+    } )
+      .then( response => response.json() )
+      .then( response => checkResponse( response, "register", "app" ) );
   },
 };
 
-async function setupListeners( func ) {
+function setupListeners( func ) {
   try { // check that /login or /register
     var site = document.getElementsByName( "password_confirm" )[0] ? "register" : "login";
   } catch ( e ) {
