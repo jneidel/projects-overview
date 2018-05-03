@@ -63,7 +63,7 @@
 
 /* Applying margin to inner insted of content as otherwise the card flip animation will be cut off */
 #inner {
-  margin: $margin-contentTop 0;
+  margin-top: $margin-contentTop;
 }
 #content {
   margin: 0;
