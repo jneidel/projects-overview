@@ -20,8 +20,8 @@ const sync = browserSync();
 
 const results = [];
 
-[ "app", "account", "loginRegister", "welcome", "help" ].forEach( ( name ) => {
-  const scss = genScss( `../styles/${name}.bundle.css` );
+[ "app", "account", "login-register", "welcome", "help" ].forEach( ( name ) => {
+  const scss = genScss( `../css/${name}.bundle.css` );
 
   const entryPath = `./src/bundles/${name}.bundle.js`;
   const entry = prod ? polyfill( entryPath ) : entryPath;
@@ -30,7 +30,7 @@ const results = [];
     name  : `/${name}`, // For webpack console output
     entry,
     output: {
-      path    : path.resolve( __dirname, "public/scripts" ),
+      path    : path.resolve( __dirname, "dist/js" ),
       filename: `${name}.bundle.js`,
     },
     module: {

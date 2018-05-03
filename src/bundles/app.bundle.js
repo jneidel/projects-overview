@@ -1,5 +1,5 @@
-require( "../scripts/globalVariables/globals" );
-require( "../scripts/app" );
+require( "../js/global-variables/globals" );
+require( "../js/app" );
 
-require( "../styles/layout.scss" );
-require( "../styles/app.scss" );
+require( "../scss/layout.scss" );
+require( "../scss/app.scss" );

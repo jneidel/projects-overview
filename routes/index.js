@@ -1,10 +1,10 @@
 const express = require( "express" );
 const router = express.Router();
-const app = require( "../controllers/appController" );
-const header = require( "../controllers/headerController" );
-const database = require( "../controllers/databaseController" );
-const { verifyToken, verifyTokenThrow } = require( "../handlers/tokenHandler" );
-const checkForApiKey = require( "../handlers/apiKeyHandler" );
+const app = require( "../controllers/app" );
+const header = require( "../controllers/header" );
+const database = require( "../controllers/database" );
+const { verifyToken, verifyTokenThrow } = require( "../handlers/token" );
+const checkForApiKey = require( "../handlers/api-key" );
 
 router.get( "/app",
   verifyTokenThrow,

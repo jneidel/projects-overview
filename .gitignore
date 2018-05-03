@@ -6,9 +6,9 @@ old-private-key.pem
 
 todo.md
 
-public/scripts
-public/styles/account.bundle.css
-public/styles/app.bundle.css
-public/styles/help.bundle.css
-public/styles/loginRegister.bundle.css
-public/styles/welcome.bundle.css
+dist/js
+dist/css/account.bundle.css
+dist/css/app.bundle.css
+dist/css/help.bundle.css
+dist/css/login-register.bundle.css
+dist/css/welcome.bundle.css

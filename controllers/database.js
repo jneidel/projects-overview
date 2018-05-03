@@ -1,5 +1,5 @@
 const bcrypt = require( "bcrypt" );
-const { throwUserError } = require( "../handlers/errorHandlers" );
+const { throwUserError } = require( "../handlers/error" );
 
 /* eslint-disable global-require */
 

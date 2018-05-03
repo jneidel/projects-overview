@@ -2,10 +2,9 @@ const validator = require( "validator" );
 const bcrypt = require( "bcrypt" );
 const uuid = require( "uuid" );
 const reservedUsernames = require( "../data/reserved-usernames" );
-const { throwUserError, throwUserErrorWithState } = require( "../handlers/errorHandlers" );
+const { throwUserError, throwUserErrorWithState } = require( "../handlers/error" );
 
 require( "dotenv" ).config( { path: "../variables.env" } );
-
 
 exports.validateRegister = async ( req, res, next ) => {
   /*

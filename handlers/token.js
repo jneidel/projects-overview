@@ -1,13 +1,13 @@
-const header = require( "../controllers/headerController.js" );
-const encryption = require( "../controllers/encryptionController" );
-const { throwUserError } = require( "../handlers/errorHandlers" );
+const header = require( "../controllers/header" );
+const encryption = require( "../controllers/encryption" );
+const { throwUserError } = require( "../handlers/error" );
 
 exports.verifyToken = async ( req, res, next ) => {
   try {
     header.parseToken( req, res, () => {} );
     await encryption.decryptToken( req, res, () => {} );
     await encryption.verifyToken( req, res, next );
-  } catch ( e ) { // no cookie available
+  } catch ( err ) { // no cookie available
     req.body.username = undefined;
     return next();
   }
@@ -18,7 +18,7 @@ exports.verifyTokenAPI = async ( req, res, next ) => {
     header.parseToken( req, res, () => {} );
     await encryption.decryptToken( req, res, () => {} );
     await encryption.verifyToken( req, res, next );
-  } catch ( e ) {
+  } catch ( err ) {
     return throwUserError( "Error verifiying the token", req, res );
   }
 };
@@ -28,7 +28,7 @@ exports.verifyTokenThrow = async ( req, res, next ) => {
     header.parseToken( req, res, () => {} );
     await encryption.decryptToken( req, res, () => {} );
     await encryption.verifyToken( req, res, next );
-  } catch ( e ) { // not logged int
+  } catch ( err ) { // not logged int
     req.flash( "error", "Authentication is required to visit that url." );
     return res.redirect( "login" );
   }

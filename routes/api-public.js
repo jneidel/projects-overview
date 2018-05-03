@@ -1,7 +1,7 @@
 const express = require( "express" );
 const router = express.Router();
-const database = require( "../controllers/databaseController" );
-const { verifyTokenAPI, setupToken } = require( "../handlers/tokenHandler" );
+const database = require( "../controllers/database" );
+const { verifyTokenAPI, setupToken } = require( "../handlers/token" );
 
 router.post( "/",
   database.connectDatabase,

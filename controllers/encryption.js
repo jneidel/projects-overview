@@ -4,7 +4,7 @@ const rsa = require( "node-rsa" );
 const atob = require( "atob" );
 const btoa = require( "btoa" );
 const bcrypt = require( "bcrypt" );
-const { throwUserError } = require( "../handlers/errorHandlers" );
+const { throwUserError } = require( "../handlers/error" );
 
 require( "dotenv" ).config( { path: "../variables.env" } );
 
@@ -68,7 +68,6 @@ exports.generateToken = async ( req, res, next ) => {
   return next();
 };
 
-
 exports.verifyToken = async ( req, res, next ) => {
   /*
    * Out: username, homepage
@@ -105,7 +104,7 @@ exports.encryptToken = async ( req, res, next ) => {
    */
   let token = req.token;
 
-  const publicKeyFile = await fs.readFile( "./public/public-key.pem" );
+  const publicKeyFile = await fs.readFile( "./dist/public-key.pem" );
   const publicKey = new rsa();
   publicKey.importKey( publicKeyFile, "pkcs8-public-pem" );
 

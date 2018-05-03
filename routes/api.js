@@ -1,11 +1,11 @@
 const express = require( "express" );
 const router = express.Router();
-const account = require( "../controllers/accountController" );
-const database = require( "../controllers/databaseController" );
-const encryption = require( "../controllers/encryptionController" );
-const header = require( "../controllers/headerController.js" );
-const { catchErrors } = require( "../handlers/errorHandlers" );
-const { verifyTokenAPI, setupToken } = require( "../handlers/tokenHandler" );
+const account = require( "../controllers/account" );
+const database = require( "../controllers/database" );
+const encryption = require( "../controllers/encryption" );
+const header = require( "../controllers/header" );
+const { catchErrors } = require( "../handlers/error" );
+const { verifyTokenAPI, setupToken } = require( "../handlers/token" );
 
 router.post( "/login",
   encryption.decryptPasswords,

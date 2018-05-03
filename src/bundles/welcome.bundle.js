@@ -1,4 +1,4 @@
-require( "../scripts/globalVariables/globals" );
-require( "../scripts/welcome" );
+require( "../js/global-variables/globals" );
+require( "../js/welcome" );
 
-require( "../styles/welcome.scss" );
+require( "../scss/welcome.scss" );
