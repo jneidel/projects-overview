@@ -1,4 +1,4 @@
-/* globals $ checkResponse axios */
+/* globals $ checkResponse */
 /* eslint-disable no-use-before-define */
 
 /* Visual DOM Selection Tree - always applies to the dom selection above
@@ -7,6 +7,7 @@
  *<   p.2ndChild // < signifies out point item
  */
 
+const axios = require( "axios" );
 const sweetalert = require( "sweetalert" );
 
 function setHeight( card, side ) {
@@ -95,9 +96,8 @@ const createNew = {
     setHeight( card, "front" );
     setListener.remove( card.getElementsByClassName( "remove" )[0] );
 
-    axios.post( "api/add-new-card" )
-      .then( response => response.json() )
-      .then( response => checkResponse( response, "app" ) );
+    const response = await axios.post( "api/add-new-card" );
+    checkResponse( response.data, "app" );
   },
   addCard() {
     // Appending 'add new card' button to body, as otherwise the grid would apply.
@@ -115,7 +115,7 @@ const setListener = {
   item( item ) {
     let originalItem = item.value;
 
-    item.addEventListener( "keydown", async () => {
+    item.addEventListener( "keydown", async event => {
       if ( event.which === 13 ) {
         const innerCard = item.parentNode.parentNode.parentNode;
         /*
@@ -149,23 +149,22 @@ const setListener = {
           setHeight( innerCard.parentNode, side );
         }
 
-        axios.post( "api/update", {
+        const response = await axios.post( "api/update", {
           updatedItem: item.value,
           item       : originalItem,
           side,
           title,
-        } )
-          .then( response => response.json() )
-          .then( response => checkResponse( response, "app" ) );
+        } );
+        checkResponse( response.data, "app" );
 
         originalItem = item.value;
-	 		}
+      }
     } );
   },
   title( title ) {
     let originalTitle = title.value;
 
-    title.addEventListener( "keydown", async () => {
+    title.addEventListener( "keydown", async event => {
       if ( event.which === 13 ) {
         if ( title.value.length >= 20 ) {
           sweetalert( {
@@ -188,7 +187,7 @@ const setListener = {
 
         otherSide.value = title.value;
 
-        axios.post( "api/update", { updatedTitle: title.value, title: originalTitle } );
+        await axios.post( "api/update", { updatedTitle: title.value, title: originalTitle } );
 
         originalTitle = title.value;
       }
@@ -228,9 +227,8 @@ const setListener = {
       bullet.parentNode.remove();
       setHeight( card, side );
 
-      axios.post( "api/remove-item", { title, item, side } )
-        .then( response => response.json() )
-        .then( response => checkResponse( response, "app" ) );
+      const response = await axios.post( "api/remove-item", { title, item, side } );
+      checkResponse( response.data, "app" );
     }
 
     bullet.addEventListener( "mouseenter", () => {
@@ -297,11 +295,10 @@ const setListener = {
       item.parentNode.remove();
       setHeight( card, side );
 
-      axios.post( "api/switch-item", {
+      const response = await axios.post( "api/switch-item", {
         title: title.value, item : item.value, side, otherSide,
-      } )
-        .then( response => response.json() )
-        .then( response => checkResponse( response, "app" ) );
+      } );
+      checkResponse( response.data, "app" );
     }
 
     switchEl.addEventListener( "mouseenter", () => {
@@ -331,9 +328,8 @@ const setListener = {
 
           card.remove();
 
-          axios.post( "api/remove-card", { title } )
-            .then( response => response.json() )
-            .then( response => checkResponse( response, "app" ) );
+          const response = await axios.post( "api/remove-card", { title } );
+          checkResponse( response.data, "app" );
         }
       } );
     } );

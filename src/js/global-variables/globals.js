@@ -33,29 +33,3 @@ window.checkResponse = ( res, errorRedirect, successRedirect = null ) => {
     return res;
   }
 };
-
-function readFile( blob ) {
-  return new Promise( ( resolve, reject ) => {
-    var reader = new FileReader();
-    reader.onload = () => {
-      resolve( reader.result );
-    };
-    reader.readAsText( blob );
-  } );
-}
-
-window.axios = {
-  get: url =>
-    fetch( url, { method: "GET" } )
-      .then( response => response.blob() )
-      .then( blob => readFile( blob ) ),
-  post: ( url, body ) =>
-    fetch( url, {
-      method : "POST",
-      body   : JSON.stringify( body ),
-      headers: {
-        "Accept": "application/json, text/plain, */*",
-        "Content-Type": "application/json",
-      },
-    } ),
-};

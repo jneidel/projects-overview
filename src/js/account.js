@@ -1,5 +1,6 @@
-/* global checkResponse encryptWithPubKey $ axios */
+/* global checkResponse encryptWithPubKey $ */
 
+const axios = require( "axios" );
 const sweetalert = require( "sweetalert" );
 
 const setListener = {
@@ -9,11 +10,10 @@ const setListener = {
 
     password = await encryptWithPubKey( password );
 
-    axios.post( "api/update-username", {
+    const response = await axios.post( "api/update-username", {
       newUsername: username, password,
-    } )
-      .then( response => response.json() )
-      .then( response => checkResponse( response, "account", "app" ) );
+    } );
+    checkResponse( response.data, "account", "app" );
   },
   password: async () => {
     let password = document.getElementsByName( "password" )[0].value;
@@ -24,11 +24,10 @@ const setListener = {
     passwordRepeat = await encryptWithPubKey( passwordRepeat );
     passwordConfirm = await encryptWithPubKey( passwordConfirm );
 
-    axios.post( "api/update-password", {
+    const response = await axios.post( "api/update-password", {
       password, passwordRepeat, passwordConfirm,
-    } )
-      .then( response => response.json() )
-      .then( response => checkResponse( response, "account", "app" ) );
+    } );
+    checkResponse( response.data, "account", "app" );
   },
   remove: () => {
     sweetalert( {
@@ -43,9 +42,8 @@ const setListener = {
 
         passwordConfirm = await encryptWithPubKey( passwordConfirm );
 
-        axios.post( "api/remove-account", { passwordConfirm } )
-          .then( response => response.json() )
-          .then( response => checkResponse( response, "account", "app" ) );
+        const response = await axios.post( "api/remove-account", { passwordConfirm } );
+        checkResponse( response.data, "account", "login" );
       }
     } );
   },
@@ -62,15 +60,13 @@ const setListener = {
 
         passwordConfirm = await encryptWithPubKey( passwordConfirm );
 
-        axios.post( "api/clear-cards", { passwordConfirm } )
-          .then( response => response.json() )
-          .then( response => checkResponse( response, "account", "app" ) );
+        const response = await axios.post( "api/clear-cards", { passwordConfirm } );
+        checkResponse( response.data, "account", "app" );
       }
     } );
   },
   apiKey: async () => {
-    const response = await axios.post( "api/create-apikey" )
-      .then( response => response.json() );
+    const response = await axios.post( "api/create-apikey" );
     const data = checkResponse( response, "account" );
     const key = data.apiKey;
 
@@ -127,7 +123,7 @@ $( ".toogle" ).forEach( ( el ) => {
     const groupWrapper = el.parentNode.parentNode;
     const inputWrapper = groupWrapper.querySelector( ".input-wrapper" ).style;
 
-    const isHidden = ~Array.from( groupWrapper.classList ).indexOf( "hidden" );
+    const isHidden = ~[ ...groupWrapper.classList ].indexOf( "hidden" );
 
     if ( isHidden ) {
       groupWrapper.classList.remove( "hidden" );
