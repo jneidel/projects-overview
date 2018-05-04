@@ -47,11 +47,16 @@ To access your current projects programmatically checkout the [API docs](https:/
 Based on the concept of minimizing the number of active projects to focus on getting those done, I built an non-interactive html site, listing my current projects, to stay mindful of how many active projects I had.
 As editing the source every time I updated my projects wasn't very practical, I built this app from scratch to solve that problem and learn node/express/mongo in the process.
 
-## Created using
+## Tech Stack
 
 ![](https://i.imgur.com/52HU8Ua.png)
 
-Ordered by importance: [Node.js](https://nodejs.org/en/), [Express](https://expressjs.com/), [MongoDB](https://www.mongodb.com/), [Pug](https://pugjs.org/), [Webpack](https://webpack.js.org/), [Mocha](https://mochajs.org/), [Sinon](http://sinonjs.org/), [CircleCI](https://circleci.com/), [JSON Web Tokens](https://jwt.io/)
+- Server: [Node.js](https://nodejs.org/en/), [Express](https://expressjs.com/)
+- Database: [MongoDB](https://www.mongodb.com/)
+- Template: [Pug](https://pugjs.org/)
+- Bundler: [Webpack](https://webpack.js.org/)
+- Testing: [Mocha](https://mochajs.org/), [Sinon](http://sinonjs.org/), [CircleCI](https://circleci.com/)
+- Tokens: [JSON Web Tokens](https://jwt.io/)
 
 ## License
 

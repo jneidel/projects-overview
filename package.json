@@ -13,7 +13,7 @@
     "node": "9.0.0"
   },
   "scripts": {
-    "start": "concurrently \"npm run watch\" \"npm run build\" --names \"💻 ,📦 \" --prefix name",
+    "start": "concurrently \"npm run watch\" \"npm run build\" --names \"💻,📦\" --prefix name",
     "watch": "nodemon app.js --ignore dist/js/",
     "build": "webpack -w",
     "prod": "node -r dotenv/config app.js dotenv_config_path=variables.env"
