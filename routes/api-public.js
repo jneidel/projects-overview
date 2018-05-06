@@ -8,7 +8,7 @@ router.post( "/",
   async ( req, res ) => {
     const users = req.db.users;
     const cards = req.db.cards;
-    const apiKey = req.query.key;
+    const apiKey = req.body.key;
 
     if ( !apiKey ) {
       return res.json( { error: "You must provide an api key." } );

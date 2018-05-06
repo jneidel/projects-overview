@@ -6,21 +6,18 @@ Via the public API you can access your current projects.
 
 Generate an api key at the [/account](https://po.jneidel.com/account) page.
 
-## Usage
-
-```
-POST https://po.jneidel.com/api/public?key=<your-api-key>
-```
-
 ## API
-
-Only one route is available at the moment:
 
 ### /api/public
 
-Type: `POST`
+<table><tr>
+  <td>Method: <code>POST</code></td>
+  <td>Param: <code>key</code></td>
+</tr></table>
 
-Requires api key via the `key` query parameter `/api/public?key=<your-api-key>`.
+```
+curl -X POST https://po.jneidel.com/api/public -d '{ "key": <your-api-key> }' -H "Content-Type: application/json"
+```
 
 Returns a JSON of the following structure:
 
