@@ -12,3 +12,5 @@ dist/css/app.bundle.css
 dist/css/help.bundle.css
 dist/css/login-register.bundle.css
 dist/css/welcome.bundle.css
+
+logs/*.log

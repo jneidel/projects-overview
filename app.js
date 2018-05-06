@@ -1,19 +1,22 @@
 const express = require( "express" );
 const bodyParser = require( "body-parser" );
-const morgan = require( "morgan" );
 const sessions = require( "express-session" );
 const flash = require( "connect-flash" );
 const errorHandlers = require( "./handlers/error" );
+const logger = require( "./logs/logger" );
 
 const app = express();
 
 require( "dotenv" ).config( { path: "variables.env" } );
 
 const port = process.env.PORT;
-const nodeEnv = process.env.NODE_ENV;
+const NODE_ENV = process.env.NODE_ENV;
 
-if ( nodeEnv === "dev" ) {
-  app.use( morgan( "dev" ) );
+if ( NODE_ENV === "dev" ) {
+  app.use( logger.dev );
+} if ( NODE_ENV === "prod" ) {
+  app.use( logger.writeErrors );
+  app.use( logger.writeRequests );
 }
 
 app.set( "view engine", "pug" );
@@ -46,7 +49,7 @@ process.on( "unhandledRejection", ( err ) => { throw err; } );
 app.use( errorHandlers.notFound );
 app.use( errorHandlers.flashValidationErrors );
 
-if ( nodeEnv === "dev" ) {
+if ( NODE_ENV === "dev" ) {
   app.use( errorHandlers.developmentErrors );
 } else {
   app.use( errorHandlers.productionErrors );
