@@ -68,7 +68,7 @@ const setListener = {
   apiKey: async () => {
     const response = await axios.post( "api/create-apikey" );
     const data = checkResponse( response, "account" );
-    const key = data.apiKey;
+    const key = data.data.apiKey;
 
     let keyEl = document.getElementById( "apiKey" );
 
