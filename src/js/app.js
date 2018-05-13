@@ -309,7 +309,7 @@ const setListener = {
     } );
   },
   remove( remove ) {
-    remove.addEventListener( "click", async () => {
+    remove.addEventListener( "click", () => {
       sweetalert( {
         title     : "Remove Card",
         text      : "Do you really want to remove this card?",
@@ -370,10 +370,10 @@ function flipCard( card ) {
   const cards = $( ".card" );
 
   for ( const item of items ) {
-	  setListener.item( item );
+    setListener.item( item );
   }
   for ( const title of titles ) {
-	  setListener.title( title );
+    setListener.title( title );
   }
   for ( const bullet of bullets ) {
     setListener.bullet( bullet );
