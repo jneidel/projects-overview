@@ -20,7 +20,7 @@ const sync = browserSync();
 
 const results = [];
 
-[ "app", "account", "login-register", "welcome", "help" ].forEach( ( name ) => {
+[ "app", "account", "login-register", "welcome", "help", "error" ].forEach( ( name ) => {
   const scss = genScss( `../css/${name}.bundle.css` );
 
   const entryPath = `./src/bundles/${name}.bundle.js`;

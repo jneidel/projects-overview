@@ -41,6 +41,7 @@ exports.productionErrors = ( err, req, res, next ) => {
   res.render( "error", {
     title  : "Error",
     message: err.message,
+    status : err.status,
     error  : {},
   } );
 };

@@ -73,8 +73,7 @@ body {
   .footer-link { // Class to overwrite default above
     @include linkUnderline;
   }
-}
-
+} 
 .footer-hr {
   @include hr( 80vw ); // _patterns
   margin: 0;

@@ -1,0 +1,16 @@
+@import "mixins/_footer.scss";
+
+
+
+h1 {
+  font-size: 50px;
+  margin-bottom: 0;
+}
+
+#content p, #content a {
+  font-size: 22px;
+}
+
+.footer-link {
+  @include linkUnderline;
+}

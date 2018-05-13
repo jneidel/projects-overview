@@ -1,8 +1,17 @@
 extends layout
 
-block header
-  h1= status
+block styles
+  link( rel="stylesheet", href="css/error.bundle.css" )
+  style.
+    #inner {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
 
 block content
+  h1= status
   p= message
+  a.footer-link( href="https://github.com/jneidel/projects-overview/issues/new?assignee=jneidel&body=%3C!--%20Attach%20a%20screenshot%20where%20applicable%20--%3E%0A%23%23%23%20Expected%20Behavior%0A%0A%23%23%23%20Actual%20Behavior" target="blank" ) Send Feedback
   pre.error!= stackHighlighted
