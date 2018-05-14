@@ -8,13 +8,25 @@
 #inner {
   display: flex;
   perspective: 800px;
+
+  @media all and ( max-width: 1075px ) {
+    flex-direction: column;
+  }
 }
 
 // Card styling
 @include card; // _card
 
+
 .card {
   margin: 65px 0;
+
+  @media all and ( max-width: 1075px ) {
+    width: 260px;
+    align-self: center;
+    margin: 0;
+    margin-bottom: 15px;
+  }
 }
 
 // Text styling
