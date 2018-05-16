@@ -7,11 +7,6 @@ old-private-key.pem
 todo.md
 
 dist/js
-dist/css/account.bundle.css
-dist/css/app.bundle.css
-dist/css/help.bundle.css
-dist/css/login-register.bundle.css
-dist/css/welcome.bundle.css
-dist/css/error.bundle.css
+dist/css
 
 logs/*.log

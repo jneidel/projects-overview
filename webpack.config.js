@@ -1,6 +1,6 @@
 const path = require( "path" );
 const webpack = require( "webpack" );
-const { babel, polyfill, uglify, genScss, browserSync } = require( "setup-webpack" );
+const { babel, polyfill, genScss, browserSync } = require( "setup-webpack" );
 
 /*
    See https://github.com/jneidel/setup-webpack for an in-depth explaination of how this works.
@@ -16,7 +16,15 @@ const env = new webpack.DefinePlugin( { // Makes .env vars available in client s
   },
 } );
 
-const sync = browserSync();
+const sync = browserSync( 8000, 8080 );
+const ttf = {
+  test   : /\.(ttf)$/,
+  exclude: /node_modules/,
+  loader : "file-loader",
+  options: {
+    name: "../css/[name].[ext]",
+  },
+};
 
 const results = [];
 
@@ -27,6 +35,7 @@ const results = [];
   const entry = prod ? polyfill( entryPath ) : entryPath;
 
   results.push( {
+    mode  : prod ? "production" : "development",
     name  : `/${name}`, // For webpack console output
     entry,
     output: {
@@ -34,13 +43,17 @@ const results = [];
       filename: `${name}.bundle.js`,
     },
     module: {
-      loaders: prod ?
-        [ babel, scss.loader ] :
-        [ scss.loader ],
+      rules: prod ?
+        [ babel, scss.rule, ttf ] :
+        [ scss.rule, ttf ],
     },
     plugins: prod ?
-      [ env, uglify, scss.plugin ] :
+      [ env, scss.plugin ] :
       [ env, scss.plugin ],
+    optimization: {
+      minimize : true,
+      minimizer: [ scss.minimizer ],
+    },
   } );
 } );
 
