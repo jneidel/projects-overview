@@ -4,7 +4,7 @@
 
 [![Releases](https://img.shields.io/badge/version-v0.4-blue.svg?style=flat-square)](https://github.com/jneidel/projects-overview/releases)
 [![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat-square)](https://github.com/jneidel/projects-overview/blob/master/licence)
-[![Code style](https://img.shields.io/badge/code%20style-custom-ff69b4.svg?style=flat-square)](https://github.com/jneidel/dotfiles/blob/master/eslintrc)
+[![Code style](https://img.shields.io/badge/code%20style-custom-ff69b4.svg?style=flat-square)](https://github.com/jneidel/dotfiles/blob/master/.eslintrc)
 
 Webapp to manage current and future projects, minimizing the number of overall projects. Less concurrently active projects leads to faster completion, as ones energy is naturally more focused.
 
