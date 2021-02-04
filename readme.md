@@ -10,6 +10,8 @@ Webapp to manage current and future projects, minimizing the number of overall p
 
 ![](https://i.imgur.com/Wzjp8np.png)
 
+![](https://i.imgur.com/Xrqjghs.png)
+
 ## Features
 
 - Overview of current projects
